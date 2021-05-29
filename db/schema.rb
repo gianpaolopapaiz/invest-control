@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_29_025211) do
+ActiveRecord::Schema.define(version: 2021_05_29_160808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,14 +28,28 @@ ActiveRecord::Schema.define(version: 2021_05_29_025211) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "portfolios", force: :cascade do |t|
-    t.string "name"
-    t.bigint "stock_id", null: false
+  create_table "portfolio_funds", force: :cascade do |t|
+    t.bigint "portfolio_id", null: false
     t.bigint "fund_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["fund_id"], name: "index_portfolios_on_fund_id"
-    t.index ["stock_id"], name: "index_portfolios_on_stock_id"
+    t.index ["fund_id"], name: "index_portfolio_funds_on_fund_id"
+    t.index ["portfolio_id"], name: "index_portfolio_funds_on_portfolio_id"
+  end
+
+  create_table "portfolio_stocks", force: :cascade do |t|
+    t.bigint "portfolio_id", null: false
+    t.bigint "stock_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["portfolio_id"], name: "index_portfolio_stocks_on_portfolio_id"
+    t.index ["stock_id"], name: "index_portfolio_stocks_on_stock_id"
+  end
+
+  create_table "portfolios", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "stocks", force: :cascade do |t|
@@ -49,6 +63,8 @@ ActiveRecord::Schema.define(version: 2021_05_29_025211) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "portfolios", "funds"
-  add_foreign_key "portfolios", "stocks"
+  add_foreign_key "portfolio_funds", "funds"
+  add_foreign_key "portfolio_funds", "portfolios"
+  add_foreign_key "portfolio_stocks", "portfolios"
+  add_foreign_key "portfolio_stocks", "stocks"
 end
