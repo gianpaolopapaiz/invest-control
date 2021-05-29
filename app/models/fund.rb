@@ -1,4 +1,5 @@
 class Fund < ApplicationRecord
+	has_many :portfolios
 	STRATEGIES = ['post-fixed', 'pre-fixed', 'inflation', 'multimarket', 'variable', 'international']
   validates :short_name, :cnpj, :strategy, :buy_date, :buy_quantity, :buy_price, presence: true
 	validates :short_name, :cnpj, uniqueness: true
