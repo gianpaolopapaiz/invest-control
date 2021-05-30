@@ -6,18 +6,25 @@ class StocksController < ApplicationController
     @short_name = params[:short_name]
     @symbol = params[:symbol]
     @stock = Stock.new
+    @stock.symbol = @symbol
+    @stock.short_name = @short_name
     @portfolio = Portfolio.find(params[:portfolio_id])
   end
   def create
     @portfolio = Portfolio.find(params[:portfolio_id])
     @stock = Stock.new(stock_params)
-    # passar stock short name and symbol throught params in the form
-
+    @stock.portfolio = @portfolio
+    @stock.strategy = 'variable'
+    if @stock.save
+      redirect_to portfolio_path(@portfolio)
+    else
+      render :new
+    end
   end
 
   private
 
   def stock_params
-    params.require(:stock).permit(:buy_date, :buy_quantity, :buy_price)
+    params.require(:stock).permit(:buy_date, :buy_quantity, :buy_price, :symbol, :short_name)
   end
 end

@@ -1,12 +1,14 @@
-<h1>Adding <%= @symbol %> to your portfolio</h1>
-<%= @short_name %>
+<div class="container">
+  <h3>Add <strong><%= @symbol %></strong> to portfolio <strong><%= @portfolio.name %></strong></h3>
+  <br>
 
-<%= simple_form_for [@portfolio, @stock] do |f| %>
-  <%= f.input :buy_date %>
-  <%= f.input :buy_quantity %>
-  <%= f.input :buy_price %>
-  <%= f.submit %>
-<% end %>
+  <%= simple_form_for [@portfolio, @stock] do |f| %>
+    <%= f.input :symbol%>
+    <%= f.input :short_name %>
+    <%= f.input :buy_date %>
+    <%= f.input :buy_quantity %>
+    <%= f.input :buy_price %>
+    <%= f.submit %>
+  <% end %>
 
-
-
+</div>

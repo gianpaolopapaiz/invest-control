@@ -1,8 +1,11 @@
 <div class='container'>
-	<h1>My Portfolios</h1>
-	<p><%= link_to 'Add Portfolio', new_portfolio_path %></p>
+	<div class='d-flex align-items-center'>
+		<h1>My Portfolios |</h1>
+		<h4 class='mb-0 ml-2'><%= link_to '', new_portfolio_path, class: 'fas fa-plus' %></h4>
+			
+	</div>
 	<% if @portfolios.length <1 %>
-		<p>(No portfolio created yet!)</p>
+		<p>(No portfolio added yet!)</p>
 	<% else %>
 		<% @portfolios.each do |portfolio| %>
 			<h3><%= link_to portfolio.name, portfolio_path(portfolio) %></h3>
