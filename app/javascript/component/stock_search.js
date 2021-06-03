@@ -28,12 +28,14 @@ const fetchYahooAutoComplete = (value) => {
 }
 
 const stockAutocomplete = () => {
-  stockForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const stockValue = stockInput.value;
-    stockList.innerHTML = '<p>searching...</p>';
-    fetchYahooAutoComplete(stockValue);
-  });
+  if (stockForm) {
+    stockForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const stockValue = stockInput.value;
+      stockList.innerHTML = '<p>searching...</p>';
+      fetchYahooAutoComplete(stockValue);
+    });
+  }
 }
 
 export { stockAutocomplete };

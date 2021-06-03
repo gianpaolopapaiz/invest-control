@@ -1,5 +1,28 @@
 <div class="container">
   <h1><%= @portfolio.name %></h1>
-  <%= link_to 'Add stock', portfolio_stocks_fetch_stock_path(@portfolio) %>
-
+  <%= link_to 'Add stock', portfolio_stocks_fetch_stock_path(@portfolio), class: 'btn btn-primary mb-5' %>
+  <h3 class='mb-4'>Stocks (<%= @portfolio.stocks.length %>):</h3>
+  <% if @portfolio.stocks.length.positive? %>
+    <div class='d-flex align-items-center justify-content-start'>
+      <% @portfolio.stocks.each do |stock| %>      
+        <div class="card m-1" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title"><%= stock.symbol %></h5>
+            <h6 class="card-subtitle mb-2 text-muted"><%= stock.short_name %></h6>
+            <p class="card-text mb-0">Buy Date: <%= stock.buy_date %></p>
+            <p class="card-text mb-0">Quantity: <%= stock.buy_quantity %></p>
+            <p class="card-text mb-0">Buy Price: R$<%= stock.buy_price %></p>
+            <p class="card-text mb-0">Actual Price: R$<%= stock.buy_price %></p>
+            <p class="card-text mb-0">Return: <%= stock.buy_price %></p>
+            <div class='mt-3'>
+              <%= link_to 'more', '#', class: 'btn btn-secondary btn-sm'  %>
+              <%= link_to 'remove', '#', method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger btn-sm'  %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p>(No stock added yet!)</p>
+  <% end %>
 </div>
