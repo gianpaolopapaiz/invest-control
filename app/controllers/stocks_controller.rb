@@ -1,6 +1,7 @@
 class StocksController < ApplicationController
-  def fetch_stock
+  def choose_stock
     @portfolio = Portfolio.find(params[:portfolio_id])
+    @stock = Stock.new
   end
   def new
     @short_name = params[:short_name]

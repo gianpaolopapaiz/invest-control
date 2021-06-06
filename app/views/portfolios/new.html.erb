@@ -1,4 +1,5 @@
 <div class="container">
+<%= link_to '<< Portfolios', portfolios_path, class: 'btn btn-secondary btn-sm mb-3' %>
   <h1>New Portfolio</h1>
 	<%= simple_form_for @portfolio do |f| %>
 		<%= f.input :name %>

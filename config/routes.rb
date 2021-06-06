@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   root to: 'portfolios#index'
   resources :portfolios do
     resources :stocks, only: [:new, :create]
-    get '/stocks/fetch_stock', to: 'stocks#fetch_stock'
+    get '/stocks/choose_stock', to: 'stocks#choose_stock'
   end
 
 end

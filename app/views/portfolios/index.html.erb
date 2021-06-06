@@ -1,9 +1,6 @@
 <div class='container'>
-	<div class='d-flex align-items-center'>
-		<h1>My Portfolios |</h1>
-		<h4 class='mb-0 ml-2'><%= link_to '', new_portfolio_path, class: 'fas fa-plus' %></h4>
-			
-	</div>
+	<h1 class='mb-2'>My Portfolios</h1>
+	<%= link_to 'Add portfolio', new_portfolio_path, class: 'btn btn-primary btn-sm mb-3' %>
 	<% if @portfolios.length <1 %>
 		<p>(No portfolio added yet!)</p>
 	<% else %>

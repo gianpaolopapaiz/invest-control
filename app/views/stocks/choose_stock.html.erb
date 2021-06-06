@@ -1,0 +1,19 @@
+<div class='container'>
+  <h1>Add Stock</h1>
+  <form action="" id='stock-form'>
+    <label for="symbol">Search a stock by symbol:</label>
+    <input type="text" name="symbol" placeholder='Stock symbol...' id='symbol'>
+    <input type="submit" value='search'>
+  </form>
+  
+  <%= form_tag portfolio_stocks_choose_stock_path(@portfolio), method: :get, class: 'form-inline' do %>
+    <%= label_tag(:query, "Search a stock by symbol:") %>
+    <%= text_field_tag :query, params[:query], class: "form-control mx-1", placeholder: "Stock symbol..."
+    %>
+    <%= submit_tag "Search", class: "btn btn-primary" %>
+  <% end %> 
+  
+  <div id="stock-list">
+  </div>
+  
+</div>
