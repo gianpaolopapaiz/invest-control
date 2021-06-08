@@ -1,19 +1,22 @@
 <div class='container'>
   <h1>Add Stock</h1>
-  <form action="" id='stock-form'>
-    <label for="symbol">Search a stock by symbol:</label>
-    <input type="text" name="symbol" placeholder='Stock symbol...' id='symbol'>
-    <input type="submit" value='search'>
-  </form>
   
-  <%= form_tag portfolio_stocks_choose_stock_path(@portfolio), method: :get, class: 'form-inline' do %>
+  <%= form_tag portfolio_stocks_choose_stock_path(@portfolio), method: :get, class: 'form-inline mt-4' do %>
     <%= label_tag(:query, "Search a stock by symbol:") %>
-    <%= text_field_tag :query, params[:query], class: "form-control mx-1", placeholder: "Stock symbol..."
-    %>
+    <%= text_field_tag :query, params[:query], class: "form-control mx-1", placeholder: "Stock symbol..." %>
     <%= submit_tag "Search", class: "btn btn-primary" %>
   <% end %> 
-  
-  <div id="stock-list">
-  </div>
-  
+
+  <% if @autocomplete %>
+    <div class="mt-4">
+      <% if @autocomplete.length > 0  %>
+        <h3>Choose desired stock:</h3>
+        <% @autocomplete.each do |stock| %>
+        <p><%= stock['symbol'] %> | <%= stock['shortname'] %> | <%= link_to '+', "/portfolios/#{@portfolio.id}/stocks/new?symbol=#{stock['symbol']}&short_name=#{stock['shortname']}" %></p>
+        <% end %>
+      <% else %>
+        <p>(No stock found for '<strong><%= @query %></strong>')</p>
+      <% end %>
+    </div>
+  <% end %>
 </div>
