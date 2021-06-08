@@ -3,12 +3,12 @@
   <br>
 
   <%= simple_form_for [@portfolio, @stock] do |f| %>
-    <%= f.input :symbol%>
-    <%= f.input :short_name %>
+    <%= f.input :symbol, disabled: true %>
+    <%= f.input :short_name, disabled: true %>
     <%= f.input :buy_date %>
     <%= f.input :buy_quantity %>
     <%= f.input :buy_price %>
-    <%= f.submit %>
+    <%= f.submit 'Add Stock', class: 'btn btn-primary' %>
   <% end %>
 
 </div>
