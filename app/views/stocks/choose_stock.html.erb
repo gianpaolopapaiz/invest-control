@@ -1,6 +1,6 @@
 <div class='container'>
+  <%= link_to '<< Portfolio', portfolio_path(@portfolio), class: 'btn btn-secondary btn-sm mb-3' %>
   <h1>Add Stock</h1>
-  
   <%= form_tag portfolio_stocks_choose_stock_path(@portfolio), method: :get, class: 'form-inline mt-4' do %>
     <%= label_tag(:query, "Search a stock by symbol:") %>
     <%= text_field_tag :query, params[:query], class: "form-control mx-1", placeholder: "Stock symbol..." %>

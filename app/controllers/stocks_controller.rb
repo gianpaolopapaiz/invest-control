@@ -8,6 +8,7 @@ class StocksController < ApplicationController
       @autocomplete = fetch_autocomplete(@query)['quotes']
     end
   end
+
   def new
     @short_name = params[:short_name]
     @symbol = params[:symbol]
@@ -16,6 +17,7 @@ class StocksController < ApplicationController
     @stock.short_name = @short_name
     @portfolio = Portfolio.find(params[:portfolio_id])
   end
+
   def create
     @portfolio = Portfolio.find(params[:portfolio_id])
     @stock = Stock.new(stock_params)
@@ -28,15 +30,21 @@ class StocksController < ApplicationController
     end
   end
 
+  def destroy
+    stock = Stock.find(params[:id])
+    stock.destroy
+    redirect_to portfolio_path(stock.portfolio)
+  end
+
   private
 
   def fetch_autocomplete(query)
-    url = URI("https://apidojo-yahoo-finance-v1.p.rapidapi.com/auto-complete?q=#{@query}")
+    url = URI("https://apidojo-yahoo-finance-v1.p.rapidapi.com/auto-complete?q=#{query}")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     request = Net::HTTP::Get.new(url)
-    request["x-rapidapi-key"] = '0d23aa15ccmsh08742d5ddc98f33p18f9dbjsnd790f2c04382'
+    request["x-rapidapi-key"] = ENV["YAHOO_API"]
     request["x-rapidapi-host"] = 'apidojo-yahoo-finance-v1.p.rapidapi.com'
     response = http.request(request)
     return JSON.parse(response.read_body)

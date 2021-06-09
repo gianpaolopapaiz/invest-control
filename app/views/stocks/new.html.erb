@@ -3,8 +3,8 @@
   <br>
 
   <%= simple_form_for [@portfolio, @stock] do |f| %>
-    <%= f.input :symbol, disabled: true %>
-    <%= f.input :short_name, disabled: true %>
+    <%= f.input :symbol %>
+    <%= f.input :short_name %>
     <%= f.input :buy_date %>
     <%= f.input :buy_quantity %>
     <%= f.input :buy_price %>
