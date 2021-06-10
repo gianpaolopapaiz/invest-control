@@ -6,7 +6,7 @@ class PortfoliosController < ApplicationController
 
 	def show
 		@portfolio = Portfolio.find(params[:id])
-		update_stock_price
+		update_stocks_price
 	end
 
 	def new
@@ -24,7 +24,7 @@ class PortfoliosController < ApplicationController
 
 	private
 
-	def update_stock_price
+	def update_stocks_price
     portfolio = Portfolio.find(params[:id])
 		if portfolio.stocks.length.positive?
 			stock_symbols = []
