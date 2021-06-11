@@ -7,6 +7,13 @@ class PortfoliosController < ApplicationController
 	def show
 		@portfolio = Portfolio.find(params[:id])
 		update_stocks_price
+		@stocks = @portfolio.stocks
+		@stocks_actual_amount = stocks_actual_amount(@stocks)
+		@stocks_buy_amount = stocks_buy_amount(@stocks)
+		if @stocks.length > 0 
+			@stocks_return_tax = ((@stocks_actual_amount / @stocks_buy_amount) - 1) *100
+			@stocks_return_value = (@stocks_actual_amount - @stocks_buy_amount) 
+		end
 	end
 
 	def new
@@ -23,6 +30,22 @@ class PortfoliosController < ApplicationController
 	end
 
 	private
+
+	def stocks_actual_amount(stocks)
+		sum = 0
+		@stocks.each do |stock|
+			sum += (stock.buy_quantity * stock.actual_price)
+		end
+		sum
+	end
+
+	def stocks_buy_amount(stocks)
+		sum = 0
+		@stocks.each do |stock|
+			sum += (stock.buy_quantity * stock.buy_price)
+		end
+		sum
+	end
 
 	def update_stocks_price
     portfolio = Portfolio.find(params[:id])
