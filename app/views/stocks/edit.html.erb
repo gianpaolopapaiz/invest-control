@@ -1,0 +1,13 @@
+<div class="container">
+  <h3>Update  <strong><%= @stock.symbol %></strong></h3>
+  <br>
+
+  <%= simple_form_for @stock do |f| %>
+    <%= f.input :buy_date %>
+    <%= f.input :buy_quantity %>
+    <%= f.input :buy_price %>
+    <%= f.input :advisor, collection: Stock::ADVISORS %>
+    <%= f.submit 'Update', class: 'btn btn-primary' %>
+  <% end %>
+
+</div>

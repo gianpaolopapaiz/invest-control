@@ -6,6 +6,9 @@ class StocksController < ApplicationController
     if params[:query] && params[:query] != ''
       @query = params[:query]
       @autocomplete = fetch_autocomplete(@query)['quotes']
+      if !@autocomplete
+        flash[:alert] = 'API error, please try again later'
+      end
     end
   end
 
@@ -30,6 +33,21 @@ class StocksController < ApplicationController
     end
   end
 
+  def edit
+    @stock = Stock.find(params[:id])
+  end
+
+  def update
+    @stock = Stock.find(params[:id])
+      if @stock.update(stock_params)
+        flash[:success] = "Stock was successfully updated"
+        redirect_to portfolio_path(@stock.portfolio)
+      else
+        flash[:alert] = @stock.errors.messages
+        render :edit
+      end
+  end
+
   def destroy
     stock = Stock.find(params[:id])
     stock.destroy
@@ -51,6 +69,6 @@ class StocksController < ApplicationController
   end
 
   def stock_params
-    params.require(:stock).permit(:buy_date, :buy_quantity, :buy_price, :symbol, :short_name)
+    params.require(:stock).permit(:buy_date, :buy_quantity, :buy_price, :symbol, :short_name, :advisor)
   end
 end

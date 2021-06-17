@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   resources :portfolios do
     resources :stocks, only: [:new, :create]
     get '/stocks/choose_stock', to: 'stocks#choose_stock'
-    get '/stocks/update_stocks_price', to: 'stocks#update_stocks_price', as: 'update_stocks_price'
   end
-  resources :stocks, only: [:destroy]
+  get '/portfolios/:id/update_stocks_price', to: 'portfolios#update_stocks_price', as: 'update_stocks_price'
+  resources :stocks, only: [:edit, :update, :destroy]
 
 end

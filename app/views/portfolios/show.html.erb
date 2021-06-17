@@ -1,33 +1,37 @@
 <div class="container">
   <%= link_to '<< Portfolios', portfolios_path, class: 'btn btn-secondary btn-sm mb-3' %> 
   <h1 class='mb-4'><%= @portfolio.name %></h1> 
-  <h3 class='mb-2'>Stocks (<%= @stocks.length %>):</h3>
+  <h2 class='mb-2'>Stocks:</h2>
   <%= link_to 'Add stock', portfolio_stocks_choose_stock_path(@portfolio), class: 'btn btn-primary btn-sm mb-3' %>
+  <%= link_to 'Update stocks', update_stocks_price_path(@portfolio), class: 'btn btn-secondary btn-sm mb-3' %>
   
   <% if @stocks.length > 0 %>
-  <p>Ammount: R<%= number_to_currency(@stocks_actual_amount) %></p>
-  <p>Return Tax: <%= @stocks_return_tax.round(2) %>%</p>
+  <h4><strong>Summary</strong></h4>
+  <p class='mb-0'>Ammount: <%= number_to_currency(@stocks_actual_amount) %></p>
+  <p class='mb-0'>Return Tax: <%= @stocks_return_tax.round(2) %>%</p>
   <p>Return Value: <%= number_to_currency(@stocks_return_value) %></p>
   <% end %>
   
-
+  <h4 class='mb-2'>All Stocks (<%= @stocks.length %>):</h4>
   <% if @stocks.length.positive? %>
     <div class='d-flex align-items-center justify-content-start flex-wrap'>
       <% @stocks.each do |stock| %>      
-        <div class="card m-1" style="width: 18rem;">
+        <div class="card m-1" style="width: 16rem;">
           <div class="card-body">
             <h5 class="card-title"><strong><%= stock.symbol %></strong></h5>
             <h6 class="card-subtitle mb-2 text-muted"><%= stock.short_name %></h6>
-            <p class="card-text mb-0">Ammount: <%= number_to_currency(stock.amount) %></p>
-            <p class="card-text mb-0">Buy Date: <%= stock.buy_date %></p>
+            <h6 class="card-subtitle mb-2 text-muted">Advisor: <%= stock.advisor %></h6>
+            <p class="card-text mb-0">Amount: <%= number_to_currency(stock.amount) %></p>
+            <p class="card-text mb-0">Buy Date: <%= stock.buy_date.strftime("%Y/%m/%d") %></p>
             <p class="card-text mb-0">Quantity: <%= stock.buy_quantity %></p>
-            <p class="card-text mb-0">Buy Price: <%= number_to_currency(stock.buy_price) %></p>
+            <p class="card-text mb-2">Buy Price: <%= number_to_currency(stock.buy_price) %></p>
+            <p class="card-text mb-0">Actual Date: <%= stock.updated_at.strftime("%Y/%m/%d") %></p>
             <p class="card-text mb-0">Actual Price: <%= number_to_currency(stock.actual_price) %></p>
             <p class="card-text mb-0">Return Tax: <%= stock.return_tax.round(2) %>%</p>
             <p class="card-text mb-0">Return Value: <%= number_to_currency(stock.return_value) %></p>
 
             <div class='mt-3 text-right'>
-              <%= link_to 'edit', '#', class: 'btn btn-secondary btn-sm'  %>
+              <%= link_to 'edit', edit_stock_path(stock), class: 'btn btn-secondary btn-sm'  %>
               <%= link_to 'remove', stock_path(stock), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger btn-sm'  %>
             </div>
           </div>

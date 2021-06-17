@@ -8,6 +8,7 @@
     <%= f.input :buy_date %>
     <%= f.input :buy_quantity %>
     <%= f.input :buy_price %>
+    <%= f.input :advisor, collection: Stock::ADVISORS %>
     <%= f.submit 'Add Stock', class: 'btn btn-primary' %>
   <% end %>
 
