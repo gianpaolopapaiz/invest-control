@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_17_112358) do
+ActiveRecord::Schema.define(version: 2021_06_17_230538) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,24 +28,6 @@ ActiveRecord::Schema.define(version: 2021_06_17_112358) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "portfolio_id", null: false
     t.index ["portfolio_id"], name: "index_funds_on_portfolio_id"
-  end
-
-  create_table "portfolio_funds", force: :cascade do |t|
-    t.bigint "portfolio_id", null: false
-    t.bigint "fund_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["fund_id"], name: "index_portfolio_funds_on_fund_id"
-    t.index ["portfolio_id"], name: "index_portfolio_funds_on_portfolio_id"
-  end
-
-  create_table "portfolio_stocks", force: :cascade do |t|
-    t.bigint "portfolio_id", null: false
-    t.bigint "stock_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["portfolio_id"], name: "index_portfolio_stocks_on_portfolio_id"
-    t.index ["stock_id"], name: "index_portfolio_stocks_on_stock_id"
   end
 
   create_table "portfolios", force: :cascade do |t|
@@ -67,13 +49,10 @@ ActiveRecord::Schema.define(version: 2021_06_17_112358) do
     t.float "actual_price"
     t.date "actual_date"
     t.string "advisor"
+    t.date "update_date"
     t.index ["portfolio_id"], name: "index_stocks_on_portfolio_id"
   end
 
   add_foreign_key "funds", "portfolios"
-  add_foreign_key "portfolio_funds", "funds"
-  add_foreign_key "portfolio_funds", "portfolios"
-  add_foreign_key "portfolio_stocks", "portfolios"
-  add_foreign_key "portfolio_stocks", "stocks"
   add_foreign_key "stocks", "portfolios"
 end

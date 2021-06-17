@@ -3,9 +3,11 @@ Rails.application.routes.draw do
   root to: 'portfolios#index'
   resources :portfolios do
     resources :stocks, only: [:new, :create, :index]
+    resources :funds, only: [:new, :create, :index]
     get '/stocks/choose_stock', to: 'stocks#choose_stock'
+    get '/funds/choose_fund', to: 'funds#choose_fund'
   end
   get '/portfolios/:id/update_stocks_price', to: 'portfolios#update_stocks_price', as: 'update_stocks_price'
   resources :stocks, only: [:edit, :update, :destroy]
-
+  resources :funds, only: [:edit, :update, :destroy]
 end
