@@ -6,7 +6,6 @@ class PortfoliosController < ApplicationController
 
 	def show
 		@portfolio = Portfolio.find(params[:id])
-		# update_stocks_price
 		@stocks = @portfolio.stocks
 		@stocks_actual_amount = stocks_actual_amount(@stocks)
 		@stocks_buy_amount = stocks_buy_amount(@stocks)
@@ -28,32 +27,6 @@ class PortfoliosController < ApplicationController
 			render :new
 		end
 	end
-	
-	def update_stocks_price
-		portfolio = Portfolio.find(params[:id])
-		if portfolio.stocks.length.positive?
-			stock_symbols = []
-			portfolio.stocks.each_with_index do |stock| 
-				stock_symbols << stock.symbol
-			end
-			query = stock_symbols.join(',')
-			data_fetch = fetch_stock_price(query)
-			if data_fetch['quoteResponse']
-				portfolio.stocks.each_with_index do |stock, index| 
-					stock.actual_price = data_fetch['quoteResponse']['result'][index]['regularMarketPrice']
-					stock.actual_date = DateTime.now
-					if stock.save
-						flash[:alert] = 'Stocks updated'
-					else
-						flash[:alert] = stock.errors.messages
-					end
-				end
-			else
-				flash[:alert] = 'API error, please try again later'
-			end
-			redirect_to portfolio_path(portfolio)
-		end
-	end
 
 	private
 
@@ -72,19 +45,6 @@ class PortfoliosController < ApplicationController
 		end
 		sum
 	end
-
-
-	def fetch_stock_price(query)
-    url = URI("https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/v2/get-quotes?region=BR&symbols=#{query}")
-    http = Net::HTTP.new(url.host, url.port)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    request = Net::HTTP::Get.new(url)
-    request["x-rapidapi-key"] = ENV["YAHOO_API"]
-    request["x-rapidapi-host"] = 'apidojo-yahoo-finance-v1.p.rapidapi.com'
-    response = http.request(request)
-    return JSON.parse(response.read_body)
-  end
 	
 	def portfolio_params
 		params.require(:portfolio).permit(:name)
