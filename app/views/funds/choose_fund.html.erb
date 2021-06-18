@@ -7,13 +7,13 @@
     <%= submit_tag "Search", class: "btn btn-primary" %>
   <% end %> 
 
-  <% if @autocomplete  %>
+  <% if @fetched_fund  %>
     <div class="mt-4">
      
         <h3>Choose desired fund:</h3>
        
         <p><%#= stock['symbol'] %> | <%#= stock['shortname'] | <%= link_to '+', "/portfolios/#{@portfolio.id}/stocks/new?symbol=#{stock['symbol']}&short_name=#{stock['shortname']}" %></p>
-        <p><%= @autocomplete['nomeAbreviado'] %> </p>
+        <p><%= @fetched_fund['nomeAbreviado'] %> </p>
       
      
       

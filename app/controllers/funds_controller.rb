@@ -5,8 +5,8 @@ class FundsController < ApplicationController
     @query = 'nil'
     if params[:query] && params[:query] != ''
       @query = params[:query]
-      @autocomplete = fetch_autocomplete(@query)
-      if !@autocomplete
+      @fetched_fund = fetch_fund(@query)
+      if !@fetched_fund
         flash[:alert] = 'API error, please try again later'
       end
     end   
@@ -14,7 +14,7 @@ class FundsController < ApplicationController
 
   private
 
-  def fetch_autocomplete(query)
+  def fetch_fund(query)
     token = get_financial_data_token
     if token
       uri = URI.parse("https://api.financialdata.io/v1/fundos/#{query}")
