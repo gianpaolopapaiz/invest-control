@@ -7,16 +7,18 @@
     <%= submit_tag "Search", class: "btn btn-primary" %>
   <% end %> 
 
-  <% if @autocomplete %>
+  <% if @autocomplete  %>
     <div class="mt-4">
-      <% if @autocomplete.length > 0  %>
+     
         <h3>Choose desired fund:</h3>
-        <% @autocomplete.each do |fund| %>
+       
         <p><%#= stock['symbol'] %> | <%#= stock['shortname'] | <%= link_to '+', "/portfolios/#{@portfolio.id}/stocks/new?symbol=#{stock['symbol']}&short_name=#{stock['shortname']}" %></p>
-        <% end %>
-      <% else %>
-        <p>(No fund found for '<strong><%= @query %></strong>')</p>
-      <% end %>
+        <p><%= @autocomplete['nomeAbreviado'] %> </p>
+      
+     
+      
     </div>
   <% end %>
+    
+        <p>(No fund found for '<strong><%= @query %></strong>')</p>
 </div>
