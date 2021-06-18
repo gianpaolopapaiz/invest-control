@@ -1,0 +1,22 @@
+<div class='container'>
+  <%= link_to '<< Portfolio', portfolio_stocks_path(@portfolio), class: 'btn btn-secondary btn-sm mb-3' %>
+  <h1>Add Fund</h1>
+  <%= form_tag portfolio_funds_choose_fund_path(@portfolio), method: :get, class: 'form-inline mt-4' do %>
+    <%= label_tag(:query, "Search a fund by CNPJ:") %>
+    <%= text_field_tag :query, params[:query], class: "form-control mx-1", placeholder: "Fund CNPJ..." %>
+    <%= submit_tag "Search", class: "btn btn-primary" %>
+  <% end %> 
+
+  <% if @autocomplete %>
+    <div class="mt-4">
+      <% if @autocomplete.length > 0  %>
+        <h3>Choose desired fund:</h3>
+        <% @autocomplete.each do |fund| %>
+        <p><%#= stock['symbol'] %> | <%#= stock['shortname'] | <%= link_to '+', "/portfolios/#{@portfolio.id}/stocks/new?symbol=#{stock['symbol']}&short_name=#{stock['shortname']}" %></p>
+        <% end %>
+      <% else %>
+        <p>(No fund found for '<strong><%= @query %></strong>')</p>
+      <% end %>
+    </div>
+  <% end %>
+</div>

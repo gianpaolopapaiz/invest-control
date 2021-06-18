@@ -7,7 +7,7 @@
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       <%= link_to 'Stock', portfolio_stocks_choose_stock_path(@portfolio), class: 'dropdown-item' %>
-      <a class="dropdown-item" href="#">Fund</a>
+      <%= link_to 'Fund', portfolio_funds_choose_fund_path(@portfolio), class: 'dropdown-item' %>
     </div>
   </div>
   <h4><strong>Composition</strong></h4>
