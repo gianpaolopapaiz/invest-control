@@ -12,6 +12,16 @@ class FundsController < ApplicationController
     end   
   end
 
+  def new
+    raise
+    @short_name = params[:short_name]
+    @cnpj = params[:cnpj]
+    @stock = Stock.new
+    @stock.symbol = @symbol
+    @stock.short_name = @short_name
+    @portfolio = Portfolio.find(params[:portfolio_id])
+  end
+
   private
 
   def fetch_fund(query)

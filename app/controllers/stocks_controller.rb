@@ -94,7 +94,7 @@ class StocksController < ApplicationController
 			else
 				flash[:alert] = 'API error, please try again later'
 			end
-			redirect_to portfolio_path(portfolio)
+			redirect_to portfolio_stocks_path(portfolio)
 		end
 	end
 

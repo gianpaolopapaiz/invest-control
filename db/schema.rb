@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_19_152354) do
+ActiveRecord::Schema.define(version: 2021_06_19_160038) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 2021_06_19_152354) do
     t.string "advisor"
     t.float "actual_price"
     t.date "actual_date"
+    t.string "cnpj_clean"
     t.index ["portfolio_id"], name: "index_funds_on_portfolio_id"
   end
 
