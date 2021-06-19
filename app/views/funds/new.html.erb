@@ -1,0 +1,19 @@
+<div class="container">
+  <%= link_to '<< Portfolio Funds', portfolio_funds_path(@portfolio), class: 'btn btn-secondary btn-sm mb-3' %>
+  <h3>Add <strong><%= @symbol %></strong> to portfolio <strong><%= @portfolio.name %></strong></h3>
+  <br>
+
+  <%= simple_form_for [@portfolio, @fund] do |f| %>
+    <%= f.input :short_name %>
+    <%= f.input :cnpj %>
+    <%= f.input :cnpj_clean, :as => :hidden %>
+    <%= f.input :fund_class %>
+    <%= f.input :strategy, collection: Stock::STRATEGIES %>
+    <%= f.input :buy_date %>
+    <%= f.input :buy_quantity %>
+    <%= f.input :buy_price %>
+    <%= f.input :advisor, collection: Stock::ADVISORS %>
+    <%= f.submit 'Add Fund', class: 'btn btn-primary' %>
+  <% end %>
+
+</div>
