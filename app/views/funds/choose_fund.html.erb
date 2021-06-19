@@ -3,7 +3,7 @@
   <h1>Add Fund</h1>
   <%= form_tag portfolio_funds_choose_fund_path(@portfolio), method: :get, class: 'form-inline mt-4' do %>
     <%= label_tag(:query, "Search a fund by CNPJ:") %>
-    <%= text_field_tag :query, params[:query], class: "form-control mx-1", placeholder: "Fund CNPJ..." %>
+    <%= number_field_tag :query, params[:query], class: "form-control mx-1", placeholder: "Fund CNPJ..." %>
     <%= submit_tag "Search", class: "btn btn-primary" %>
   <% end %> 
 

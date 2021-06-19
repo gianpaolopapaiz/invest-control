@@ -1,0 +1,15 @@
+<div class="container">
+  <%= link_to '<< Portfolio', portfolio_path(@fund.portfolio), class: 'btn btn-secondary btn-sm mb-3' %>
+  <h3>Update  <strong><%= @fund.short_name %></strong></h3>
+  <br>
+
+  <%= simple_form_for @fund do |f| %>
+    <%= f.input :buy_date %>
+    <%= f.input :buy_quantity %>
+    <%= f.input :buy_price %>
+    <%= f.input :strategy, collection: Fund::STRATEGIES %>
+    <%= f.input :advisor, collection: Stock::ADVISORS %>
+    <%= f.submit 'Update', class: 'btn btn-primary' %>
+  <% end %>
+
+</div>

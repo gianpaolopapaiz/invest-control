@@ -58,7 +58,7 @@ class StocksController < ApplicationController
   def update
     @stock = Stock.find(params[:id])
       if @stock.update(stock_params)
-        flash[:success] = "Stock was successfully updated"
+        flash[:success] = "Stock successfully updated"
         redirect_to portfolio_path(@stock.portfolio)
       else
         flash[:alert] = @stock.errors.messages

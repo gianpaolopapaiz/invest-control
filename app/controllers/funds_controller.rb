@@ -9,10 +9,10 @@ class FundsController < ApplicationController
 		# 	@funds_return_value = (@funds_actual_amount - @funds_buy_amount) 
 		# end
 
-    # if params[:query] && params[:query] != ''
-    #   @query = params[:query]
-    #   @stocks = @portfolio.stocks.where("symbol ILIKE ? OR advisor ILIKE ?", "%#{@query}%", "%#{@query}%")
-    # end
+    if params[:query] && params[:query] != ''
+      @query = params[:query]
+      @funds = @portfolio.funds.where("cnpj_clean ILIKE ? OR advisor ILIKE ? OR short_name ILIKE ?", "%#{@query}%", "%#{@query}%", "%#{@query}%")
+    end
     
   end
   
@@ -51,6 +51,27 @@ class FundsController < ApplicationController
     else
       render :new
     end
+  end
+
+  def edit
+    @fund = Fund.find(params[:id])
+  end
+
+  def update
+    @fund = Fund.find(params[:id])
+      if @fund.update(fund_params)
+        flash[:success] = "Fund successfully updated"
+        redirect_to portfolio_path(@fund.portfolio)
+      else
+        flash[:alert] = @fund.errors.messages
+        render :edit
+      end
+  end
+
+  def destroy
+    fund = Fund.find(params[:id])
+    fund.destroy
+    redirect_to portfolio_path(fund.portfolio)
   end
 
   private

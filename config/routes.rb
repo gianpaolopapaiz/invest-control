@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     get '/funds/choose_fund', to: 'funds#choose_fund'
   end
   get '/portfolios/:id/update_stocks_price', to: 'stocks#update_stocks_price', as: 'update_stocks_price'
+  get '/portfolios/:id/update_funds_price', to: 'funds#update_funds_price', as: 'update_funds_price'
   resources :stocks, only: [:edit, :update, :destroy]
   resources :funds, only: [:edit, :update, :destroy]
 end

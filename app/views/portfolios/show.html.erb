@@ -11,55 +11,57 @@
     </div>
   </div>
   <h4><strong>Composition</strong></h4>
-  <% if @stocks.length > 0 %>
-    <div class="card m-1" style="width: 16rem;">
-      <div class="card-body">
-        <h5 class="card-title"><strong>Stocks(<%= @stocks.length %>)</strong></h5>
-        <h6 class="card-subtitle mb-2 text-muted">Summary</h6>
-        <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-          <span>Ammount:</span> 
-          <span><%= number_to_currency(@stocks_actual_amount) %></span>
-        </div>
-        <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-          <span>Return Tax:</span> 
-          <span><%= @stocks_return_tax.round(2) %>%</span>
-        </div>
-        <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-          <span>Return Value:</span> 
-          <span><%= number_to_currency(@stocks_return_value) %></span>
-        </div>
-        <p class="card-text mb-0"> </p>
-        <p class="card-text mb-0"> </p>
-        <div class='mt-3 text-right'>
-          <%= link_to 'manage', portfolio_stocks_path(@portfolio), class: 'btn btn-secondary btn-sm'  %>
-        </div>
-      </div>
-    </div>
-  <% end %>
-  <% if @funds.length > 0 %>
-    <div class="card m-1" style="width: 16rem;">
-      <div class="card-body">
-        <h5 class="card-title"><strong>Funds(<%= @funds.length %>)</strong></h5>
-        <h6 class="card-subtitle mb-2 text-muted">Summary</h6>
-        <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-          <span>Ammount:</span> 
-          <span><%= number_to_currency(@funds_actual_amount) %></span>
-        </div>
-        <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-          <span>Return Tax:</span> 
-          <span><%= @funds_return_tax.round(2) %>%</span>
-        </div>
-        <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-          <span>Return Value:</span> 
-          <span><%= number_to_currency(@funds_return_value) %></span>
-        </div>
-        <p class="card-text mb-0"> </p>
-        <p class="card-text mb-0"> </p>
-        <div class='mt-3 text-right'>
-          <%= link_to 'manage', portfolio_funds_path(@portfolio), class: 'btn btn-secondary btn-sm'  %>
+  <div class='d-flex align-items-center justify-content-start flex-wrap'>  
+    <% if @stocks.length > 0 %>
+      <div class="card m-1" style="width: 16rem;">
+        <div class="card-body">
+          <h5 class="card-title"><strong>Stocks(<%= @stocks.length %>)</strong></h5>
+          <h6 class="card-subtitle mb-2 text-muted">Summary</h6>
+          <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+            <span>Ammount:</span> 
+            <span><%= number_to_currency(@stocks_actual_amount) %></span>
+          </div>
+          <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+            <span>Return Tax:</span> 
+            <span><%= @stocks_return_tax.round(2) %>%</span>
+          </div>
+          <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+            <span>Return Value:</span> 
+            <span><%= number_to_currency(@stocks_return_value) %></span>
+          </div>
+          <p class="card-text mb-0"> </p>
+          <p class="card-text mb-0"> </p>
+          <div class='mt-3 text-right'>
+            <%= link_to 'manage', portfolio_stocks_path(@portfolio), class: 'btn btn-secondary btn-sm'  %>
+          </div>
         </div>
       </div>
-    </div>
-  <% end %>
+    <% end %>
+    <% if @funds.length > 0 %>
+      <div class="card m-1" style="width: 16rem;">
+        <div class="card-body">
+          <h5 class="card-title"><strong>Funds(<%= @funds.length %>)</strong></h5>
+          <h6 class="card-subtitle mb-2 text-muted">Summary</h6>
+          <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+            <span>Ammount:</span> 
+            <span><%= number_to_currency(@funds_actual_amount) %></span>
+          </div>
+          <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+            <span>Return Tax:</span> 
+            <span><%= @funds_return_tax.round(2) %>%</span>
+          </div>
+          <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+            <span>Return Value:</span> 
+            <span><%= number_to_currency(@funds_return_value) %></span>
+          </div>
+          <p class="card-text mb-0"> </p>
+          <p class="card-text mb-0"> </p>
+          <div class='mt-3 text-right'>
+            <%= link_to 'manage', portfolio_funds_path(@portfolio), class: 'btn btn-secondary btn-sm'  %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
 
 </div>
