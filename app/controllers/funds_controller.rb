@@ -74,6 +74,43 @@ class FundsController < ApplicationController
     redirect_to portfolio_path(fund.portfolio)
   end
 
+  def update_funds_price
+		portfolio = Portfolio.find(params[:id])
+		if portfolio.funds.length.positive?
+			query = stock_symbols.join(',')
+			data_fetch = fetch_stock_price(query)
+			if data_fetch['quoteResponse']
+				portfolio.funds.each_with_index do |fund, index| 
+					fund.actual_price = data_fetch['quoteResponse']['result'][index]['regularMarketPrice']
+					fund.actual_date = DateTime.now
+					if fund.save
+						flash[:alert] = 'Fundss updated'
+					else
+						flash[:alert] = fund.errors.messages
+					end
+				end
+			else
+				flash[:alert] = 'API error, please try again later'
+			end
+			redirect_to portfolio_funds_path(portfolio)
+		end
+	end
+
+  def fetch_fund_price(fund)
+    token = get_financial_data_token
+    if token
+      uri = URI.parse("https://api.financialdata.io/v1/fundos/#{fund.cnpj_clean}/cotas")
+      header = {'Content-Type': 'application/json', 'Authorization': "Bearer #{token}"}
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      request = Net::HTTP::Get.new(uri.request_uri, header)
+      response = http.request(request)
+      raise
+      return JSON.parse(response.read_body) 
+    end
+  end
+
   private
 
   def fetch_fund(query)
@@ -92,6 +129,7 @@ class FundsController < ApplicationController
       render :choose_fund
     end
   end
+
 
   def get_financial_data_token
     login = ENV["FINANCIAL_LOGIN"]
