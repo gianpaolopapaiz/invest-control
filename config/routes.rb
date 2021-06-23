@@ -12,4 +12,10 @@ Rails.application.routes.draw do
   resources :stocks, only: [:edit, :update, :destroy]
   resources :funds, only: [:edit, :update, :destroy]
   get '/funds/:id/fetch_fund_price', to: 'funds#fetch_fund_price', as: 'fetch_fund_price'
+
+  namespace :api, defaults: { format: :json } do
+    namespace :v1 do
+      resources :stocks, only: [ :index, :show ]
+    end
+  end
 end
