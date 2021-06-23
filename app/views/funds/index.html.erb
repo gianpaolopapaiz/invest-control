@@ -7,9 +7,9 @@
   
   <% if @funds.length > 0 %>
     <h4><strong>Summary</strong></h4>
-    <p class="card-text mb-0">Ammount: <%= number_to_currency(@fundss_actual_amount) %></p>
-    <p class="card-text mb-0">Return Tax: <%#= @funds_return_tax.round(2) %>%</p>
-    <p class="card-text">Return Value: <%= number_to_currency(@fundss_return_value) %></p>
+    <p class="card-text mb-0">Ammount: <%= number_to_currency(@funds_actual_amount) %></p>
+    <p class="card-text mb-0">Return Tax: <%= @funds_return_tax.round(2) %>%</p>
+    <p class="card-text">Return Value: <%= number_to_currency(@funds_return_value) %></p>
   <% end %>
   
   <% if @query && @query != '' %>
@@ -37,7 +37,7 @@
             <h6 class="card-subtitle mb-2 text-muted">Advisor: <%= fund.advisor %></h6>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
               <span>Amount:</span> 
-              <span><%#= number_to_currency(fund.amount) %></span>
+              <span><%= number_to_currency(fund.amount) %></span>
             </div>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
               <span>Buy Date:</span>
@@ -53,7 +53,9 @@
             </div>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
               <span>Actual Date:</span>
-              <span><%#= fund.actual_date.strftime("%Y/%m/%d") %></span>
+              <% if fund.actual_date %>
+                <span><%= fund.actual_date.strftime("%Y/%m/%d") %></span>  
+              <% end %>
             </div>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
               <span>Actual Price:</span>
@@ -61,13 +63,14 @@
             </div>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
               <span>Return Tax:</span>
-              <span><%#= fund.return_tax.round(2) %>%</span>
+              <span><%= fund.return_tax.round(2) %>%</span>
             </div>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
               <span>Return Value:</span>
-              <span><%#= number_to_currency(fund.return_value) %></span>
+              <span><%= number_to_currency(fund.return_value) %></span>
             </div>
             <div class='mt-3 text-right'>
+            <%= link_to 'update',  fetch_fund_price_path(fund), class: 'btn btn-secondary btn-sm'  %>
               <%= link_to 'edit', edit_fund_path(fund), class: 'btn btn-secondary btn-sm'  %>
               <%= link_to 'remove', fund_path(fund), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger btn-sm'  %>
             </div>

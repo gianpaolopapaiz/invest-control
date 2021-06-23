@@ -2,12 +2,13 @@ class FundsController < ApplicationController
   def index
     @portfolio = Portfolio.find(params[:portfolio_id])
     @funds = @portfolio.funds
-    # @funds_actual_amount = stocks_actual_amount(@stocks)
-		# @funds_buy_amount = stocks_buy_amount(@stocks)
-		# if @funds.length > 0 
-		# 	@funds_return_tax = ((@funds_actual_amount / @funds_buy_amount) - 1) *100
-		# 	@funds_return_value = (@funds_actual_amount - @funds_buy_amount) 
-		# end
+    @funds_actual_amount = funds_actual_amount(@funds)
+		@funds_buy_amount = funds_buy_amount(@funds)
+		
+    if @funds.length > 0 
+			@funds_return_tax = ((@funds_actual_amount / @funds_buy_amount) - 1) *100
+			@funds_return_value = (@funds_actual_amount - @funds_buy_amount) 
+		end
 
     if params[:query] && params[:query] != ''
       @query = params[:query]
@@ -47,7 +48,7 @@ class FundsController < ApplicationController
     @fund = Fund.new(fund_params)
     @fund.portfolio = @portfolio
     if @fund.save
-      redirect_to portfolio_path(@portfolio)
+      redirect_to portfolio_funds_path(@portfolio)
     else
       render :new
     end
@@ -71,48 +72,48 @@ class FundsController < ApplicationController
   def destroy
     fund = Fund.find(params[:id])
     fund.destroy
-    redirect_to portfolio_path(fund.portfolio)
+    redirect_to portfolio_funds_path(fund.portfolio)
   end
 
   def update_funds_price
 		portfolio = Portfolio.find(params[:id])
 		if portfolio.funds.length.positive?
-			query = stock_symbols.join(',')
-			data_fetch = fetch_stock_price(query)
-			if data_fetch['quoteResponse']
-				portfolio.funds.each_with_index do |fund, index| 
-					fund.actual_price = data_fetch['quoteResponse']['result'][index]['regularMarketPrice']
-					fund.actual_date = DateTime.now
-					if fund.save
-						flash[:alert] = 'Fundss updated'
-					else
-						flash[:alert] = fund.errors.messages
-					end
-				end
-			else
-				flash[:alert] = 'API error, please try again later'
-			end
-			redirect_to portfolio_funds_path(portfolio)
-		end
-	end
-
-  def fetch_fund_price(fund)
-    token = get_financial_data_token
-    if token
-      uri = URI.parse("https://api.financialdata.io/v1/fundos/#{fund.cnpj_clean}/cotas")
-      header = {'Content-Type': 'application/json', 'Authorization': "Bearer #{token}"}
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      request = Net::HTTP::Get.new(uri.request_uri, header)
-      response = http.request(request)
-      raise
-      return JSON.parse(response.read_body) 
+			portfolio.funds.each do |fund|
+        data_fetch = fetch_fund_price(fund.cnpj_clean)
+        if data_fetch.last['data'] && data_fetch.last['data'] != fund.actual_date
+          fund.actual_date = Date.strptime(data_fetch.last['data'], '%Y-%m-%d')
+          fund.actual_price = data_fetch.last['valor'].to_f
+          if fund.save
+            flash[:alert] = "Updated #{fund.short_name}"
+          else
+            flash[:alert] = fund.errors.messages
+          end
+        end
+      end
+    else
+      flash[:alert] = "Funds already updated"
     end
-  end
-
+		redirect_to portfolio_funds_path(portfolio)
+	end
+  
   private
 
+  def funds_actual_amount(funds)
+		sum = 0
+		funds.each do |fund|
+			sum += (fund.buy_quantity * fund.actual_price) if fund.actual_price
+		end
+		sum
+	end
+
+	def funds_buy_amount(funds)
+		sum = 0
+		funds.each do |fund|
+			sum += (fund.buy_quantity * fund.buy_price)
+		end
+		sum
+	end
+  
   def fetch_fund(query)
     token = get_financial_data_token
     if token
@@ -129,7 +130,20 @@ class FundsController < ApplicationController
       render :choose_fund
     end
   end
-
+  
+  def fetch_fund_price(query)
+    token = get_financial_data_token
+    if token
+      uri = URI.parse("https://api.financialdata.io/v1/fundos/#{query}/cotas")
+      header = {'Content-Type': 'application/json', 'Authorization': "Bearer #{token}"}
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      request = Net::HTTP::Get.new(uri.request_uri, header)
+      response = http.request(request)
+      return JSON.parse(response.read_body) 
+    end
+  end
 
   def get_financial_data_token
     login = ENV["FINANCIAL_LOGIN"]

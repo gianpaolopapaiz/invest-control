@@ -5,7 +5,8 @@ class StocksController < ApplicationController
     @stocks = @portfolio.stocks
     @stocks_actual_amount = stocks_actual_amount(@stocks)
 		@stocks_buy_amount = stocks_buy_amount(@stocks)
-		if @stocks.length > 0 
+		
+    if @stocks.length > 0 
 			@stocks_return_tax = ((@stocks_actual_amount / @stocks_buy_amount) - 1) *100
 			@stocks_return_value = (@stocks_actual_amount - @stocks_buy_amount) 
 		end

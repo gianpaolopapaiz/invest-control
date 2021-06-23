@@ -11,4 +11,5 @@ Rails.application.routes.draw do
   get '/portfolios/:id/update_funds_price', to: 'funds#update_funds_price', as: 'update_funds_price'
   resources :stocks, only: [:edit, :update, :destroy]
   resources :funds, only: [:edit, :update, :destroy]
+  get '/funds/:id/fetch_fund_price', to: 'funds#fetch_fund_price', as: 'fetch_fund_price'
 end

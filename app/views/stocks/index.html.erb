@@ -52,7 +52,9 @@
             </div>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
               <span>Actual Date:</span>
-              <span><%= stock.actual_date.strftime("%Y/%m/%d") %></span>
+              <% if stock.actual_date %>
+                <span><%= stock.actual_date.strftime("%Y/%m/%d") %></span>  
+              <% end %>
             </div>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
               <span>Actual Price:</span>
