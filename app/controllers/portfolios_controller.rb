@@ -1,7 +1,8 @@
 class PortfoliosController < ApplicationController
 	
 	def index
-		@portfolios = Portfolio.all
+		@portfolios = current_user.portfolios
+		
 	end
 
 	def show
