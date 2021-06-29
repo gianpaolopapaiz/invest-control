@@ -6,8 +6,19 @@ class PortfoliosController < ApplicationController
 
 	def show
 		@portfolio = Portfolio.find(params[:id])
-		# stocks
 		@stocks = @portfolio.stocks
+		@funds = @portfolio.funds
+		#portfolio
+		@portfolio_actual_amount = portfolio_actual_amount
+		@portfolio_buy_amount = portfolio_buy_amount
+		if @stocks.length > 0 || @funds.length > 0
+			@portfolio_return_tax = ((@portfolio_actual_amount / @portfolio_buy_amount) - 1) *100
+			@portfolio_return_value = (@portfolio_actual_amount - @portfolio_buy_amount)
+		else
+			@portfolio_return_tax = 0
+			@portfolio_return_value = 0
+		end
+		# stocks
 		@stocks_actual_amount = product_actual_amount(@stocks)
 		@stocks_buy_amount = product_buy_amount(@stocks)
 		if @stocks.length > 0 
@@ -20,7 +31,6 @@ class PortfoliosController < ApplicationController
 			end 
 		end
 		# funds
-		@funds = @portfolio.funds
 		@funds_actual_amount = product_actual_amount(@funds)
 		@funds_buy_amount = product_buy_amount(@funds)
 		if @funds.length > 0 
@@ -49,6 +59,22 @@ class PortfoliosController < ApplicationController
 
 	private
 
+	def portfolio_actual_amount
+		portfolio = Portfolio.find(params[:id])
+		sum = 0
+		sum = product_actual_amount(portfolio.stocks) if portfolio.stocks.length > 0
+		sum += product_actual_amount(portfolio.funds) if portfolio.funds.length > 0
+		sum
+	end
+
+	def portfolio_buy_amount
+		portfolio = Portfolio.find(params[:id])
+		sum = 0
+		sum = product_buy_amount(portfolio.stocks) if portfolio.stocks.length > 0
+		sum += product_buy_amount(portfolio.funds) if portfolio.funds.length > 0
+		sum
+	end
+	
 	def product_actual_amount(product)
 		sum = 0
 		product.each do |product|
@@ -64,7 +90,7 @@ class PortfoliosController < ApplicationController
 		end
 		sum
 	end
-	
+
 	def portfolio_params
 		params.require(:portfolio).permit(:name)
 	end

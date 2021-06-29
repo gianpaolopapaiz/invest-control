@@ -10,6 +10,15 @@
       <%= link_to 'Fund', portfolio_funds_choose_fund_path(@portfolio), class: 'dropdown-item' %>
     </div>
   </div>
+
+  <% if @stocks.length > 0 || @funds.length > 0 %>
+    <h4><strong>Summary</strong></h4>
+    <p class="card-text mb-0">Ammount: <%= number_to_currency(@portfolio_actual_amount) %></p>
+    <p class="card-text mb-0">Return Tax: <%= @portfolio_return_tax.round(2) %>%</p>
+    <p class="card-text">Return Value: <%= number_to_currency(@portfolio_return_value) %></p>
+  <% end %>
+
+
   <h4><strong>Composition</strong></h4>
   <div class='d-flex align-items-center justify-content-start flex-wrap'>  
     <% if @stocks.length > 0 %>
