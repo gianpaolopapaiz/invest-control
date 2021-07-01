@@ -1,9 +1,8 @@
 <div class='container'>
-	<h2 class='mb-2 text-center'>Meus Portfolios </h1>
-<%= link_to 'Add portfolio', new_portfolio_path, class: 'btn btn-primary btn-sm mb-3' %>
+	<h2 class='mb-2 text-center'>Meus Portfolios </h2>
+	<%= link_to 'Adicionar', new_portfolio_path, class: 'btn btn-primary btn-sm mb-3' %>
 	<% if @portfolios && @portfolios.length > 0 %>
 		<div class='d-flex align-items-center justify-content-start flex-wrap'>
-		
 			<% @portfolios.each do |portfolio| %>
 				<div class="card invest-card m-1" style="width: 16rem;">
 					<div class="dropdown"> 
@@ -20,14 +19,17 @@
 						<div>
 							<h5 class="card-title"><strong><%= portfolio.name %></strong></h5>
 						</div>
-						<h6 class="card-subtitle mb-2 text-muted"><%= portfolio.name %></h6>
-						<h6 class="card-subtitle mb-2 text-muted">Advisor: <%= portfolio.name %></h6>
+						<h6 class="card-subtitle mb-2 text-muted">Nº de ativos <%= portfolio.stocks.count + portfolio.funds.count %></h6>
 						<div class="card-text mb-0 d-flex align-items-center justify-content-between">
 							<span>Montante:</span> 
 							<span><%= number_to_currency(portfolio.name) %></span>
 						</div>
+						<div class="card-text mb-0 d-flex align-items-center justify-content-between">
+							<span>Taxa de retorno:</span> 
+							<span><%= number_to_currency(portfolio.name) %></span>
+						</div>
 						<div class="card-text mb-2 d-flex align-items-center justify-content-between">
-							<span>Retorno:</span> 
+							<span>Retorno absoluto:</span> 
 							<span><%= number_to_currency(portfolio.name) %></span>
 						</div>
 					</div>

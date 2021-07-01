@@ -1,6 +1,13 @@
-.navbar-lewagon {
+.app-navbar {
+  display: flex;
+  width: 100%;
   justify-content: space-between;
   background: white;
+  width: 100%;
+  padding: 8px 16px;
+  a {
+    color: rgba(0, 0, 0, 0.644);
+  }
 }
 
 .navbar-lewagon .navbar-collapse {
@@ -9,4 +16,10 @@
 
 .navbar-lewagon .navbar-brand img {
   width: 40px;
+}
+
+.nav-item {
+  a {
+    padding-right: 0;
+  }
 }

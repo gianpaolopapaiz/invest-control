@@ -52,12 +52,28 @@ class PortfoliosController < ApplicationController
 		@portfolio = Portfolio.new(portfolio_params)
 		@portfolio.user = current_user
 		if @portfolio.save
-			redirect_to portfolio_path(@portfolio)
+			redirect_to portfolios_path
 		else
 			flash[:alert] = @portfolio.errors.messages
 			render :new
 		end
 	end
+
+	def edit
+		@portfolio = Portfolio.find(params[:id])
+	end
+
+	def update
+		@portfolio = Portfolio.find(params[:id])
+			if @portfolio.update(portfolio_params)
+				flash[:success] = "Portfolio was successfully updated"
+				redirect_to portfolios_path
+			else
+				flash[:error] = "Something went wrong"
+				render :edit
+			end
+	end
+	
 
 	def destroy
 		@portfolio = Portfolio.find(params[:id])

@@ -1,6 +1,7 @@
+  <%= link_to '', portfolios_path, class: 'fas fa-angle-double-left app-btn-path' %>
 <div class="container">
-  <%= link_to '<< Portfolios', portfolios_path, class: 'btn btn-secondary btn-sm mb-3' %> 
-  <h1 class='mb-2'><%= @portfolio.name %></h1> 
+  <h2 class='text-center mb-0'><%= @portfolio.name %></h2> 
+  <p class='text-center'>Visão Geral</p>
   <div class="dropdown">
     <button class="btn btn-primary dropdown-toggle mb-3" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       Add product
@@ -12,30 +13,30 @@
   </div>
 
   <% if @stocks.length > 0 || @funds.length > 0 %>
-    <h4><strong>Summary</strong></h4>
-    <p class="card-text mb-0">Ammount: <%= number_to_currency(@portfolio_actual_amount) %></p>
+    <h4><strong>Resumo</strong></h4>
+    <p class="card-text mb-0">Montante: <%= number_to_currency(@portfolio_actual_amount) %></p>
     <p class="card-text mb-0">Return Tax: <%= @portfolio_return_tax.round(2) %>%</p>
     <p class="card-text">Return Value: <%= number_to_currency(@portfolio_return_value) %></p>
   <% end %>
 
 
-  <h4><strong>Composition</strong></h4>
+  <h4><strong>Ativos</strong></h4>
   <div class='d-flex align-items-center justify-content-start flex-wrap'>  
     <% if @stocks.length > 0 %>
-      <div class="card m-1" style="width: 16rem;">
+      <div class="card invest-card m-1" style="width: 16rem;">
         <div class="card-body">
-          <h5 class="card-title"><strong>Stocks(<%= @stocks.length %>)</strong></h5>
-          <h6 class="card-subtitle mb-2 text-muted">Summary</h6>
+          <h5 class="card-title"><strong>Ações</strong></h5>
+          <h6 class="card-subtitle mb-2 text-muted">Nº de ativos <%= @stocks.length %> </h6>
           <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-            <span>Ammount:</span> 
+            <span>Montante:</span> 
             <span><%= number_to_currency(@stocks_actual_amount) %></span>
           </div>
           <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-            <span>Return Tax:</span> 
+            <span>Taxa de retorno:</span> 
             <span><%= @stocks_return_tax.round(2) %>%</span>
           </div>
           <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-            <span>Return Value:</span> 
+            <span>Retorno absoluto:</span> 
             <span><%= number_to_currency(@stocks_return_value) %></span>
           </div>
           <p class="card-text mb-0"> </p>
@@ -47,20 +48,20 @@
       </div>
     <% end %>
     <% if @funds.length > 0 %>
-      <div class="card m-1" style="width: 16rem;">
+      <div class="card invest-card m-1" style="width: 16rem;">
         <div class="card-body">
-          <h5 class="card-title"><strong>Funds(<%= @funds.length %>)</strong></h5>
-          <h6 class="card-subtitle mb-2 text-muted">Summary</h6>
+          <h5 class="card-title"><strong>Fundos</strong></h5>
+          <h6 class="card-subtitle mb-2 text-muted">Nº de ativos <%= @funds.length %></h6>
           <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-            <span>Ammount:</span> 
+            <span>Montante:</span> 
             <span><%= number_to_currency(@funds_actual_amount) %></span>
           </div>
           <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-            <span>Return Tax:</span> 
+            <span>Taxa de retorno</span> 
             <span><%= @funds_return_tax.round(2) %>%</span>
           </div>
           <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-            <span>Return Value:</span> 
+            <span>Retorno absoluto:</span> 
             <span><%= number_to_currency(@funds_return_value) %></span>
           </div>
           <p class="card-text mb-0"> </p>
