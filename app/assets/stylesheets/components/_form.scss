@@ -1,0 +1,18 @@
+.app-form {
+  min-height: calc(100vh - 75px);
+  width: 100%;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .simple_form {
+    width: 80%;
+    margin-bottom: 20px;
+  }
+  .devise-links {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+  }
+}

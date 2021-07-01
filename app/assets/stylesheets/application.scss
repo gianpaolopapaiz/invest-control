@@ -12,3 +12,8 @@
 @import "components/index";
 @import "components/invest_card";
 @import "pages/index";
+@import "components/form";
+
+body {
+  min-height: 100vh;
+}
