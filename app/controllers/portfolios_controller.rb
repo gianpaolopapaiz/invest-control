@@ -2,7 +2,6 @@ class PortfoliosController < ApplicationController
 	
 	def index
 		@portfolios = current_user.portfolios
-		
 	end
 
 	def show
@@ -51,11 +50,19 @@ class PortfoliosController < ApplicationController
 
 	def create
 		@portfolio = Portfolio.new(portfolio_params)
+		@portfolio.user = current_user
 		if @portfolio.save
 			redirect_to portfolio_path(@portfolio)
 		else
+			flash[:alert] = @portfolio.errors.messages
 			render :new
 		end
+	end
+
+	def destroy
+		@portfolio = Portfolio.find(params[:id])
+		@portfolio.destroy
+		redirect_to portfolios_path
 	end
 
 	private
