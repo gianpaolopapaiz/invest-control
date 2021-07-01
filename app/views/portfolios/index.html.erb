@@ -1,10 +1,42 @@
 <div class='container'>
-	<h1 class='mb-2'>My Portfolios</h1>
-	<%= link_to 'Add portfolio', new_portfolio_path, class: 'btn btn-primary btn-sm mb-3' %>
-	<% if @portfolio && @portfolios.length > 0 %>
-		<% @portfolios.each do |portfolio| %>
-			<h3><%= link_to portfolio.name, portfolio_path(portfolio) %></h3>
-		<% end %>
+	<h2 class='mb-2 text-center'>Meus Portfolios </h1>
+<%= link_to 'Add portfolio', new_portfolio_path, class: 'btn btn-primary btn-sm mb-3' %>
+	<% if @portfolios && @portfolios.length > 0 %>
+		<div class='d-flex align-items-center justify-content-start flex-wrap'>
+		
+			<% @portfolios.each do |portfolio| %>
+				<div class="card invest-card m-1" style="width: 16rem;">
+					<div class="dropdown"> 
+						<button class="fas fa-cog fixed-top-right text-muted" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							<%= link_to 'Editar', edit_portfolio_path(portfolio), class: 'dropdown-item' %>
+							<%= link_to 'Remover', portfolio_path(portfolio), method: :delete, data: { confirm: "Você tem certeza?" }, class: 'dropdown-item' %>
+						</div>
+					</div>
+					<div class='fixed-bottom-right'>
+						<%= link_to '', portfolio_path(portfolio), class: 'fas fa-angle-double-right'  %>
+					</div>
+					<div class="card-body">
+						<div>
+							<h5 class="card-title"><strong><%= portfolio.name %></strong></h5>
+						</div>
+						<h6 class="card-subtitle mb-2 text-muted"><%= portfolio.name %></h6>
+						<h6 class="card-subtitle mb-2 text-muted">Advisor: <%= portfolio.name %></h6>
+						<div class="card-text mb-0 d-flex align-items-center justify-content-between">
+							<span>Montante:</span> 
+							<span><%= number_to_currency(portfolio.name) %></span>
+						</div>
+						<div class="card-text mb-2 d-flex align-items-center justify-content-between">
+							<span>Retorno:</span> 
+							<span><%= number_to_currency(portfolio.name) %></span>
+						</div>
+					</div>
+				</div>
+			<% end %>
+    </div>
+
+
+
 	<% else %>
 		<p>(No portfolio added yet!)</p>
 	<% end %>

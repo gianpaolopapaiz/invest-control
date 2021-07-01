@@ -1,0 +1,34 @@
+.invest-card {
+  position: relative;
+}
+
+.fixed-top-right {
+  position: absolute;
+  background-color: white;
+  padding: 0;
+  border: none;
+  right: 7px;
+  top: 7px;
+}
+
+.fixed-top-right:hover {
+  text-decoration: none;
+}
+
+.fixed-bottom-right {
+  position: absolute;
+  bottom: 7px;
+  right: 10px;
+}
+
+.fixed-bottom-right a:hover {
+  text-decoration: none;
+}
+
+
+
+@media only screen and (max-width: 576px) {
+  .invest-card {
+    width: 100% !important;
+  }
+}
