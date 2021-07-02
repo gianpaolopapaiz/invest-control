@@ -1,26 +1,28 @@
-  <%= link_to '', portfolios_path, class: 'fas fa-angle-double-left app-btn-path' %>
 <div class="container">
-  <h2 class='text-center mb-0'><%= @portfolio.name %></h2> 
-  <p class='text-center'>Visão Geral</p>
-  <div class="dropdown">
-    <button class="btn btn-primary dropdown-toggle mb-3" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Add product
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <%= link_to 'Stock', portfolio_stocks_choose_stock_path(@portfolio), class: 'dropdown-item' %>
-      <%= link_to 'Fund', portfolio_funds_choose_fund_path(@portfolio), class: 'dropdown-item' %>
+  <div class='d-flex align-items-center justify-content-between flex-wrap'>
+    <div class='d-flex align-items-center justify-content-start'>
+      <h2 class='mb-0'><%= @portfolio.name %> </h2>
+      <h5 class='mb-0 ml-2'>- Visão Geral</h5>
     </div>
-  </div>
+		<button class="fas fa-ellipsis-v app-btn-flat" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <%= link_to 'Adicionar Ação', portfolio_stocks_choose_stock_path(@portfolio), class: 'dropdown-item' %>
+      <%= link_to 'Adicionar Fundo', portfolio_funds_choose_fund_path(@portfolio), class: 'dropdown-item' %>
+			<%= link_to 'Renomear', edit_portfolio_path(@portfolio), class: 'dropdown-item' %>
+			<%= link_to 'Remover', portfolio_path(@portfolio), method: :delete, data: { confirm: "Você tem certeza?" }, class: 'dropdown-item' %>
+		</div>
+	</div>
+	<hr>
 
   <% if @stocks.length > 0 || @funds.length > 0 %>
-    <h4><strong>Resumo</strong></h4>
-    <p class="card-text mb-0">Montante: <%= number_to_currency(@portfolio_actual_amount) %></p>
-    <p class="card-text mb-0">Return Tax: <%= @portfolio_return_tax.round(2) %>%</p>
-    <p class="card-text">Return Value: <%= number_to_currency(@portfolio_return_value) %></p>
+    <h4><strong>Sumário</strong></h4>
+    <p class="card-text mb-0">Montante: <%= number_to_currency(@portfolio_actual_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
+    <p class="card-text mb-0">Taxa de retorno: <%= number_to_percentage(@portfolio_return_tax, separator: ',', delimiter: '.', precision: 2) %></p>
+    <p class="card-text">Retorno absoluto: <%= number_to_currency(@portfolio_return_value, unit:'R$', separator: ',', delimiter: '.') %></p>
   <% end %>
 
 
-  <h4><strong>Ativos</strong></h4>
+  <h4><strong>Ativos por tipo</strong></h4>
   <div class='d-flex align-items-center justify-content-start flex-wrap'>  
     <% if @stocks.length > 0 %>
       <div class="card invest-card m-1" style="width: 16rem;">
@@ -29,15 +31,15 @@
           <h6 class="card-subtitle mb-2 text-muted">Nº de ativos <%= @stocks.length %> </h6>
           <div class="card-text mb-0 d-flex align-items-center justify-content-between">
             <span>Montante:</span> 
-            <span><%= number_to_currency(@stocks_actual_amount) %></span>
+            <span><%= number_to_currency(@stocks_actual_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
           </div>
           <div class="card-text mb-0 d-flex align-items-center justify-content-between">
             <span>Taxa de retorno:</span> 
-            <span><%= @stocks_return_tax.round(2) %>%</span>
+            <span><%= number_to_percentage(@stocks_return_tax, separator: ',', delimiter: '.', precision: 2) %></span>
           </div>
           <div class="card-text mb-0 d-flex align-items-center justify-content-between">
             <span>Retorno absoluto:</span> 
-            <span><%= number_to_currency(@stocks_return_value) %></span>
+            <span><%= number_to_currency(@stocks_return_value, unit:'R$', separator: ',', delimiter: '.') %></span>
           </div>
           <p class="card-text mb-0"> </p>
           <p class="card-text mb-0"> </p>
@@ -54,15 +56,15 @@
           <h6 class="card-subtitle mb-2 text-muted">Nº de ativos <%= @funds.length %></h6>
           <div class="card-text mb-0 d-flex align-items-center justify-content-between">
             <span>Montante:</span> 
-            <span><%= number_to_currency(@funds_actual_amount) %></span>
+            <span><%= number_to_currency(@funds_actual_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
           </div>
           <div class="card-text mb-0 d-flex align-items-center justify-content-between">
             <span>Taxa de retorno</span> 
-            <span><%= @funds_return_tax.round(2) %>%</span>
+            <span><%= number_to_percentage(@funds_return_tax, separator: ',', delimiter: '.', precision: 2) %></span>
           </div>
           <div class="card-text mb-0 d-flex align-items-center justify-content-between">
             <span>Retorno absoluto:</span> 
-            <span><%= number_to_currency(@funds_return_value) %></span>
+            <span><%= number_to_currency(@funds_return_value, unit:'R$', separator: ',', delimiter: '.') %></span>
           </div>
           <p class="card-text mb-0"> </p>
           <p class="card-text mb-0"> </p>

@@ -1,8 +1,10 @@
-<div class="container">
-<%= link_to '<< Portfolios', portfolios_path, class: 'btn btn-secondary btn-sm mb-3' %>
-  <h2>Editar Portfolio</h2>
+<div class="app-form text-center">
+  <h2>Renomear Carteira</h2>
 	<%= simple_form_for @portfolio do |f| %>
-		<%= f.input :name, label: 'Nome' %>
-		<%= f.submit 'Atualizar', class: 'btn btn-primary btn-block' %>
+		<%= f.input :name, label: 'Escolha o novo nome desejado:' %>
+		<div class='d-flex justify-content-center align-items-center'>
+			<%= link_to 'Voltar', portfolios_path, class: 'btn btn-secondary btn-block w-50 m-0 mr-1' %>
+			<%= f.submit 'Atualizar', class: 'btn btn-primary btn-block w-50 m-0 ml-1' %>
+		</div>
 	<% end %>
 </div>
