@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container mb-4">
   <div class='d-flex align-items-center justify-content-between flex-wrap'>
     <div class='d-flex align-items-center justify-content-start'>
       <h2 class='mb-0'><%= @portfolio.name %> </h2>
@@ -20,9 +20,10 @@
   <% end %>
   
   <% if @query && @query != '' %>
-    <div class='d-flex align-items-center'>
-      <h4 class='mb-0'>Funds filtrados por: "<%= @query %>" (<%= @funds.length %>) | </h4>
-      <%= link_to 'remove filter', portfolio_funds_path(@portfolio), class: 'ml-2' %>
+      <h4 class='mb-0'><strong>Fundos filtrados por:</strong></h4>
+    <div class='d-flex justify-content-between align-items-center'>
+      <h4>"<%= @query %>" (<%= @funds.length %>)</h4>
+      <%= link_to 'remover filtro', portfolio_funds_path(@portfolio), class: 'ml-2' %>
     </div>
   <% else %>
     <h4 class='mb-0'><strong>Fundos (<%= @funds.length %>):</strong></h4>
