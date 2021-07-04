@@ -1,11 +1,13 @@
 class PortfoliosController < ApplicationController
 	
 	def index
-		@portfolios = current_user.portfolios
+		# @portfolios = current_user.portfolios
+		@portfolios = policy_scope(Portfolio)
 	end
 
 	def show
-		@portfolio = Portfolio.find(params[:id])
+		# @portfolio = Portfolio.find(params[:id])
+		@portfolio = policy_scope(Portfolio)
 		@stocks = @portfolio.stocks
 		@funds = @portfolio.funds
 		#portfolio

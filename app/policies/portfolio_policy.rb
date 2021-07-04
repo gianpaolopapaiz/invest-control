@@ -3,6 +3,9 @@ class PortfolioPolicy < ApplicationPolicy
     def resolve
       scope.all
     end
+    def show?
+      record.user == user
+    end
     def create?
       return true
     end
