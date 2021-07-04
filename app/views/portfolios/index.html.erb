@@ -36,8 +36,8 @@
 							<span><%= number_to_currency(portfolio.name, unit:'R$', separator: ',', delimiter: '.') %></span>
 						</div>
 						<div class=''>
-						<%= link_to 'Detalhes', portfolio_path(portfolio, unit:'R$', separator: ',', delimiter: '.'), class: 'btn btn-primary btn-block btn-sm'  %>
-					</div>
+							<%= link_to 'Detalhes', portfolio_path(portfolio, unit:'R$', separator: ',', delimiter: '.'), class: 'btn btn-primary btn-block btn-sm'  %>
+						</div>
 					</div>
 				</div>
 			<% end %>

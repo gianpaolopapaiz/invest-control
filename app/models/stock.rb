@@ -8,13 +8,25 @@ class Stock < ApplicationRecord
   validates :advisor, inclusion: { in: ADVISORS }
 
   def amount
-    actual_price * buy_quantity
+    if actual_price
+      actual_price * buy_quantity
+    else
+      0
+    end
   end
   def return_value
-    (actual_price - buy_price) * buy_quantity
+    if actual_price
+      (actual_price - buy_price) * buy_quantity
+    else
+      0
+    end
   end
   def return_tax
-    (((actual_price / buy_price) -1 ) * 100) 
+    if actual_price
+      (((actual_price / buy_price) -1 ) * 100) 
+    else
+      0
+    end
   end 
   def day_return
     ((((actual_price / buy_price) ** (1 / (actual_date - buy_date).to_f)) - 1) * 100)

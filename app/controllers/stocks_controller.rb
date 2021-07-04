@@ -1,5 +1,4 @@
 class StocksController < ApplicationController
-  
   def index
     @portfolio = Portfolio.find(params[:portfolio_id])
     @stocks = @portfolio.stocks
@@ -104,7 +103,7 @@ class StocksController < ApplicationController
   def stocks_actual_amount(stocks)
 		sum = 0
 		@stocks.each do |stock|
-			sum += (stock.buy_quantity * stock.actual_price)
+			sum += (stock.buy_quantity * stock.actual_price) if stock.actual_price
 		end
 		sum
 	end
