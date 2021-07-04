@@ -1,6 +1,7 @@
 class FundsController < ApplicationController
   def index
     @portfolio = Portfolio.find(params[:portfolio_id])
+    authorize @portfolio
     @funds = @portfolio.funds
     @funds_actual_amount = funds_actual_amount(@funds)
 		@funds_buy_amount = funds_buy_amount(@funds)
