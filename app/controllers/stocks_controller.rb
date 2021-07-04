@@ -1,6 +1,6 @@
 class StocksController < ApplicationController
   def index
-    @portfolio = Portfolio.find(params[:portfolio_id])
+    @portfolio = policy_scope(Portfolio).find(params[:portfolio_id])
     @stocks = @portfolio.stocks
     @stocks_actual_amount = stocks_actual_amount(@stocks)
 		@stocks_buy_amount = stocks_buy_amount(@stocks)
@@ -19,6 +19,7 @@ class StocksController < ApplicationController
   
   def choose_stock
     @portfolio = Portfolio.find(params[:portfolio_id])
+    authorize @portfolio
     @stock = Stock.new
     @query = 'nil'
     if params[:query] && params[:query] != ''
@@ -37,10 +38,12 @@ class StocksController < ApplicationController
     @stock.symbol = @symbol
     @stock.short_name = @short_name
     @portfolio = Portfolio.find(params[:portfolio_id])
+    authorize @portfolio
   end
 
   def create
     @portfolio = Portfolio.find(params[:portfolio_id])
+    authorize @portfolio
     @stock = Stock.new(stock_params)
     @stock.portfolio = @portfolio
     @stock.strategy = 'variable'
@@ -74,6 +77,7 @@ class StocksController < ApplicationController
 
   def update_stocks_price
 		portfolio = Portfolio.find(params[:id])
+    authorize portfolio
 		if portfolio.stocks.length.positive?
 			stock_symbols = []
 			portfolio.stocks.each_with_index do |stock| 

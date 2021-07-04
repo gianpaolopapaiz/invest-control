@@ -20,4 +20,20 @@ class PortfolioPolicy < ApplicationPolicy
   def destroy?
     record.user == user
   end
+
+  def choose_stock?
+    return true
+  end
+
+  def update_stocks_price?
+    record.user == user
+  end
+
+  def choose_fund?
+    return true
+  end
+
+  def update_funds_price?
+    record.user == user
+  end
 end
