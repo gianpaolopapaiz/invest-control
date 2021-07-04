@@ -25,15 +25,15 @@
 						<h6 class="card-subtitle mb-2 text-muted">Nº de ativos <%= portfolio.stocks.count + portfolio.funds.count %></h6>
 						<div class="card-text mb-0 d-flex align-items-center justify-content-between">
 							<span>Montante:</span> 
-							<span><%= number_to_currency(portfolio.name, unit:'R$', separator: ',', delimiter: '.') %></span>
+							<span><%= number_to_currency(portfolio.amount, unit:'R$', separator: ',', delimiter: '.') %></span>
 						</div>
 						<div class="card-text mb-0 d-flex align-items-center justify-content-between">
 							<span>Taxa de retorno:</span> 
-							<span><%= number_to_percentage(portfolio.name, separator: ',', delimiter: '.', precision: 2) %></span>
+							<span><%= number_to_percentage(portfolio.return_tax, separator: ',', delimiter: '.', precision: 2) %></span>
 						</div>
 						<div class="card-text mb-3 d-flex align-items-center justify-content-between">
 							<span>Retorno absoluto:</span> 
-							<span><%= number_to_currency(portfolio.name, unit:'R$', separator: ',', delimiter: '.') %></span>
+							<span><%= number_to_currency(portfolio.return_value, unit:'R$', separator: ',', delimiter: '.') %></span>
 						</div>
 						<div class=''>
 							<%= link_to 'Detalhes', portfolio_path(portfolio, unit:'R$', separator: ',', delimiter: '.'), class: 'btn btn-primary btn-block btn-sm'  %>
