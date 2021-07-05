@@ -1,6 +1,6 @@
 class FundsController < ApplicationController
   def index
-    @portfolio = Portfolio.find(params[:portfolio_id])
+    @portfolio = policy_scope(Portfolio).find(params[:portfolio_id])
     @funds = @portfolio.funds
     @funds_actual_amount = funds_actual_amount(@funds)
 		@funds_buy_amount = funds_buy_amount(@funds)
@@ -19,6 +19,7 @@ class FundsController < ApplicationController
   
   def choose_fund
     @portfolio = Portfolio.find(params[:portfolio_id])
+    authorize @portfolio
     @fund = Fund.new
     @query = 'nil'
     if params[:query] && params[:query] != ''
@@ -41,10 +42,12 @@ class FundsController < ApplicationController
     @fund.fund_class = @fund_class
     @fund.short_name = @short_name
     @portfolio = Portfolio.find(params[:portfolio_id])
+    authorize @portfolio
   end
 
   def create
     @portfolio = Portfolio.find(params[:portfolio_id])
+    authorize @portfolio
     @fund = Fund.new(fund_params)
     @fund.portfolio = @portfolio
     if @fund.save
@@ -56,10 +59,12 @@ class FundsController < ApplicationController
 
   def edit
     @fund = Fund.find(params[:id])
+    authorize @fund
   end
 
   def update
     @fund = Fund.find(params[:id])
+    authorize @fund
       if @fund.update(fund_params)
         flash[:success] = "Fund successfully updated"
         redirect_to portfolio_path(@fund.portfolio)
@@ -71,12 +76,14 @@ class FundsController < ApplicationController
 
   def destroy
     fund = Fund.find(params[:id])
+    authorize fund
     fund.destroy
     redirect_to portfolio_funds_path(fund.portfolio)
   end
 
   def update_funds_price
 		portfolio = Portfolio.find(params[:id])
+    authorize portfolio
 		if portfolio.funds.length.positive?
 			portfolio.funds.each do |fund|
         data_fetch = fetch_fund_price(fund.cnpj_clean)

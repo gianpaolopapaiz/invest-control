@@ -1,11 +1,12 @@
 class PortfoliosController < ApplicationController
 	
 	def index
-		@portfolios = current_user.portfolios
+		@portfolios = policy_scope(Portfolio).order(created_at: :desc)
 	end
 
 	def show
 		@portfolio = Portfolio.find(params[:id])
+		authorize @portfolio
 		@stocks = @portfolio.stocks
 		@funds = @portfolio.funds
 		#portfolio
@@ -46,10 +47,12 @@ class PortfoliosController < ApplicationController
 
 	def new
 		@portfolio = Portfolio.new
+		authorize @portfolio
 	end
 
 	def create
 		@portfolio = Portfolio.new(portfolio_params)
+		authorize @portfolio
 		@portfolio.user = current_user
 		if @portfolio.save
 			redirect_to portfolios_path
@@ -61,10 +64,12 @@ class PortfoliosController < ApplicationController
 
 	def edit
 		@portfolio = Portfolio.find(params[:id])
+		authorize @portfolio
 	end
 
 	def update
 		@portfolio = Portfolio.find(params[:id])
+		authorize @portfolio
 			if @portfolio.update(portfolio_params)
 				flash[:success] = "Portfolio was successfully updated"
 				redirect_to portfolios_path
@@ -77,6 +82,7 @@ class PortfoliosController < ApplicationController
 
 	def destroy
 		@portfolio = Portfolio.find(params[:id])
+		authorize @portfolio
 		@portfolio.destroy
 		redirect_to portfolios_path
 	end
