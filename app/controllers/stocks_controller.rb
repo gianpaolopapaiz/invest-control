@@ -35,6 +35,7 @@ class StocksController < ApplicationController
     @short_name = params[:short_name]
     @symbol = params[:symbol]
     @stock = Stock.new
+    authorize @stock
     @stock.symbol = @symbol
     @stock.short_name = @short_name
     @portfolio = Portfolio.find(params[:portfolio_id])
@@ -56,10 +57,12 @@ class StocksController < ApplicationController
 
   def edit
     @stock = Stock.find(params[:id])
+    authorize @stock
   end
 
   def update
     @stock = Stock.find(params[:id])
+    authorize @stock
       if @stock.update(stock_params)
         flash[:success] = "Stock successfully updated"
         redirect_to portfolio_path(@stock.portfolio)
@@ -71,6 +74,7 @@ class StocksController < ApplicationController
 
   def destroy
     stock = Stock.find(params[:id])
+    authorize stock
     stock.destroy
     redirect_to portfolio_path(stock.portfolio)
   end

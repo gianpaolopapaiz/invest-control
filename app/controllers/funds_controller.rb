@@ -59,10 +59,12 @@ class FundsController < ApplicationController
 
   def edit
     @fund = Fund.find(params[:id])
+    authorize @fund
   end
 
   def update
     @fund = Fund.find(params[:id])
+    authorize @fund
       if @fund.update(fund_params)
         flash[:success] = "Fund successfully updated"
         redirect_to portfolio_path(@fund.portfolio)
@@ -74,6 +76,7 @@ class FundsController < ApplicationController
 
   def destroy
     fund = Fund.find(params[:id])
+    authorize fund
     fund.destroy
     redirect_to portfolio_funds_path(fund.portfolio)
   end
