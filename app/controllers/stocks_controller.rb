@@ -47,7 +47,7 @@ class StocksController < ApplicationController
     authorize @portfolio
     @stock = Stock.new(stock_params)
     @stock.portfolio = @portfolio
-    @stock.strategy = 'variable'
+    @stock.strategy = 'Variável'
     if @stock.save
       redirect_to portfolio_path(@portfolio)
     else
