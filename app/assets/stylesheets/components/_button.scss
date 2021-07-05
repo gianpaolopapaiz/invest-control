@@ -7,4 +7,9 @@
 .app-btn-flat {
   border: none;
   background-color: none;
+  color: black;
+}
+
+.app-btn-flat:hover {
+  text-decoration: none;
 }
