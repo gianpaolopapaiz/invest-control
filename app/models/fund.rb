@@ -7,6 +7,9 @@ class Fund < ApplicationRecord
 	validates :advisor, inclusion: { in: ADVISORS }
 	validates :cnpj_clean, format: { with: /\d{8}0001\d{2}/, message: 'Only allows digits!'}
 
+	def initial_amount
+    	buy_price * buy_quantity
+  end
 	def amount
 		if actual_price
     	actual_price * buy_quantity

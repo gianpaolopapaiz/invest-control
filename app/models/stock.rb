@@ -6,6 +6,10 @@ class Stock < ApplicationRecord
 	validates :strategy, inclusion: { in: STRATEGIES }
   validates :advisor, inclusion: { in: ADVISORS }
 
+  def initial_amount
+      buy_price * buy_quantity
+  end
+  
   def amount
     if actual_price
       actual_price * buy_quantity

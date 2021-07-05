@@ -1,8 +1,18 @@
 class Portfolio < ApplicationRecord
   belongs_to :user
-  has_many :funds
-  has_many :stocks
+  has_many :funds, dependent: :destroy 
+  has_many :stocks, dependent: :destroy 
   
+  def initial_amount
+    sum = 0
+    stocks.each do |stock|
+      sum += stock.buy_price * stock.buy_quantity
+    end
+    funds.each do |fund|
+      sum += fund.buy_price * fund.buy_quantity
+    end
+    sum
+  end
   def amount
     sum = 0
     stocks.each do |stock|

@@ -1,6 +1,6 @@
 <div class='container mb-4'>
 	<div class='d-flex align-items-center justify-content-between flex-wrap'>
-		<h2 class='mb-0'>Minhas Carteiras</h2>
+		<h2 class='mb-0'>Carteiras</h2>
 		<button class="fas fa-ellipsis-v app-btn-flat" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
 		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 			<%= link_to 'Adicionar Carteira', new_portfolio_path, class: 'dropdown-item' %>
@@ -24,7 +24,11 @@
 						</div>
 						<h6 class="card-subtitle mb-2 text-muted">Nº de ativos <%= portfolio.stocks.count + portfolio.funds.count %></h6>
 						<div class="card-text mb-0 d-flex align-items-center justify-content-between">
-							<span>Montante:</span> 
+							<span>Valor investido:</span> 
+							<span><%= number_to_currency(portfolio.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
+						</div>
+						<div class="card-text mb-0 d-flex align-items-center justify-content-between">
+							<span>Valor Atual:</span> 
 							<span><%= number_to_currency(portfolio.amount, unit:'R$', separator: ',', delimiter: '.') %></span>
 						</div>
 						<div class="card-text mb-0 d-flex align-items-center justify-content-between">
