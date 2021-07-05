@@ -7,15 +7,16 @@
     </div>
 		<button class="fas fa-ellipsis-v app-btn-flat" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
 		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <%= link_to 'Adicionar', portfolio_funds_choose_fund_path(@portfolio), class: 'dropdown-item' %>
-      <%= link_to 'Atualizar', update_funds_price_path(@portfolio), class: 'dropdown-item' %>
+      <%= link_to 'Adicionar fundo', portfolio_funds_choose_fund_path(@portfolio), class: 'dropdown-item' %>
+      <%= link_to 'Atualizar dados', update_funds_price_path(@portfolio), class: 'dropdown-item' %>
 		</div>
 	</div>
 	<hr>
 
   <% if @funds.length > 0 %>
     <h4><strong>Sumário</strong></h4>
-    <p class="card-text mb-0">Montante: <%= number_to_currency(@funds_actual_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
+    <p class="card-text mb-0">Valor investido: <%= number_to_currency(@funds_buy_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
+    <p class="card-text mb-0">Valor atual: <%= number_to_currency(@funds_actual_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
     <p class="card-text mb-0">Taxa de retorno: <%= number_to_percentage(@funds_return_tax, separator: ',', delimiter: '.', precision: 2) %></p>
     <p class="card-text">Retorno absoluto: <%= number_to_currency(@funds_return_value, unit:'R$', separator: ',', delimiter: '.') %></p>
   <% end %>
@@ -56,7 +57,11 @@
             <h6 class="card-subtitle mb-2 text-muted">Estratégia: <%= fund.strategy %></h6>
             <h6 class="card-subtitle mb-2 text-muted">Advisor: <%= fund.advisor %></h6>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span>Montante:</span> 
+              <span>Valor investido:</span> 
+              <span><%= number_to_currency(fund.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
+            </div>
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>Valor atual:</span> 
               <span><%= number_to_currency(fund.amount, unit:'R$', separator: ',', delimiter: '.') %></span>
             </div>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
