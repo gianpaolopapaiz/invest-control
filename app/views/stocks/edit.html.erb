@@ -1,14 +1,16 @@
-<div class="container">
-  <%= link_to '<< Portfolio', portfolio_path(@stock.portfolio), class: 'btn btn-secondary btn-sm mb-3' %>
-  <h3>Update  <strong><%= @stock.symbol %></strong></h3>
-  <br>
+<div class="app-form">
+  <h2 class='text-center'>Editar Ação</h2>
+  <p class='text-center'><strong><%= @stock.symbol %></strong></p>
 
   <%= simple_form_for @stock do |f| %>
-    <%= f.input :buy_date %>
-    <%= f.input :buy_quantity %>
-    <%= f.input :buy_price %>
+    <%= f.input :buy_date, label: 'Data de entrada' %>
+    <%= f.input :buy_quantity, label: 'Quantidade' %>
+    <%= f.input :buy_price, label: 'Preço de entrada' %>
     <%= f.input :advisor, collection: Stock::ADVISORS %>
-    <%= f.submit 'Update', class: 'btn btn-primary' %>
+    <div class="d-flex justify-content-center align-items-center w-100 mt-3">
+      <%= link_to 'Voltar', portfolio_path(@stock.portfolio), class: 'btn btn-secondary btn-block w-50 m-0 mr-1' %>
+      <%= f.submit 'Atualizar', class: 'btn btn-primary btn-block w-50 m-0 ml-1' %>
+    </div>
   <% end %>
 
 </div>

@@ -1,21 +1,25 @@
 <div class='container'>
-  <%= link_to '<< Portfolio Stocks', portfolio_stocks_path(@portfolio), class: 'btn btn-secondary btn-sm mb-3' %>
-  <h1>Add Stock</h1>
-  <%= form_tag portfolio_stocks_choose_stock_path(@portfolio), method: :get, class: 'form-inline mt-4' do %>
-    <%= label_tag(:query, "Search a stock by symbol:") %>
-    <%= text_field_tag :query, params[:query], class: "form-control mx-1", placeholder: "Stock symbol..." %>
-    <%= submit_tag "Search", class: "btn btn-primary" %>
+  <h2>Pesquise uma ação</h2>
+  <%= form_tag portfolio_stocks_choose_stock_path(@portfolio), method: :get, class: 'form-inline mt-3' do %>
+    <%= label_tag(:query, "Pesquise pelo símbolo da ação:") %>
+    <%= text_field_tag :query, params[:query], class: "form-control", placeholder: "Símbolo da ação..." %>
+    <div class='d-flex justify-content-center align-items-center w-100 mt-3'>
+			<%= link_to 'Voltar', portfolio_path(@portfolio), class: 'btn btn-secondary btn-block w-50 m-0 mr-1' %>
+      <%= submit_tag "Pesquisar", class: "btn btn-primary btn-block w-50 m-0 ml-1" %>
+		</div>
   <% end %> 
 
   <% if @autocomplete %>
-    <div class="mt-4">
+    <div class="mt-4 w-100">
       <% if @autocomplete.length > 0  %>
-        <h3>Choose desired stock:</h3>
+        <h3 class='mb-3'>Selecione uma ação:</h3>
+        <hr class='no-margin'>
         <% @autocomplete.each do |stock| %>
-        <p><%= stock['symbol'] %> | <%= stock['shortname'] %> | <%= link_to '+', "/portfolios/#{@portfolio.id}/stocks/new?symbol=#{stock['symbol']}&short_name=#{stock['shortname']}" %></p>
+          <%= link_to "#{stock['symbol'] } | #{stock['shortname'] }", "/portfolios/#{@portfolio.id}/stocks/new?symbol=#{stock['symbol']}&short_name=#{stock['shortname']}", class:'btn btn-block w-100 m-0 text-left' %>
+          <hr class='no-margin'>
         <% end %>
       <% else %>
-        <p>(No stock found for '<strong><%= @query %></strong>')</p>
+        <p>(nenhuma ação encontrada para '<strong><%= @query %></strong>')</p>
       <% end %>
     </div>
   <% end %>

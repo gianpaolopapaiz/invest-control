@@ -1,9 +1,8 @@
 class Stock < ApplicationRecord
   belongs_to :portfolio
-  STRATEGIES = ['post-fixed', 'pre-fixed', 'inflation', 'multimarket', 'variable', 'international']
+  STRATEGIES = ['Pós-fixado', 'Pré-fixado', 'Inflação', 'Multimercado', 'Variável', 'Internacional']
   ADVISORS = ['Zenit', 'Bittencourt', 'None']
   validates :short_name, :symbol, :strategy, :buy_date, :buy_quantity, :buy_price, :advisor, presence: true
-	validates :short_name, :symbol, uniqueness: true
 	validates :strategy, inclusion: { in: STRATEGIES }
   validates :advisor, inclusion: { in: ADVISORS }
 

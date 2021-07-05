@@ -1,17 +1,21 @@
 <div class='container'>
-  <%= link_to '<< Portfolio Funds', portfolio_funds_path(@portfolio), class: 'btn btn-secondary btn-sm mb-3' %>
-  <h1>Add Fund</h1>
-  <%= form_tag portfolio_funds_choose_fund_path(@portfolio), method: :get, class: 'form-inline mt-4' do %>
-    <%= label_tag(:query, "Search a fund by CNPJ:") %>
-    <%= number_field_tag :query, params[:query], class: "form-control mx-1", placeholder: "Fund CNPJ..." %>
-    <%= submit_tag "Search", class: "btn btn-primary" %>
+  <h3>Pesquise um fundo</h3>
+  <%= form_tag portfolio_funds_choose_fund_path(@portfolio), method: :get, class: 'form-inline mt-3' do %>
+    <%= label_tag(:query, "Pesquise pelo CNPJ do fundo:") %>
+    <%= number_field_tag :query, params[:query], class: "form-control", placeholder: "CNPJ do fundo..." %>
+    <div class='d-flex justify-content-center align-items-center w-100 mt-3'>
+			<%= link_to 'Voltar', portfolio_path(@portfolio), class: 'btn btn-secondary btn-block w-50 m-0 mr-1' %>
+      <%= submit_tag "Pesquisar", class: "btn btn-primary btn-block w-50 m-0 ml-1" %>
+		</div>
   <% end %> 
 
   <% if @fetched_fund  %>
     <% if @fetched_fund['cnpj'] %>
-      <div class="mt-4">
-        <h3>Choose desired fund:</h3> 
-        <p><%= @fetched_fund['nomeAbreviado'] %> | <%= @fetched_fund['cnpj'] %> | <%= @fetched_fund['classe'] %> | <%= link_to '+', "/portfolios/#{@portfolio.id}/funds/new?cnpj=#{@fetched_fund['cnpj']}&short_name=#{@fetched_fund['nomeAbreviado']}&fund_class=#{@fetched_fund['classe']}&cnpj_clean=#{@query}" %></p>
+      <div class="mt-4 w-100">
+        <h3 class='mb-3'>Selecione um fundo:</h3>
+        <hr class='no-margin'> 
+        <%= link_to "#{@fetched_fund['nomeAbreviado']} | #{@fetched_fund['cnpj']}", "/portfolios/#{@portfolio.id}/funds/new?cnpj=#{@fetched_fund['cnpj']}&short_name=#{@fetched_fund['nomeAbreviado']}&fund_class=#{@fetched_fund['classe']}&cnpj_clean=#{@query}", class:'btn btn-block w-100 m-0 text-left' %>
+        <hr class='no-margin'>
       </div>
     <% else %>
       <p>(No fund found for '<strong><%= @query %></strong>')</p>
