@@ -27,6 +27,7 @@ gem 'simple_form'
 gem 'devise'
 gem 'pundit'
 gem 'cloudinary', '~> 1.16.0'
+gem "chartkick"
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 

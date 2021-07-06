@@ -9,6 +9,7 @@ require("@rails/activestorage").start()
 require("channels")
 
 import 'bootstrap';
+import "chartkick/chart.js"
 
 document.addEventListener('turbolinks:load', () => {
   // Call your JS functions here

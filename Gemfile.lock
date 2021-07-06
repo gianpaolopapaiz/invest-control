@@ -65,6 +65,7 @@ GEM
       msgpack (~> 1.0)
     builder (3.2.4)
     byebug (11.1.3)
+    chartkick (4.0.4)
     cloudinary (1.16.1)
       aws_cf_signer
       rest-client
@@ -224,6 +225,7 @@ DEPENDENCIES
   autoprefixer-rails (= 10.2.5)
   bootsnap (>= 1.4.2)
   byebug
+  chartkick
   cloudinary (~> 1.16.0)
   devise
   dotenv-rails
