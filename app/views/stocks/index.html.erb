@@ -12,14 +12,6 @@
 		</div>
 	</div>
 	<hr>
-  
-  <% if @stocks.length > 0 %>
-    <h4><strong>Sumário</strong></h4>
-    <p class="card-text mb-0">Valor investido: <%= number_to_currency(@stocks_buy_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
-    <p class="card-text mb-0">Valor atual: <%= number_to_currency(@stocks_actual_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
-    <p class="card-text mb-0">Taxa de retorno: <%= number_to_percentage(@stocks_return_tax, separator: ',', delimiter: '.', precision: 2) %></p>
-    <p class="card-text">Retorno absoluto: <%= number_to_currency(@stocks_return_value, unit:'R$', separator: ',', delimiter: '.') %></p>
-  <% end %>
 
   <% if @query && @query != '' %>
       <h4 class='mb-0'><strong>Ações filtradas por:</strong></h4>
@@ -58,48 +50,46 @@
             <h6 class="card-subtitle mb-2 text-muted"><%= stock.short_name %></h6>
             <h6 class="card-subtitle mb-2 text-muted">Advisor: <%= stock.advisor %></h6>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span>Valor investido:</span> 
-              <span><%= number_to_currency(stock.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
-            </div>
-            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span>Valor atual:</span> 
+              <span>Posição:</span> 
               <span><%= number_to_currency(stock.amount, unit:'R$', separator: ',', delimiter: '.') %></span>
             </div>
+            <hr class='my-1'>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span>Data de entrada:</span>
-              <span><%= stock.buy_date.strftime("%d/%m/%y") %></span>
-            </div>
-            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span>Quantidade:</span>
-              <span><%= stock.buy_quantity %></span>
-            </div>
-            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span>Preço de entrada:</span>
-              <span><%= number_to_currency(stock.buy_price, unit:'R$', separator: ',', delimiter: '.') %></span>
-            </div>
-            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span>Data atualização:</span>
-              <% if stock.actual_date %>
-                <span><%= stock.actual_date.strftime("%Y/%m/%d") %></span>  
-              <% end %>
-            </div>
-            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span>Preço atualização:</span>
-              <span><%= number_to_currency(stock.actual_price, unit:'R$', separator: ',', delimiter: '.') %></span>
+              <span>Valor aplicado:</span> 
+              <span><%= number_to_currency(stock.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
             </div>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
               <span>Taxa de retorno:</span>
               <span><%= number_to_percentage(stock.return_tax, separator: ',', delimiter: '.', precision: 2) %></span>
             </div>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span>Retorno absoluto:</span>
+              <span>Rendimento:</span>
               <span><%= number_to_currency(stock.return_value, unit:'R$', separator: ',', delimiter: '.') %></span>
             </div>
+            <hr class='my-1'>
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>Quantidade:</span>
+              <span><%= stock.buy_quantity %></span>
+            </div>
+            <table class='w-100'>
+              <tbody>
+                <tr>
+                  <td class='text-left'>Entrada:</td>
+                  <td class='text-center'><%= stock.buy_date.strftime("%d/%m/%y") %></td>
+                  <td class='text-right'><%= number_to_currency(stock.buy_price, unit:'R$', separator: ',', delimiter: '.') %></td>
+                </tr>
+                <tr>
+                  <td class='text-left'>Atualizado:</td>
+                  <td class='text-center'><%= stock.actual_date.strftime("%d/%m/%y") %></td>
+                  <td class='text-right'><%= number_to_currency(stock.actual_price, unit:'R$', separator: ',', delimiter: '.') %></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       <% end %>
     </div>
   <% else %>
-    <p>(No stock added yet!)</p>
+    <p>(Nenhuma ação adicionada!)</p>
   <% end %>
 </div>

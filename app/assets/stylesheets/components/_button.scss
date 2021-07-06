@@ -23,3 +23,15 @@
 hr.no-margin {
   margin: 0;
 }
+
+.app-nav-btn {
+  border: 2px solid $blue;
+}
+
+.nav-left {
+  margin-right: -1px;
+}
+
+.nav-right {
+  margin-left: -1px;
+}
