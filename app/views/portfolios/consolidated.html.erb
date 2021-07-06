@@ -1,0 +1,74 @@
+<div class="container">
+  <div class='d-flex align-items-center justify-content-between flex-wrap'>
+      <%= link_to '', portfolios_path, class: "fas fa-chevron-left app-btn-flat" %>
+      <div class='d-flex align-items-center justify-content-start flex-column'>
+        <h2 class='mb-0'>Tabela Consolidada </h2>
+      </div>
+      <div >
+      </div>
+    </div>
+  </div>
+  <hr>
+</div>
+
+<div style="overflow-x:auto;" class='mx-2 my-4 '>
+  <table class='app-table-consolidated'>
+    <tr>
+      <th>Carteira</th>
+      <th>Produto</th>
+      <th>Estratégia</th>
+      <th>Nome</th>
+      <th>Símbolo / CNPJ</th>
+      <th>Advisor</th>
+      <th>Posição</th>
+      <th>Valor aplicado</th>
+      <th>Taxa de retorno</th>
+      <th>Rendimento</th>
+      <th>Quant.</th>
+      <th>Data entrada</th>
+      <th>Valor antrada</th>
+      <th>Data atual</th>
+      <th>Valor atual</th>
+    </tr>
+    <% @portfolios.each do |portfolio| %>
+      <% portfolio.stocks.each do |stock| %>
+        <tr>
+          <td><%= stock.portfolio.name %></td>
+          <td>Ação</td>
+          <td><%= stock.strategy %></td>
+          <td><%= stock.short_name %></td>
+          <td><%= stock.symbol %></td>
+          <td><%= stock.advisor %></td>
+          <td><%= number_to_currency(stock.amount, unit:'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= number_to_currency(stock.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= number_to_percentage(stock.return_tax, separator: ',', delimiter: '.', precision: 2) %></td>
+          <td><%= number_to_currency(stock.return_value, unit:'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= stock.buy_quantity %></td>
+          <td><%= stock.buy_date.strftime("%d/%m/%y") %></td>
+          <td><%= number_to_currency(stock.buy_price, unit:'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= stock.actual_date.strftime("%d/%m/%y") %></td>
+          <td><%= number_to_currency(stock.actual_price, unit:'R$', separator: ',', delimiter: '.') %></td>
+        </tr>
+      <% end %>
+      <% portfolio.funds.each do |stock| %>
+        <tr>
+          <td><%= stock.portfolio.name %></td>
+          <td>Ação</td>
+          <td><%= stock.strategy %></td>
+          <td><%= stock.short_name %></td>
+          <td><%= stock.cnpj %></td>
+          <td><%= stock.advisor %></td>
+          <td><%= number_to_currency(stock.amount, unit:'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= number_to_currency(stock.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= number_to_percentage(stock.return_tax, separator: ',', delimiter: '.', precision: 2) %></td>
+          <td><%= number_to_currency(stock.return_value, unit:'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= stock.buy_quantity %></td>
+          <td><%= stock.buy_date.strftime("%d/%m/%y") %></td>
+          <td><%= number_to_currency(stock.buy_price, unit:'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= stock.actual_date.strftime("%d/%m/%y") %></td>
+          <td><%= number_to_currency(stock.actual_price, unit:'R$', separator: ',', delimiter: '.') %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+</div>

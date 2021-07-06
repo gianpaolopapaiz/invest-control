@@ -93,13 +93,17 @@ class PortfoliosController < ApplicationController
 				render :edit
 			end
 	end
-	
 
 	def destroy
 		@portfolio = Portfolio.find(params[:id])
 		authorize @portfolio
 		@portfolio.destroy
 		redirect_to portfolios_path
+	end
+
+	def consolidated
+		@portfolios = current_user.portfolios
+		authorize @portfolios
 	end
 
 	private
