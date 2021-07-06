@@ -2,6 +2,21 @@ class PortfoliosController < ApplicationController
 	
 	def index
 		@portfolios = policy_scope(Portfolio).order(created_at: :desc)
+		@global_amount = 0
+		@global_buy_amount = 0
+		@global_return_tax = 0
+		@global_strategy_composition_value = {}
+		@portfolios.each do |portfolio|
+			@global_amount += portfolio.amount
+			@global_buy_amount += portfolio.initial_amount
+			@global_strategy_composition_value = @global_strategy_composition_value.merge(portfolio.strategy_composition_value){ |k, a_value, b_value| a_value + b_value }
+		end
+		@global_return_tax = (@global_amount - @global_buy_amount) / @global_buy_amount * 100
+		@global_return_value = @global_amount - @global_buy_amount
+		@global_strategy_composition_percentage = {}
+		@global_strategy_composition_value.each do |key,value| 		
+			@global_strategy_composition_percentage["#{key}"] = value / @global_amount * 100
+		end
 	end
 
 	def show
