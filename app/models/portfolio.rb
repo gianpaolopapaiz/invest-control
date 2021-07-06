@@ -50,4 +50,25 @@ class Portfolio < ApplicationRecord
       0
     end 
   end
+
+  def strategy_composition
+    composition = {}
+    stocks.each do |stock|
+      if composition["#{stock.strategy}"]
+        composition["#{stock.strategy}"] += stock.amount / amount * 100
+      else
+        composition["#{stock.strategy}"] = stock.amount / amount * 100
+      end
+    end
+    funds.each do |fund|
+      if composition["#{fund.strategy}"]
+        composition["#{fund.strategy}"] += fund.amount / amount * 100
+      else
+        composition["#{fund.strategy}"] = fund.amount / amount * 100
+      end
+    end
+    composition
+  end
 end
+
+# ['Pós-fixado', 'Pré-fixado', 'Inflação', 'Multimercado', 'Variável', 'Internacional']
