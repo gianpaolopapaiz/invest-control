@@ -80,8 +80,8 @@
                 </tr>
                 <tr>
                   <td class='text-left'>Atualizado:</td>
-                  <td class='text-center'><%= stock.actual_date.strftime("%d/%m/%y") %></td>
-                  <td class='text-right'><%= number_to_currency(stock.actual_price, unit:'R$', separator: ',', delimiter: '.') %></td>
+                  <td class='text-center'><%= stock.actual_date.strftime("%d/%m/%y") if stock.actual_date %></td>
+                  <td class='text-right'><%= number_to_currency(stock.actual_price, unit:'R$', separator: ',', delimiter: '.') if stock.actual_price %></td>
                 </tr>
               </tbody>
             </table>

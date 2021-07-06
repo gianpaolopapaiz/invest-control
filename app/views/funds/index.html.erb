@@ -58,8 +58,8 @@
               <span><%= number_to_currency(fund.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
             </div>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span><strong>Taxa de retorno:</strong></span>
-              <span><strong><%= number_to_percentage(fund.return_tax, separator: ',', delimiter: '.', precision: 2) %></strong></span>
+              <span>Taxa de retorno:</span>
+              <span><%= number_to_percentage(fund.return_tax, separator: ',', delimiter: '.', precision: 2) %></span>
             </div>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
               <span>Rendimento:</span>
@@ -79,8 +79,8 @@
                 </tr>
                 <tr>
                   <td class='text-left'>Atualizado:</td>
-                  <td class='text-center'><%= fund.actual_date.strftime("%d/%m/%y") %></td>
-                  <td class='text-right'><%= number_to_currency(fund.actual_price, unit:'R$', separator: ',', delimiter: '.') %></td>
+                  <td class='text-center'><%= fund.actual_date.strftime("%d/%m/%y") if fund.actual_date %></td>
+                  <td class='text-right'><%= number_to_currency(fund.actual_price, unit:'R$', separator: ',', delimiter: '.') if fund.actual_price %></td>
                 </tr>
               </tbody>
             </table>

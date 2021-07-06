@@ -1,53 +1,87 @@
 <div class='container mb-4'>
 	<div class='d-flex align-items-center justify-content-between flex-wrap'>
-		<h2 class='mb-0'>Carteiras</h2>
+		<h2 class='mb-0'>Visão Global</h2>
 		<button class="fas fa-ellipsis-v app-btn-flat" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
 		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 			<%= link_to 'Adicionar Carteira', new_portfolio_path, class: 'dropdown-item' %>
 		</div>
 	</div>
 	<hr>
-	<% if @portfolios && @portfolios.length > 0 %>
-		<div class='d-flex align-items-center justify-content-start flex-wrap'>
-			<% @portfolios.each do |portfolio| %>
-				<div class="card invest-card m-1" style="width: 16rem;">
-					<div class="dropdown"> 
-						<button class="fas fa-cog fixed-top-right text-muted" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<%= link_to 'Renomear', edit_portfolio_path(portfolio), class: 'dropdown-item' %>
-							<%= link_to 'Remover', portfolio_path(portfolio), method: :delete, data: { confirm: "Você tem certeza?" }, class: 'dropdown-item' %>
-						</div>
-					</div>
-					<div class="card-body">
-						<div>
-							<h5 class="card-title"><strong><%= portfolio.name %></strong></h5>
-						</div>
-						<h6 class="card-subtitle mb-2 text-muted">Nº de ativos <%= portfolio.stocks.count + portfolio.funds.count %></h6>
-						<div class="card-text mb-0 d-flex align-items-center justify-content-between">
-							<span>Posição:</span> 
-							<span><%= number_to_currency(portfolio.amount, unit:'R$', separator: ',', delimiter: '.') %></span>
-						</div>
-						<hr class='my-1'>
-						<div class="card-text mb-0 d-flex align-items-center justify-content-between">
-							<span>Valor aplicado:</span> 
-							<span><%= number_to_currency(portfolio.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
-						</div>
-						<div class="card-text mb-0 d-flex align-items-center justify-content-between">
-							<span>Taxa de retorno:</span> 
-							<span><%= number_to_percentage(portfolio.return_tax, separator: ',', delimiter: '.', precision: 2) %></span>
-						</div>
-						<div class="card-text mb-3 d-flex align-items-center justify-content-between">
-							<span>Rendimento:</span> 
-							<span><%= number_to_currency(portfolio.return_value, unit:'R$', separator: ',', delimiter: '.') %></span>
-						</div>
-						<div class=''>
-							<%= link_to 'Detalhes', portfolio_path(portfolio, unit:'R$', separator: ',', delimiter: '.'), class: 'btn btn-primary btn-block btn-sm'  %>
-						</div>
-					</div>
-				</div>
-			<% end %>
+
+	<nav>
+    <div class="nav nav-pills nav-fill mb-3" id="nav-tab" role="tablist">
+      <a class="nav-item nav-link active app-nav-btn nav-left" id="nav-summary-tab" data-toggle="tab" href="#nav-summary" role="tab" aria-controls="nav-summary" aria-selected="true"><strong>Resumo</strong></a>
+      <a class="nav-item nav-link app-nav-btn nav-right" id="nav-portfolios-tab" data-toggle="tab" href="#nav-portfolios" role="tab" aria-controls="nav-portfolios" aria-selected="false"><strong>Carteiras</strong></a>
     </div>
-	<% else %>
-		<p>(No portfolio added yet!)</p>
-	<% end %>
+  </nav>
+
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-summary" role="tabpanel" aria-labelledby="nav-summary-tab">
+      <%# Summary tab %>
+			<%# if @stocks.length > 0 || @funds.length > 0 %>
+        <h4><strong>Resumo</strong></h4>
+        <p class="card-text mb-0">Patrimônio: <%= number_to_currency(@global_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
+        <p class="card-text mb-0">Valor aplicado: <%= number_to_currency(@global_buy_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
+        <p class="card-text mb-0">Taxa de retorno: <%= number_to_percentage(@global_return_tax, separator: ',', delimiter: '.', precision: 2) %></p>
+        <p class="card-text">Rendimento: <%= number_to_currency(@global_return_value, unit:'R$', separator: ',', delimiter: '.') %></p>
+
+      <%# end %>
+			
+			<h4><strong>Dashboard</strong></h4>
+      <div class='my-4'>
+        <h5 class="text-center"><strong>Composição por estratégia</strong></h4>
+        <%= pie_chart @global_strategy_composition_percentage, width: "", legend: "bottom", donut: true, prefix: "", suffix: "%", thousands: ".", decimal: ",", round: 2, loading: "carregando..." %>
+      </div>
+
+		</div>
+		<div class="tab-pane fade show" id="nav-portfolios" role="tabpanel" aria-labelledby="nav-portfolios-tab">
+      <%# Summary tab %>
+			<% if @portfolios && @portfolios.length > 0 %>
+				<div class='d-flex align-items-center justify-content-start flex-wrap'>
+					<% @portfolios.each do |portfolio| %>
+						<div class="card invest-card m-1" style="width: 16rem;">
+							<div class="dropdown"> 
+								<button class="fas fa-cog fixed-top-right text-muted" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									<%= link_to 'Renomear', edit_portfolio_path(portfolio), class: 'dropdown-item' %>
+									<%= link_to 'Remover', portfolio_path(portfolio), method: :delete, data: { confirm: "Você tem certeza?" }, class: 'dropdown-item' %>
+								</div>
+							</div>
+							<div class="card-body">
+								<div>
+									<h5 class="card-title"><strong><%= portfolio.name %></strong></h5>
+								</div>
+								<h6 class="card-subtitle mb-2 text-muted">Nº de ativos <%= portfolio.stocks.count + portfolio.funds.count %></h6>
+								<div class="card-text mb-0 d-flex align-items-center justify-content-between">
+									<span>Posição:</span> 
+									<span><%= number_to_currency(portfolio.amount, unit:'R$', separator: ',', delimiter: '.') %></span>
+								</div>
+								<hr class='my-1'>
+								<div class="card-text mb-0 d-flex align-items-center justify-content-between">
+									<span>Valor aplicado:</span> 
+									<span><%= number_to_currency(portfolio.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
+								</div>
+								<div class="card-text mb-0 d-flex align-items-center justify-content-between">
+									<span>Taxa de retorno:</span> 
+									<span><%= number_to_percentage(portfolio.return_tax, separator: ',', delimiter: '.', precision: 2) %></span>
+								</div>
+								<div class="card-text mb-3 d-flex align-items-center justify-content-between">
+									<span>Rendimento:</span> 
+									<span><%= number_to_currency(portfolio.return_value, unit:'R$', separator: ',', delimiter: '.') %></span>
+								</div>
+								<div class=''>
+									<%= link_to 'Detalhes', portfolio_path(portfolio, unit:'R$', separator: ',', delimiter: '.'), class: 'btn btn-primary btn-block btn-sm'  %>
+								</div>
+							</div>
+						</div>
+					<% end %>
+				</div>
+			<% else %>
+				<p>(No portfolio added yet!)</p>
+			<% end %>
+		</div>
+	</div>
+
+
+
 </div>
