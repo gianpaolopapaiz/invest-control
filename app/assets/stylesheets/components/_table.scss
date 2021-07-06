@@ -1,0 +1,22 @@
+.app-table-consolidated {
+  max-width: 100%;
+  min-width: fit-content;
+  overflow-x: scroll;
+  font-size: small;
+  text-align: center;
+  margin: 0 auto;
+  
+}
+
+.app-table-consolidated table, th, td {
+  border: 1px solid black;
+}
+
+.app-table-consolidated th, td {
+  padding: 4px;
+}
+
+.app-table-consolidated th {
+  background-color: $blue;
+  color: $light-gray;
+}

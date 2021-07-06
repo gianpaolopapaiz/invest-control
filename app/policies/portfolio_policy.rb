@@ -21,6 +21,12 @@ class PortfolioPolicy < ApplicationPolicy
     record.user == user
   end
 
+  def consolidated?
+    record.each do |s_record|
+      s_record.user == user 
+    end
+  end
+
   def choose_stock?
     return true
   end

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   end
   get '/portfolios/:id/update_stocks_price', to: 'stocks#update_stocks_price', as: 'update_stocks_price'
   get '/portfolios/:id/update_funds_price', to: 'funds#update_funds_price', as: 'update_funds_price'
+  get '/consolidated', to: 'portfolios#consolidated', as: 'consolidated'
   resources :stocks, only: [:edit, :update, :destroy]
   resources :funds, only: [:edit, :update, :destroy]
   get '/funds/:id/fetch_fund_price', to: 'funds#fetch_fund_price', as: 'fetch_fund_price'
