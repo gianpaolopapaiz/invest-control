@@ -12,14 +12,6 @@
 		</div>
 	</div>
 	<hr>
-
-  <% if @funds.length > 0 %>
-    <h4><strong>Sumário</strong></h4>
-    <p class="card-text mb-0">Valor investido: <%= number_to_currency(@funds_buy_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
-    <p class="card-text mb-0">Valor atual: <%= number_to_currency(@funds_actual_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
-    <p class="card-text mb-0">Taxa de retorno: <%= number_to_percentage(@funds_return_tax, separator: ',', delimiter: '.', precision: 2) %></p>
-    <p class="card-text">Retorno absoluto: <%= number_to_currency(@funds_return_value, unit:'R$', separator: ',', delimiter: '.') %></p>
-  <% end %>
   
   <% if @query && @query != '' %>
       <h4 class='mb-0'><strong>Fundos filtrados por:</strong></h4>
@@ -57,48 +49,46 @@
             <h6 class="card-subtitle mb-2 text-muted">Estratégia: <%= fund.strategy %></h6>
             <h6 class="card-subtitle mb-2 text-muted">Advisor: <%= fund.advisor %></h6>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span>Valor investido:</span> 
-              <span><%= number_to_currency(fund.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
-            </div>
-            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span>Valor atual:</span> 
+              <span>Posição:</span> 
               <span><%= number_to_currency(fund.amount, unit:'R$', separator: ',', delimiter: '.') %></span>
             </div>
+            <hr class='my-1'>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span>Data de entrada:</span>
-              <span><%= fund.buy_date.strftime("%d/%m/%y") %></span>
-            </div>
-            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span>Quantidade:</span>
-              <span><%= fund.buy_quantity %></span>
-            </div>
-            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span>Preço de entrada:</span>
-              <span><%= number_to_currency(fund.buy_price, unit:'R$', separator: ',', delimiter: '.') %></span>
-            </div>
-            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span>Data atualização:</span>
-              <% if fund.actual_date %>
-                <span><%= fund.actual_date.strftime("%d/%m/%y") %></span>  
-              <% end %>
-            </div>
-            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span>Preço atualização:</span>
-              <span><%= number_to_currency(fund.actual_price, unit:'R$', separator: ',', delimiter: '.') %></span>
+              <span>Valor aplicado:</span> 
+              <span><%= number_to_currency(fund.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
             </div>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
               <span><strong>Taxa de retorno:</strong></span>
               <span><strong><%= number_to_percentage(fund.return_tax, separator: ',', delimiter: '.', precision: 2) %></strong></span>
             </div>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
-              <span><strong>Retorno absoluto:</strong></span>
-              <span><strong><%= number_to_currency(fund.return_value, unit:'R$', separator: ',', delimiter: '.') %></strong></span>
+              <span>Rendimento:</span>
+              <span><%= number_to_currency(fund.return_value, unit:'R$', separator: ',', delimiter: '.') %></span>
             </div>
+            <hr class='my-1'>
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>Quantidade:</span>
+              <span><%= fund.buy_quantity %></span>
+            </div>
+            <table class='w-100'>
+              <tbody>
+                <tr>
+                  <td class='text-left'>Entrada:</td>
+                  <td class='text-center'><%= fund.buy_date.strftime("%d/%m/%y") %></td>
+                  <td class='text-right'><%= number_to_currency(fund.buy_price, unit:'R$', separator: ',', delimiter: '.') %></td>
+                </tr>
+                <tr>
+                  <td class='text-left'>Atualizado:</td>
+                  <td class='text-center'><%= fund.actual_date.strftime("%d/%m/%y") %></td>
+                  <td class='text-right'><%= number_to_currency(fund.actual_price, unit:'R$', separator: ',', delimiter: '.') %></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       <% end %>
     </div>
   <% else %>
-    <p>(No fund added yet!)</p>
+    <p>(Nenhum fundo adicionado!)</p>
   <% end %>
 </div>

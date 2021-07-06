@@ -24,19 +24,20 @@
 						</div>
 						<h6 class="card-subtitle mb-2 text-muted">Nº de ativos <%= portfolio.stocks.count + portfolio.funds.count %></h6>
 						<div class="card-text mb-0 d-flex align-items-center justify-content-between">
-							<span>Valor investido:</span> 
-							<span><%= number_to_currency(portfolio.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
-						</div>
-						<div class="card-text mb-0 d-flex align-items-center justify-content-between">
-							<span>Valor Atual:</span> 
+							<span>Posição:</span> 
 							<span><%= number_to_currency(portfolio.amount, unit:'R$', separator: ',', delimiter: '.') %></span>
+						</div>
+						<hr class='my-1'>
+						<div class="card-text mb-0 d-flex align-items-center justify-content-between">
+							<span>Valor aplicado:</span> 
+							<span><%= number_to_currency(portfolio.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
 						</div>
 						<div class="card-text mb-0 d-flex align-items-center justify-content-between">
 							<span>Taxa de retorno:</span> 
 							<span><%= number_to_percentage(portfolio.return_tax, separator: ',', delimiter: '.', precision: 2) %></span>
 						</div>
 						<div class="card-text mb-3 d-flex align-items-center justify-content-between">
-							<span>Retorno absoluto:</span> 
+							<span>Rendimento:</span> 
 							<span><%= number_to_currency(portfolio.return_value, unit:'R$', separator: ',', delimiter: '.') %></span>
 						</div>
 						<div class=''>
