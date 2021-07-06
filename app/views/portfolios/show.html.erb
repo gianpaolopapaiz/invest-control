@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container mb-4">
   <div class='d-flex align-items-center justify-content-between flex-wrap'>
     <%= link_to '', portfolios_path, class: "fas fa-chevron-left app-btn-flat" %>
     <div class='d-flex align-items-center justify-content-start flex-column'>
@@ -17,10 +17,11 @@
 
   <nav>
     <div class="nav nav-pills nav-fill mb-3" id="nav-tab" role="tablist">
-      <a class="nav-item nav-link active olho-color-white" id="nav-summary-tab" data-toggle="tab" href="#nav-summary" role="tab" aria-controls="nav-summary" aria-selected="true"><strong>Resumo</strong></a>
-      <a class="nav-item nav-link olho-color-white" id="nav-products-tab" data-toggle="tab" href="#nav-products" role="tab" aria-controls="nav-products" aria-selected="false"><strong>Ativos</strong></a>
+      <a class="nav-item nav-link active app-nav-btn nav-left" id="nav-summary-tab" data-toggle="tab" href="#nav-summary" role="tab" aria-controls="nav-summary" aria-selected="true"><strong>Resumo</strong></a>
+      <a class="nav-item nav-link app-nav-btn nav-right" id="nav-products-tab" data-toggle="tab" href="#nav-products" role="tab" aria-controls="nav-products" aria-selected="false"><strong>Ativos</strong></a>
     </div>
   </nav>
+
   <div class="tab-content" id="nav-tabContent">
   <%# Summary tab %>
     <div class="tab-pane fade show active" id="nav-summary" role="tabpanel" aria-labelledby="nav-summary-tab">
@@ -95,15 +96,4 @@
       </div>
     </div>
   </div>
-  
-  
-
-
-
-
-
-
-
-
-
 </div>
