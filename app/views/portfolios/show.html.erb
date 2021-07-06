@@ -36,7 +36,7 @@
       <h4><strong>Dashboard</strong></h4>
       <div class='my-4'>
         <h5 class="text-center"><strong>Composição por estratégia</strong></h4>
-        <%= pie_chart @portfolio.strategy_composition, width: "", legend: "bottom", donut: true, prefix: "", suffix: "%", thousands: ".", decimal: ",", round: 2, loading: "carregando..." %>
+        <%= pie_chart @portfolio.strategy_composition, width: "", legend: "bottom", donut: true, prefix: "", suffix: "%", thousands: ".", decimal: ",", round: 2, loading: "carregando...", empty: "Sem dados" %>
       </div>
 
     </div>
