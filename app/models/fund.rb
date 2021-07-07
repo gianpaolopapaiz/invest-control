@@ -1,7 +1,7 @@
 class Fund < ApplicationRecord
 	belongs_to :portfolio
 	STRATEGIES = ['Pós-fixado', 'Pré-fixado', 'Inflação', 'Multimercado', 'Variável', 'Internacional']
-	ADVISORS = ['Zenit', 'Bittencourt', 'None']
+	ADVISORS = ['Zenit', 'Bittencourt', 'Nenhum']
   validates :short_name, :cnpj, :cnpj_clean, :strategy, :buy_date, :buy_quantity, :buy_price, :advisor, presence: true
 	validates :strategy, inclusion: { in: STRATEGIES }
 	validates :advisor, inclusion: { in: ADVISORS }

@@ -11,7 +11,7 @@
         <%= image_tag 'default-user-image.png', class: "avatar dropdown-toggle", id: "navbarDropdown", data: { toggle: "dropdown" }, 'aria-haspopup': true, 'aria-expanded': false %>
       <% end %>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-      <%= link_to "Painel",  portfolios_path, class: "dropdown-item" %>
+      <%= link_to "Visão global",  portfolios_path, class: "dropdown-item" %>
         <%= link_to "Editar conta",  edit_user_registration_path, class: "dropdown-item" %>
         <%= link_to "Sair", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
       </div>

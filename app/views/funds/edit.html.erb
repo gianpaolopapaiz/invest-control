@@ -4,7 +4,7 @@
 
   <%= simple_form_for @fund do |f| %>
     <%= f.input :strategy, label: 'Estratégia', collection: Fund::STRATEGIES %>
-    <%= f.input :buy_date, label: 'Data de entrada' %>
+    <%= f.input :buy_date, label: 'Data de entrada', html5: true %>
     <%= f.input :buy_quantity, label: 'Quantidade' %>
     <%= f.input :buy_price, label: 'Preço de entrada' %>
     <%= f.input :advisor, collection: Stock::ADVISORS %>
