@@ -43,30 +43,30 @@
           <td><%= number_to_currency(stock.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></td>
           <td><%= number_to_percentage(stock.return_tax, separator: ',', delimiter: '.', precision: 2) %></td>
           <td><%= number_to_currency(stock.return_value, unit:'R$', separator: ',', delimiter: '.') %></td>
-          <td><%= stock.buy_quantity %></td>
+          <td><%= number_to_currency(stock.buy_quantity, unit: '', separator: ',', delimiter: '.', precision: 2) %></td>
           <td><%= stock.buy_date.strftime("%d/%m/%y") %></td>
           <td><%= number_to_currency(stock.buy_price, unit:'R$', separator: ',', delimiter: '.') %></td>
-          <td><%= stock.actual_date.strftime("%d/%m/%y") %></td>
+          <td><%= stock.actual_date.strftime("%d/%m/%y") if stock.actual_date %></td>
           <td><%= number_to_currency(stock.actual_price, unit:'R$', separator: ',', delimiter: '.') %></td>
         </tr>
       <% end %>
-      <% portfolio.funds.each do |stock| %>
+      <% portfolio.funds.each do |fund| %>
         <tr>
-          <td><%= stock.portfolio.name %></td>
-          <td>Ação</td>
-          <td><%= stock.strategy %></td>
-          <td><%= stock.short_name %></td>
-          <td><%= stock.cnpj %></td>
-          <td><%= stock.advisor %></td>
-          <td><%= number_to_currency(stock.amount, unit:'R$', separator: ',', delimiter: '.') %></td>
-          <td><%= number_to_currency(stock.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></td>
-          <td><%= number_to_percentage(stock.return_tax, separator: ',', delimiter: '.', precision: 2) %></td>
-          <td><%= number_to_currency(stock.return_value, unit:'R$', separator: ',', delimiter: '.') %></td>
-          <td><%= stock.buy_quantity %></td>
-          <td><%= stock.buy_date.strftime("%d/%m/%y") %></td>
-          <td><%= number_to_currency(stock.buy_price, unit:'R$', separator: ',', delimiter: '.') %></td>
-          <td><%= stock.actual_date.strftime("%d/%m/%y") %></td>
-          <td><%= number_to_currency(stock.actual_price, unit:'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= fund.portfolio.name %></td>
+          <td>Fundo</td>
+          <td><%= fund.strategy %></td>
+          <td><%= fund.short_name %></td>
+          <td><%= fund.cnpj %></td>
+          <td><%= fund.advisor %></td>
+          <td><%= number_to_currency(fund.amount, unit:'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= number_to_currency(fund.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= number_to_percentage(fund.return_tax, separator: ',', delimiter: '.', precision: 2) %></td>
+          <td><%= number_to_currency(fund.return_value, unit:'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= number_to_currency(fund.buy_quantity, unit: '', separator: ',', delimiter: '.', precision: 2) %></td>
+          <td><%= fund.buy_date.strftime("%d/%m/%y") %></td>
+          <td><%= number_to_currency(fund.buy_price, unit:'R$', separator: ',', delimiter: '.') %></td>
+          <td><%= fund.actual_date.strftime("%d/%m/%y") if fund.actual_date %></td>
+          <td><%= number_to_currency(fund.actual_price, unit:'R$', separator: ',', delimiter: '.') %></td>
         </tr>
       <% end %>
     <% end %>

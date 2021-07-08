@@ -34,7 +34,7 @@
   
   <% if @funds.length.positive? %>
     <div class='d-flex align-items-strech justify-content-start flex-wrap'>
-      <% @funds.each do |fund| %>     
+      <% @funds.order('buy_date DESC').each do |fund| %>     
         <div class="card invest-card m-1" style="width: 16rem;">
           <div class="dropdown"> 
 						<button class="fas fa-cog fixed-top-right text-muted" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
@@ -68,7 +68,7 @@
             <hr class='my-1'>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
               <span>Quantidade:</span>
-              <span><%= fund.buy_quantity %></span>
+              <span><%= number_to_currency(fund.buy_quantity, unit: '', separator: ',', delimiter: '.', precision: 2) %></span>
             </div>
             <table class='w-100'>
               <tbody>
