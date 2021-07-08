@@ -47,9 +47,8 @@
 					</div>
 				</div>
 				
-				<hr class='mt-4'>
-
 				<% if @global_strategy_composition_percentage != {} %>
+				<hr class='mt-4'>
 					<div class='mt-3 mb-4'>
 						<h5 class="text-center"><strong>Composição por estratégia</strong></h4>
 						<%= pie_chart @global_strategy_composition_percentage, width: "", legend: "bottom", donut: true, prefix: "", suffix: "%", thousands: ".", decimal: ",", round: 2, loading: "carregando...", empty: "Sem dados" %>
