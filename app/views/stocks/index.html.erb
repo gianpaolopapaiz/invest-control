@@ -69,7 +69,7 @@
             <hr class='my-1'>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
               <span>Quantidade:</span>
-              <span><%= stock.buy_quantity %></span>
+              <span><%= number_to_currency(stock.buy_quantity, unit: '', separator: ',', delimiter: '.', precision: 2) %></span>
             </div>
             <table class='w-100'>
               <tbody>
