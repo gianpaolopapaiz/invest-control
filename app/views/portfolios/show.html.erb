@@ -29,20 +29,42 @@
 
     <div class="tab-content" id="nav-tabContent">
       <div class="tab-pane fade show active" id="nav-summary" role="tabpanel" aria-labelledby="nav-summary-tab">
-        <%# Summary tab %>
+  
         <% if @stocks.length > 0 || @funds.length > 0 %>
-          <h4><strong>Resumo</strong></h4>
-          <p class="card-text mb-0">Posição: <%= number_to_currency(@portfolio_actual_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
-          <p class="card-text mb-0">Valor aplicado: <%= number_to_currency(@portfolio_buy_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
-          <p class="card-text mb-0">Taxa de retorno: <%= number_to_percentage(@portfolio_return_tax, separator: ',', delimiter: '.', precision: 2) %></p>
-          <p class="card-text">Rendimento: <%= number_to_currency(@portfolio_return_value, unit:'R$', separator: ',', delimiter: '.') %></p>
+          
+          <h4><strong>Dashboard</strong></h4>
+         
+          <div class="d-flex align-items-center justify-content-between mt-3">
+            <div class='card dash-card text-center w-50 mr-1 p-3'>
+              <p class="mb-0 text">Posição</p>
+              <p class='mb-0 value'><%= number_to_currency(@portfolio_actual_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
+            </div>
+            <div class='card dash-card text-center w-50 ml-1 p-3'>
+              <p class="mb-0 text">Valor aplicado</p>
+              <p class='mb-0 value'><%= number_to_currency(@portfolio_buy_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
+            </div>
+          </div>
+          <div class="d-flex align-items-center justify-content-between mt-2">
+            <div class='card dash-card text-center w-50 mr-1 p-3'>
+              <p class="mb-0 text">Taxa de retorno</p>
+              <p class='mb-0 value'><%= number_to_percentage(@portfolio_return_tax, separator: ',', delimiter: '.', precision: 2) %></p>
+            </div>
+            <div class='card dash-card text-center w-50 ml-1 p-3'>
+              <p class="mb-0 text">Rendimento:</p>
+              <p class='mb-0 value'><%= number_to_currency(@portfolio_return_value, unit:'R$', separator: ',', delimiter: '.') %></p>
+            </div>
+          </div>
+
         <% end %>
-        <hr>
-        <h4><strong>Dashboard</strong></h4>
-        <div class='my-4'>
-          <h5 class="text-center"><strong>Composição por estratégia</strong></h4>
-          <%= pie_chart @portfolio.strategy_composition, width: "", legend: "bottom", donut: true, prefix: "", suffix: "%", thousands: ".", decimal: ",", round: 2, loading: "carregando...", empty: "Sem dados" %>
-        </div>
+
+        <% if @portfolio.strategy_composition != {} %>
+        <hr class='mt-4'>
+          <div class='mt-3 mb-4'>
+            <h5 class="text-center"><strong>Composição por estratégia</strong></h4>
+            <%= pie_chart @portfolio.strategy_composition, width: "", legend: "bottom", donut: true, prefix: "", suffix: "%", thousands: ".", decimal: ",", round: 2, loading: "carregando...", empty: "Sem dados" %>
+          </div>
+        <% end %>
+        
 
       </div>
       <div class="tab-pane fade" id="nav-products" role="tabpanel" aria-labelledby="nav-products-tab">
