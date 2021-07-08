@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_01_102849) do
+ActiveRecord::Schema.define(version: 2021_07_08_172102) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 2021_07_01_102849) do
     t.string "fund_class"
     t.string "performance_text"
     t.date "buy_date"
-    t.integer "buy_quantity"
+    t.float "buy_quantity"
     t.float "buy_price"
     t.string "strategy"
     t.datetime "created_at", precision: 6, null: false
@@ -68,7 +68,7 @@ ActiveRecord::Schema.define(version: 2021_07_01_102849) do
     t.string "symbol"
     t.string "strategy"
     t.date "buy_date"
-    t.integer "buy_quantity"
+    t.float "buy_quantity"
     t.float "buy_price"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

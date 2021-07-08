@@ -34,7 +34,7 @@
   
   <% if @funds.length.positive? %>
     <div class='d-flex align-items-strech justify-content-start flex-wrap'>
-      <% @funds.each do |fund| %>     
+      <% @funds.order('buy_date DESC').each do |fund| %>     
         <div class="card invest-card m-1" style="width: 16rem;">
           <div class="dropdown"> 
 						<button class="fas fa-cog fixed-top-right text-muted" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>

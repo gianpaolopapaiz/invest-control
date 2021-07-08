@@ -35,21 +35,21 @@
           <h4><strong>Dashboard</strong></h4>
          
           <div class="d-flex align-items-center justify-content-between mt-3">
-            <div class='card dash-card text-center w-50 mr-1 p-3'>
+            <div class='card dash-card text-center w-50 mr-1 py-3 px-1'>
               <p class="mb-0 text">Posição</p>
               <p class='mb-0 value'><%= number_to_currency(@portfolio_actual_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
             </div>
-            <div class='card dash-card text-center w-50 ml-1 p-3'>
+            <div class='card dash-card text-center w-50 ml-1 py-3 px-1'>
               <p class="mb-0 text">Valor aplicado</p>
               <p class='mb-0 value'><%= number_to_currency(@portfolio_buy_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
             </div>
           </div>
           <div class="d-flex align-items-center justify-content-between mt-2">
-            <div class='card dash-card text-center w-50 mr-1 p-3'>
+            <div class='card dash-card text-center w-50 mr-1 py-3 px-1'>
               <p class="mb-0 text">Taxa de retorno</p>
               <p class='mb-0 value'><%= number_to_percentage(@portfolio_return_tax, separator: ',', delimiter: '.', precision: 2) %></p>
             </div>
-            <div class='card dash-card text-center w-50 ml-1 p-3'>
+            <div class='card dash-card text-center w-50 ml-1 py-3 px-1'>
               <p class="mb-0 text">Rendimento:</p>
               <p class='mb-0 value'><%= number_to_currency(@portfolio_return_value, unit:'R$', separator: ',', delimiter: '.') %></p>
             </div>
@@ -65,7 +65,6 @@
           </div>
         <% end %>
         
-
       </div>
       <div class="tab-pane fade" id="nav-products" role="tabpanel" aria-labelledby="nav-products-tab">
         <%# Producst tab %>

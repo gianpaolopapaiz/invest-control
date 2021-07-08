@@ -12,11 +12,15 @@
   border: 1px solid black;
 }
 
-.app-table-consolidated th, td {
+.app-table-consolidated th, .app-table-consolidated td {
   padding: 4px;
 }
 
 .app-table-consolidated th {
   background-color: $blue;
   color: $light-gray;
+}
+
+td.text-left, td.text-right, td.text-center {
+  padding: 0;
 }
