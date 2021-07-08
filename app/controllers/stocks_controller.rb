@@ -49,7 +49,7 @@ class StocksController < ApplicationController
     @stock.portfolio = @portfolio
     @stock.strategy = 'Variável'
     if @stock.save
-      redirect_to portfolio_path(@portfolio)
+      redirect_to portfolio_stocks_path(@portfolio)
     else
       render :new
     end
@@ -65,7 +65,7 @@ class StocksController < ApplicationController
     authorize @stock
       if @stock.update(stock_params)
         flash[:success] = "Stock successfully updated"
-        redirect_to portfolio_path(@stock.portfolio)
+        redirect_to portfolio_stocks_path(@stock.portfolio)
       else
         flash[:alert] = @stock.errors.messages
         render :edit
