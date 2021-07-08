@@ -67,7 +67,7 @@ class FundsController < ApplicationController
     authorize @fund
       if @fund.update(fund_params)
         flash[:success] = "Fund successfully updated"
-        redirect_to portfolio_path(@fund.portfolio)
+        redirect_to portfolio_funds_path(@fund.portfolio)
       else
         flash[:alert] = @fund.errors.messages
         render :edit
