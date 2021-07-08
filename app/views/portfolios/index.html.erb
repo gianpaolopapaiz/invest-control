@@ -13,30 +13,48 @@
 		<p>Nenhuma carteira ativa no momento...</p>
 		<%= link_to 'Adicionar Carteira', new_portfolio_path, class: 'btn btn-primary' %>
 	<% else %>
+
 		<nav>
 			<div class="nav nav-pills nav-fill mb-3" id="nav-tab" role="tablist">
 				<a class="nav-item nav-link active app-nav-btn nav-left" id="nav-summary-tab" data-toggle="tab" href="#nav-summary" role="tab" aria-controls="nav-summary" aria-selected="true"><strong>Resumo</strong></a>
 				<a class="nav-item nav-link app-nav-btn nav-right" id="nav-portfolios-tab" data-toggle="tab" href="#nav-portfolios" role="tab" aria-controls="nav-portfolios" aria-selected="false"><strong>Carteiras</strong></a>
 			</div>
 		</nav>
-
+		
 		<div class="tab-content" id="nav-tabContent">
 			<div class="tab-pane fade show active" id="nav-summary" role="tabpanel" aria-labelledby="nav-summary-tab">
-				<%# Summary tab %>
-				<%# if @stocks.length > 0 || @funds.length > 0 %>
-					<h4><strong>Resumo</strong></h4>
-					<p class="card-text mb-0">Patrimônio: <%= number_to_currency(@global_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
-					<p class="card-text mb-0">Valor aplicado: <%= number_to_currency(@global_buy_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
-					<p class="card-text mb-0">Taxa de retorno: <%= number_to_percentage(@global_return_tax, separator: ',', delimiter: '.', precision: 2) %></p>
-					<p class="card-text">Rendimento: <%= number_to_currency(@global_return_value, unit:'R$', separator: ',', delimiter: '.') %></p>
-
-				<%# end %>
 				
 				<h4><strong>Dashboard</strong></h4>
-				<div class='my-4'>
-					<h5 class="text-center"><strong>Composição por estratégia</strong></h4>
-					<%= pie_chart @global_strategy_composition_percentage, width: "", legend: "bottom", donut: true, prefix: "", suffix: "%", thousands: ".", decimal: ",", round: 2, loading: "carregando...", empty: "Sem dados" %>
+				
+				<div class="d-flex align-items-center justify-content-between mt-3">
+					<div class='card dash-card text-center w-50 mr-1 p-3'>
+						<p class="mb-0 text">Patrimônio</p>
+						<p class='mb-0 value'><%= number_to_currency(@global_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
+					</div>
+					<div class='card dash-card text-center w-50 ml-1 p-3'>
+						<p class="mb-0 text">Valor aplicado</p>
+						<p class='mb-0 value'><%= number_to_currency(@global_buy_amount, unit:'R$', separator: ',', delimiter: '.') %></p>
+					</div>
 				</div>
+				<div class="d-flex align-items-center justify-content-between mt-2">
+					<div class='card dash-card text-center w-50 mr-1 p-3'>
+						<p class="mb-0 text">Taxa de retorno</p>
+						<p class='mb-0 value'><%= number_to_percentage(@global_return_tax, separator: ',', delimiter: '.', precision: 2) %></p>
+					</div>
+					<div class='card dash-card text-center w-50 ml-1 p-3'>
+						<p class="mb-0 text">Rendimento:</p>
+						<p class='mb-0 value'><%= number_to_currency(@global_return_value, unit:'R$', separator: ',', delimiter: '.') %></p>
+					</div>
+				</div>
+				
+				<hr class='mt-4'>
+
+				<% if @global_strategy_composition_percentage != {} %>
+					<div class='mt-3 mb-4'>
+						<h5 class="text-center"><strong>Composição por estratégia</strong></h4>
+						<%= pie_chart @global_strategy_composition_percentage, width: "", legend: "bottom", donut: true, prefix: "", suffix: "%", thousands: ".", decimal: ",", round: 2, loading: "carregando...", empty: "Sem dados" %>
+					</div>
+				<% end %>
 
 			</div>
 			<div class="tab-pane fade show" id="nav-portfolios" role="tabpanel" aria-labelledby="nav-portfolios-tab">
