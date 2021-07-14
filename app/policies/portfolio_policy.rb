@@ -42,4 +42,10 @@ class PortfolioPolicy < ApplicationPolicy
   def update_funds_price?
     record.user == user
   end
+
+  def update_products_value?
+    record.each do |s_record|
+      s_record.user == user 
+    end
+  end
 end
