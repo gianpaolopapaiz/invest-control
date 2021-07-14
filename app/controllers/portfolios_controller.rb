@@ -106,6 +106,59 @@ class PortfoliosController < ApplicationController
 		authorize @portfolios
 	end
 
+	def update_products_value
+		portfolios = current_user.portfolios
+		authorize portfolios
+		errors = []
+		portfolios.each do |portfolio|
+			# funds
+			if portfolio.funds.length.positive?
+				portfolio.funds.each do |fund|
+					data_fetch = fetch_fund_price(fund.cnpj_clean)
+					if data_fetch.last['data'] && data_fetch.last['data'] != fund.actual_date
+						fund.actual_date = Date.strptime(data_fetch.last['data'], '%Y-%m-%d')
+						fund.actual_price = data_fetch.last['valor'].to_f
+						if fund.save
+							flash[:alert] = "#{fund.short_name} atualizado"
+						else
+							errors << fund.errors.messages
+						end
+					end
+				end
+			else
+				flash[:alert] = "Fundos já estão atualizados"
+			end
+			# stocks
+			if portfolio.stocks.length.positive?
+				stock_symbols = []
+				portfolio.stocks.each do |stock| 
+					stock_symbols << stock.symbol
+				end
+				query = stock_symbols.join(',')
+				data_fetch = fetch_stock_price(query)
+				if data_fetch['quoteResponse']
+					portfolio.stocks.each_with_index do |stock, index| 
+						stock.actual_price = data_fetch['quoteResponse']['result'][index]['regularMarketPrice']
+						stock.actual_date = DateTime.now
+						if stock.save
+							flash[:alert] = 'Ações atualizadas'
+						else
+							errors << stock.errors.messages
+						end
+					end
+				else
+					errors << 'Erro na API de ações, tente novamente mais tarde'
+				end
+			end
+		end
+		if errors.count.positive?
+			flash[:alert] = errors.join(' | ')
+		else
+			flash[:alert] = 'Ativos atualizados com sucesso!' 
+		end 
+		redirect_to portfolios_path
+	end
+
 	private
 
 	def portfolio_actual_amount
@@ -143,5 +196,48 @@ class PortfoliosController < ApplicationController
 	def portfolio_params
 		params.require(:portfolio).permit(:name)
 	end
+
+	# for value update
+	# funds
+	def fetch_fund_price(query)
+    token = get_financial_data_token
+    if token
+      uri = URI.parse("https://api.financialdata.io/v1/fundos/#{query}/cotas")
+      header = {'Content-Type': 'application/json', 'Authorization': "Bearer #{token}"}
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      request = Net::HTTP::Get.new(uri.request_uri, header)
+      response = http.request(request)
+      return JSON.parse(response.read_body) 
+    end
+  end
+
+  def get_financial_data_token
+    login = ENV["FINANCIAL_LOGIN"]
+    password = ENV["FINANCIAL_PASSWORD"]
+    uri = URI.parse('https://api.financialdata.io/v1/token')
+    header = {'Content-Type': 'application/json'}
+    body = {usuario: login, senha: password}
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    request = Net::HTTP::Post.new(uri.request_uri, header)
+    request.body = body.to_json
+    response = http.request(request)
+    return response.read_body
+  end
+	# stocks
+	def fetch_stock_price(query)
+    url = URI("https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/v2/get-quotes?region=BR&symbols=#{query}")
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    request = Net::HTTP::Get.new(url)
+    request["x-rapidapi-key"] = ENV["YAHOO_API"]
+    request["x-rapidapi-host"] = 'apidojo-yahoo-finance-v1.p.rapidapi.com'
+    response = http.request(request)
+    return JSON.parse(response.read_body)
+  end
 	
 end

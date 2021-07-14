@@ -84,7 +84,7 @@ class StocksController < ApplicationController
     authorize portfolio
 		if portfolio.stocks.length.positive?
 			stock_symbols = []
-			portfolio.stocks.each_with_index do |stock| 
+			portfolio.stocks.each do |stock| 
 				stock_symbols << stock.symbol
 			end
 			query = stock_symbols.join(',')
