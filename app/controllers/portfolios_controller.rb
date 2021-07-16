@@ -150,6 +150,12 @@ class PortfoliosController < ApplicationController
 					errors << 'Erro na API de ações, tente novamente mais tarde'
 				end
 			end
+			
+			# cdi
+			cdi_values = fetch_cdi_value
+			raise
+			## CONTINUAR AQUI
+
 		end
 		if errors.count.positive?
 			flash[:alert] = errors.join(' | ')
@@ -198,6 +204,27 @@ class PortfoliosController < ApplicationController
 	end
 
 	# for value update
+	# cdi
+	def fetch_cdi_value
+    token = get_financial_data_token
+    if token
+			actual_date = "#{Date.current.year}-#{Date.current.month}-#{Date.current.day}"
+			if Cdi.all.count > 0
+				last_cdi_date = Cdi.last.date
+			else
+				last_cdi_date = '2010-01-01'
+			end
+      uri = URI.parse("https://api.financialdata.io/v1/indices/CDI/serie?dataInicio=#{last_cdi_date}&dataFim=#{actual_date}")
+      header = {'Content-Type': 'application/json', 'Authorization': "Bearer #{token}"}
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      request = Net::HTTP::Get.new(uri.request_uri, header)
+      response = http.request(request)
+      return JSON.parse(response.read_body) 
+    end
+  end
+
 	# funds
 	def fetch_fund_price(query)
     token = get_financial_data_token
