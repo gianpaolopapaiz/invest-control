@@ -110,8 +110,11 @@ class PortfoliosController < ApplicationController
 		portfolios = current_user.portfolios
 		authorize portfolios
 		errors = []
+		teste = 1
+	if teste === 2
 		portfolios.each do |portfolio|
-			# funds
+			raise
+			# fundos
 			if portfolio.funds.length.positive?
 				portfolio.funds.each do |fund|
 					data_fetch = fetch_fund_price(fund.cnpj_clean)
@@ -150,13 +153,26 @@ class PortfoliosController < ApplicationController
 					errors << 'Erro na API de ações, tente novamente mais tarde'
 				end
 			end
-			
-			# cdi
-			cdi_values = fetch_cdi_value
-			raise
-			## CONTINUAR AQUI
-
 		end
+	end
+
+		# cdi
+		cdi_values = fetch_cdi_value
+		if cdi_values.count > 0 
+			cdi_values.each do |cdi|
+				new_cdi = Cdi.new()
+				new_cdi.value_month = cdi['valor'].to_f
+				new_cdi.value_day = (1 + new_cdi.value_month) ** (1.0/30.0) - 1
+				new_cdi.date_update = Date.current
+				new_cdi.date_tax = Date.new(cdi["data"][0..3].to_i, cdi["data"][5..6].to_i, cdi["data"][8..9].to_i)
+				if new_cdi.save
+					flash[:alert] = 'Cdi criada'
+				else
+					errors << new_cdi.errors.messages
+				end
+			end
+		end
+
 		if errors.count.positive?
 			flash[:alert] = errors.join(' | ')
 		else
@@ -210,7 +226,7 @@ class PortfoliosController < ApplicationController
     if token
 			actual_date = "#{Date.current.year}-#{Date.current.month}-#{Date.current.day}"
 			if Cdi.all.count > 0
-				last_cdi_date = Cdi.last.date
+				last_cdi_date = Cdi.last.date_tax
 			else
 				last_cdi_date = '2010-01-01'
 			end
