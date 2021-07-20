@@ -110,10 +110,7 @@ class PortfoliosController < ApplicationController
 		portfolios = current_user.portfolios
 		authorize portfolios
 		errors = []
-		teste = 1
-	if teste === 2
 		portfolios.each do |portfolio|
-			raise
 			# fundos
 			if portfolio.funds.length.positive?
 				portfolio.funds.each do |fund|
@@ -154,7 +151,6 @@ class PortfoliosController < ApplicationController
 				end
 			end
 		end
-	end
 
 		# cdi
 		cdi_values = fetch_cdi_value
@@ -227,7 +223,7 @@ class PortfoliosController < ApplicationController
     if token
 			actual_date = "#{Date.current.year}-#{Date.current.month}-#{Date.current.day}"
 			if Cdi.all.count > 0
-				last_cdi_date = Cdi.last.date_tax
+				last_cdi_date = Cdi.last.date_tax + 1
 			else
 				last_cdi_date = '2010-01-01'
 			end
