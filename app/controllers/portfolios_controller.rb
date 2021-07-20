@@ -161,8 +161,9 @@ class PortfoliosController < ApplicationController
 		if cdi_values.count > 0 
 			cdi_values.each do |cdi|
 				new_cdi = Cdi.new()
-				new_cdi.value_month = cdi['valor'].to_f
-				new_cdi.value_day = (1 + new_cdi.value_month) ** (1.0/30.0) - 1
+				new_cdi.value_year = cdi['valor'].to_f
+				new_cdi.value_month = (1 + new_cdi.value_year) ** (1.0 / 12.0) - 1
+				new_cdi.value_day = (1 + new_cdi.value_year) ** (1.0 / 252.0) - 1
 				new_cdi.date_update = Date.current
 				new_cdi.date_tax = Date.new(cdi["data"][0..3].to_i, cdi["data"][5..6].to_i, cdi["data"][8..9].to_i)
 				if new_cdi.save
