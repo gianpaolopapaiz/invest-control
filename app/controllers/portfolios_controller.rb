@@ -111,7 +111,7 @@ class PortfoliosController < ApplicationController
 		authorize portfolios
 		errors = []
 		portfolios.each do |portfolio|
-			# funds
+			# fundos
 			if portfolio.funds.length.positive?
 				portfolio.funds.each do |fund|
 					data_fetch = fetch_fund_price(fund.cnpj_clean)
@@ -151,6 +151,25 @@ class PortfoliosController < ApplicationController
 				end
 			end
 		end
+
+		# cdi
+		cdi_values = fetch_cdi_value
+		if cdi_values.count > 0 
+			cdi_values.each do |cdi|
+				new_cdi = Cdi.new()
+				new_cdi.value_year = cdi['valor'].to_f
+				new_cdi.value_month = (1 + new_cdi.value_year) ** (1.0 / 12.0) - 1
+				new_cdi.value_day = (1 + new_cdi.value_year) ** (1.0 / 252.0) - 1
+				new_cdi.date_update = Date.current
+				new_cdi.date_tax = Date.new(cdi["data"][0..3].to_i, cdi["data"][5..6].to_i, cdi["data"][8..9].to_i)
+				if new_cdi.save
+					flash[:alert] = 'Cdi criada'
+				else
+					errors << new_cdi.errors.messages
+				end
+			end
+		end
+
 		if errors.count.positive?
 			flash[:alert] = errors.join(' | ')
 		else
@@ -198,6 +217,27 @@ class PortfoliosController < ApplicationController
 	end
 
 	# for value update
+	# cdi
+	def fetch_cdi_value
+    token = get_financial_data_token
+    if token
+			actual_date = "#{Date.current.year}-#{Date.current.month}-#{Date.current.day}"
+			if Cdi.all.count > 0
+				last_cdi_date = Cdi.last.date_tax + 1
+			else
+				last_cdi_date = '2010-01-01'
+			end
+      uri = URI.parse("https://api.financialdata.io/v1/indices/CDI/serie?dataInicio=#{last_cdi_date}&dataFim=#{actual_date}")
+      header = {'Content-Type': 'application/json', 'Authorization': "Bearer #{token}"}
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      request = Net::HTTP::Get.new(uri.request_uri, header)
+      response = http.request(request)
+      return JSON.parse(response.read_body) 
+    end
+  end
+
 	# funds
 	def fetch_fund_price(query)
     token = get_financial_data_token
