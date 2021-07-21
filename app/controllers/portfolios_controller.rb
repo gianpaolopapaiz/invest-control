@@ -13,7 +13,7 @@ class PortfoliosController < ApplicationController
 			@global_buy_amount += portfolio.initial_amount
 			@global_strategy_composition_value = @global_strategy_composition_value.merge(portfolio.strategy_composition_value){ |k, a_value, b_value| a_value + b_value }
 			@global_initial_date = portfolio.initial_date if portfolio.initial_date < @global_initial_date
-			@global_finish_date = portfolio.finish_date if portfolio.finish_date > @global_finish_date
+			@global_finish_date = portfolio.finish_date if portfolio.finish_date && portfolio.finish_date > @global_finish_date
 		end
 		@global_return_tax = (@global_amount - @global_buy_amount) / @global_buy_amount * 100 if @global_buy_amount != 0
 		@global_return_value = @global_amount - @global_buy_amount
@@ -21,7 +21,12 @@ class PortfoliosController < ApplicationController
 		@global_strategy_composition_value.each do |key,value| 		
 			@global_strategy_composition_percentage["#{key}"] = value / @global_amount * 100
 		end
-		@global_cdi_tax = Cdi.where("date_tax >= '#{@global_initial_date}' AND date_tax <= '#{@global_finish_date}'").sum(:value_day) * 100
+		if @global_finish_date != 0
+			@global_cdi_tax = Cdi.where("date_tax >= '#{@global_initial_date}' AND date_tax <= '#{@global_finish_date}'").sum(:value_day) * 100
+		else
+			@global_cdi_tax = 0
+			@global_initial_date = 0
+		end
 	end
 
 	def show
@@ -32,6 +37,11 @@ class PortfoliosController < ApplicationController
 		#portfolio
 		@portfolio_actual_amount = portfolio_actual_amount
 		@portfolio_buy_amount = portfolio_buy_amount
+		if  @portfolio.initial_date && @portfolio.finish_date
+			@days = (@portfolio.finish_date - @portfolio.initial_date).to_i
+		else
+			@days = 0
+		end
 		if @stocks.length > 0 || @funds.length > 0
 			@portfolio_return_tax = ((@portfolio_actual_amount / @portfolio_buy_amount) - 1) *100
 			@portfolio_return_value = (@portfolio_actual_amount - @portfolio_buy_amount)

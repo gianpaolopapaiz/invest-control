@@ -86,8 +86,9 @@ class Portfolio < ApplicationRecord
   end
 
   def initial_date
-    stock_date = stocks.order(:buy_date).first.buy_date
-    fund_date = funds.order(:buy_date).first.buy_date
+    
+    stock_date = stocks.order(:buy_date).first.buy_date if stocks.count.positive?
+    fund_date = funds.order(:buy_date).first.buy_date if funds.count.positive?
     if stock_date && fund_date
       stock_date < fund_date ? stock_date : fund_date
     elsif stock_date && !fund_date
@@ -100,8 +101,8 @@ class Portfolio < ApplicationRecord
   end
 
   def finish_date
-    stock_date = stocks.order(:actual_date).last.actual_date
-    fund_date = funds.order(:actual_date).last.actual_date
+    stock_date = stocks.order(:actual_date).last.actual_date if stocks.count.positive?
+    fund_date = funds.order(:actual_date).last.actual_date if funds.count.positive?
     if stock_date && fund_date
       stock_date > fund_date ? stock_date : fund_date
     elsif stock_date && !fund_date
