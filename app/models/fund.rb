@@ -40,7 +40,11 @@ class Fund < ApplicationRecord
   def year_return
     ((((month_return / 100) + 1) ** 12) - 1) * 100
   end
-	def cdi_tax 
-    Cdi.where("date_tax >= '#{buy_date}' AND date_tax <= '#{actual_date}'").sum(:value_day) * 100
+	def cdi_tax
+		if buy_date && actual_date  
+    	Cdi.where("date_tax >= '#{buy_date}' AND date_tax <= '#{actual_date}'").sum(:value_day) * 100
+		else
+			0
+		end
   end
 end
