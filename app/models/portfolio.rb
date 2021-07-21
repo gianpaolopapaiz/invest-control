@@ -36,14 +36,6 @@ class Portfolio < ApplicationRecord
   end
 
   def return_tax
-    # sum = 0
-    # stocks.each do |stock|
-    #   sum += (((stock.actual_price / stock.buy_price) -1 ) * 100) if stock.actual_price
-    # end
-    # funds.each do |fund|
-    #   sum += (((fund.actual_price / fund.buy_price) -1 ) * 100) if fund.actual_price
-    # end
-    # sum
     if amount != 0
       return_value / initial_amount * 100
     else
@@ -92,6 +84,43 @@ class Portfolio < ApplicationRecord
     end
     composition
   end
+
+  def initial_date
+    stock_date = stocks.order(:buy_date).first.buy_date
+    fund_date = funds.order(:buy_date).first.buy_date
+    if stock_date && fund_date
+      stock_date < fund_date ? stock_date : fund_date
+    elsif stock_date && !fund_date
+      stock_date
+    elsif !stock_date && fund_date
+      fund_date
+    else
+      nil
+    end
+  end
+
+  def finish_date
+    stock_date = stocks.order(:actual_date).last.actual_date
+    fund_date = funds.order(:actual_date).last.actual_date
+    if stock_date && fund_date
+      stock_date > fund_date ? stock_date : fund_date
+    elsif stock_date && !fund_date
+      stock_date
+    elsif !stock_date && fund_date
+      fund_date
+    else
+      nil
+    end
+  end
+
+  def cdi_tax 
+    date_start = initial_date
+    date_end = finish_date
+    if date_start && date_end
+      Cdi.where("date_tax >= '#{date_start}' AND date_tax <= '#{date_end}'").sum(:value_day) * 100
+    else
+      0
+    end
+  end
 end
 
-# ['Pós-fixado', 'Pré-fixado', 'Inflação', 'Multimercado', 'Variável', 'Internacional']
