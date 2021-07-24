@@ -27,6 +27,15 @@ class PortfoliosController < ApplicationController
 			@global_cdi_tax = 0
 			@global_initial_date = 0
 		end
+		# update
+		if Date.current.wday > 5
+			update_date = Date.current - (Date.current.wday - 5)
+		else
+			update_date = Date.current	
+		end
+		if current_user.update_values_date < update_date
+			update_products_value(@portfolios)
+		end
 	end
 
 	def show
@@ -84,6 +93,7 @@ class PortfoliosController < ApplicationController
 		@portfolio = Portfolio.new(portfolio_params)
 		authorize @portfolio
 		@portfolio.user = current_user
+		@portfolio.update_values_date = Date.new(2010, 1, 1)
 		if @portfolio.save
 			redirect_to portfolios_path
 		else
@@ -121,9 +131,9 @@ class PortfoliosController < ApplicationController
 		authorize @portfolios
 	end
 
-	def update_products_value
-		portfolios = current_user.portfolios
-		authorize portfolios
+	private
+	
+	def update_products_value(portfolios)
 		errors = []
 		portfolios.each do |portfolio|
 			# fundos
@@ -166,7 +176,6 @@ class PortfoliosController < ApplicationController
 				end
 			end
 		end
-
 		# cdi
 		cdi_values = fetch_cdi_value
 		if cdi_values.count > 0 
@@ -184,16 +193,15 @@ class PortfoliosController < ApplicationController
 				end
 			end
 		end
-
+		#errors	
 		if errors.count.positive?
 			flash[:alert] = errors.join(' | ')
 		else
 			flash[:alert] = 'Ativos atualizados com sucesso!' 
 		end 
-		redirect_to portfolios_path
+		current_user.update_values_date = Date.current
+		current_user.save
 	end
-
-	private
 
 	def portfolio_actual_amount
 		portfolio = Portfolio.find(params[:id])
@@ -282,6 +290,7 @@ class PortfoliosController < ApplicationController
     response = http.request(request)
     return response.read_body
   end
+
 	# stocks
 	def fetch_stock_price(query)
     url = URI("https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/v2/get-quotes?region=BR&symbols=#{query}")
