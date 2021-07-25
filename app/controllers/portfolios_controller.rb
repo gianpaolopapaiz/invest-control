@@ -131,6 +131,26 @@ class PortfoliosController < ApplicationController
 		authorize @portfolios
 	end
 
+	def update_ipca
+	# ipca
+	ipca_values = fetch_ipca_value
+	if ipca_values.count > 0 
+			ipca_values.each do |ipca|
+				new_ipca = Ipca.new()
+				new_ipca.value_year = ipca['valor'].to_f
+				new_ipca.value_month = (1 + new_ipca.value_year) ** (1.0 / 12.0) - 1
+				new_ipca.value_day = (1 + new_ipca.value_year) ** (1.0 / 252.0) - 1
+				new_ipca.date_update = Date.current
+				new_ipca.date_tax = Date.new(ipca["data"][6..9].to_i, ipca["data"][3..4].to_i, ipca["data"][0..1].to_i)
+				if new_ipca.save
+					flash[:alert] = 'IPCA criada'
+				else
+					errors << new_ipca.errors.messages
+				end
+			end
+		end
+	end
+
 	private
 	
 	def update_products_value(portfolios)
@@ -260,6 +280,24 @@ class PortfoliosController < ApplicationController
       return JSON.parse(response.read_body) 
     end
   end
+
+		# ipca
+		def fetch_ipca_value
+			actual_date = "#{Date.current.day}/#{Date.current.month}/#{Date.current.year}"
+			if Ipca.all.count > 0
+				last_ipca_date = "#{(Ipca.last.date_tax + 1).day}/#{(Ipca.last.date_tax + 1).month}/#{(Ipca.last.date_tax + 1).year}"
+			else
+				last_ipca_date = '01/01/2010'
+			end
+			uri = URI.parse("https://api.bcb.gov.br/dados/serie/bcdata.sgs.10844/dados?formato=json&dataInicial=#{last_ipca_date}&dataFinal=#{actual_date}")
+			header = {'Content-Type': 'application/json'}
+			http = Net::HTTP.new(uri.host, uri.port)
+			http.use_ssl = true
+			http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+			request = Net::HTTP::Get.new(uri.request_uri, header)
+			response = http.request(request)
+			return JSON.parse(response.read_body) 
+		end
 
 	# funds
 	def fetch_fund_price(query)
