@@ -282,14 +282,19 @@ class PortfoliosController < ApplicationController
   end
 
 		# ipca
+		# API encontrada, precisa acertar a string de data para corresponder com a chamada da API
+		# Mes precisa ter 2 digitos obrigatóriamente
+		# Api puxa 1 valor por mês apenas
 		def fetch_ipca_value
+			# acertar aqui
 			actual_date = "#{Date.current.day}/#{Date.current.month}/#{Date.current.year}"
 			if Ipca.all.count > 0
+				# acertar aqui
 				last_ipca_date = "#{(Ipca.last.date_tax + 1).day}/#{(Ipca.last.date_tax + 1).month}/#{(Ipca.last.date_tax + 1).year}"
 			else
 				last_ipca_date = '01/01/2010'
 			end
-			uri = URI.parse("https://api.bcb.gov.br/dados/serie/bcdata.sgs.10844/dados?formato=json&dataInicial=#{last_ipca_date}&dataFinal=#{actual_date}")
+			uri = URI.parse("https://apisidra.ibge.gov.br/values/t/1737/n1/all/v/63/p/201001-202106/d/v63%202,v69%202,v2266%2013,v2263%202,v2264%202,v2265%202?formato=json")
 			header = {'Content-Type': 'application/json'}
 			http = Net::HTTP.new(uri.host, uri.port)
 			http.use_ssl = true
