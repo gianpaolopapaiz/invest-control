@@ -26,7 +26,7 @@ class StocksController < ApplicationController
       @query = params[:query]
       @autocomplete = fetch_autocomplete(@query)['quotes']
       if !@autocomplete
-        flash[:alert] = 'API error, please try again later'
+        flash[:alert] = 'Erro na API, porfavor tente mais tarde!'
       end
     end
   end
@@ -49,7 +49,7 @@ class StocksController < ApplicationController
     @stock.portfolio = @portfolio
     @stock.strategy = 'Variável'
     if @stock.save
-      redirect_to portfolio_stocks_path(@portfolio)
+      update_stocks_price
     else
       render :new
     end
@@ -64,7 +64,7 @@ class StocksController < ApplicationController
     @stock = Stock.find(params[:id])
     authorize @stock
       if @stock.update(stock_params)
-        flash[:success] = "Stock successfully updated"
+        flash[:success] = "Ações atualizadas com sucesso!"
         redirect_to portfolio_stocks_path(@stock.portfolio)
       else
         flash[:alert] = @stock.errors.messages
@@ -80,7 +80,11 @@ class StocksController < ApplicationController
   end
 
   def update_stocks_price
-		portfolio = Portfolio.find(params[:id])
+    if params[:id]
+		  portfolio = Portfolio.find(params[:id])
+    else
+      portfolio = Portfolio.find(params[:portfolio_id])
+    end
     authorize portfolio
 		if portfolio.stocks.length.positive?
 			stock_symbols = []
@@ -94,13 +98,13 @@ class StocksController < ApplicationController
 					stock.actual_price = data_fetch['quoteResponse']['result'][index]['regularMarketPrice']
 					stock.actual_date = DateTime.now
 					if stock.save
-						flash[:alert] = 'Stocks updated'
+						flash[:alert] = 'Ações atualizadas'
 					else
 						flash[:alert] = stock.errors.messages
 					end
 				end
 			else
-				flash[:alert] = 'API error, please try again later'
+				flash[:alert] = 'Erro na API, porfavor tente mais tarde!'
 			end
 			redirect_to portfolio_stocks_path(portfolio)
 		end

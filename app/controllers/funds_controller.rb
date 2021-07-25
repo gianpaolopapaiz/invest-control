@@ -26,7 +26,7 @@ class FundsController < ApplicationController
       @query = params[:query]
       @fetched_fund = fetch_fund(@query)
       if !@fetched_fund
-        flash[:alert] = 'API error, please try again later'
+        flash[:alert] = 'Erro na API, porfavor tente mais tarde!'
       end
     end   
   end
@@ -51,7 +51,7 @@ class FundsController < ApplicationController
     @fund = Fund.new(fund_params)
     @fund.portfolio = @portfolio
     if @fund.save
-      redirect_to portfolio_funds_path(@portfolio)
+      update_funds_price
     else
       render :new
     end
@@ -66,7 +66,7 @@ class FundsController < ApplicationController
     @fund = Fund.find(params[:id])
     authorize @fund
       if @fund.update(fund_params)
-        flash[:success] = "Fund successfully updated"
+        flash[:success] = "Fundos atualizados com sucesso!"
         redirect_to portfolio_funds_path(@fund.portfolio)
       else
         flash[:alert] = @fund.errors.messages
@@ -82,7 +82,11 @@ class FundsController < ApplicationController
   end
 
   def update_funds_price
-		portfolio = Portfolio.find(params[:id])
+    if params[:id]
+	  	portfolio = Portfolio.find(params[:id])
+    else
+      portfolio = Portfolio.find(params[:portfolio_id])
+    end
     authorize portfolio
 		if portfolio.funds.length.positive?
 			portfolio.funds.each do |fund|
@@ -91,14 +95,14 @@ class FundsController < ApplicationController
           fund.actual_date = Date.strptime(data_fetch.last['data'], '%Y-%m-%d')
           fund.actual_price = data_fetch.last['valor'].to_f
           if fund.save
-            flash[:alert] = "Updated #{fund.short_name}"
+            flash[:alert] = "#{fund.short_name} atualizado"
           else
             flash[:alert] = fund.errors.messages
           end
         end
       end
     else
-      flash[:alert] = "Funds already updated"
+      flash[:alert] = "Fundos já estão atualizados!"
     end
 		redirect_to portfolio_funds_path(portfolio)
 	end
@@ -133,7 +137,7 @@ class FundsController < ApplicationController
       response = http.request(request)
       return JSON.parse(response.read_body) 
     else
-      flash[:alert] = 'Error to retrieve token'
+      flash[:alert] = 'Erro no recebimento do token!'
       render :choose_fund
     end
   end
