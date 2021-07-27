@@ -198,7 +198,7 @@ class PortfoliosController < ApplicationController
 			end
 		end
 		# ipca
-		if current_user.update_values_date < Ipca.last.date_tax && current_user.update_values_date.month < Ipca.last.date_tax.month
+		if !Ipca.last || (current_user.update_values_date < Ipca.last.date_tax && current_user.update_values_date.month < Ipca.last.date_tax.month)
 			ipca_values = fetch_ipca_value
 			if ipca_values.count > 0 
 				ipca_values.each_with_index do |ipca, i|
