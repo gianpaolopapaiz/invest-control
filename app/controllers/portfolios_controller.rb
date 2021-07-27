@@ -28,8 +28,10 @@ class PortfoliosController < ApplicationController
 			@global_initial_date = 0
 		end
 		# update
-		if Date.current.wday > 5
-			update_date = Date.current - (Date.current.wday - 5)
+		if Date.current.wday == 6
+			update_date = Date.current - 1
+		elsif Date.current.wday == 0
+			update_date = Date.current - 2
 		else
 			update_date = Date.current	
 		end
@@ -131,26 +133,6 @@ class PortfoliosController < ApplicationController
 		authorize @portfolios
 	end
 
-	def update_ipca
-	# ipca
-	ipca_values = fetch_ipca_value
-	if ipca_values.count > 0 
-			ipca_values.each do |ipca|
-				new_ipca = Ipca.new()
-				new_ipca.value_year = ipca['valor'].to_f
-				new_ipca.value_month = (1 + new_ipca.value_year) ** (1.0 / 12.0) - 1
-				new_ipca.value_day = (1 + new_ipca.value_year) ** (1.0 / 252.0) - 1
-				new_ipca.date_update = Date.current
-				new_ipca.date_tax = Date.new(ipca["data"][6..9].to_i, ipca["data"][3..4].to_i, ipca["data"][0..1].to_i)
-				if new_ipca.save
-					flash[:alert] = 'IPCA criada'
-				else
-					errors << new_ipca.errors.messages
-				end
-			end
-		end
-	end
-
 	private
 	
 	def update_products_value(portfolios)
@@ -210,6 +192,47 @@ class PortfoliosController < ApplicationController
 					flash[:alert] = 'Cdi criada'
 				else
 					errors << new_cdi.errors.messages
+				end
+			end
+		end
+		# ipca
+		if current_user.update_values_date < Ipca.last.date_tax && current_user.update_values_date.month < Ipca.last.date_tax.month
+			ipca_values = fetch_ipca_value
+			if ipca_values.count > 0 
+				ipca_values.each_with_index do |ipca, i|
+					if i > 0
+						new_ipca = Ipca.new()
+						new_ipca.value_month = ipca['V'].to_f / 100
+						new_ipca.value_year = ((1 + new_ipca.value_month) ** 12.0) - 1
+						new_ipca.value_day = ((1 + new_ipca.value_year) ** (1.0 / 252)) - 1
+						new_ipca.date_update = Date.current
+						new_ipca.date_tax = Date.new(ipca["D3C"][0..3].to_i, ipca["D3C"][4..5].to_i, 1)
+						new_ipca.date_tax += 2 if new_ipca.date_tax.wday == 6
+						new_ipca.date_tax += 1 if new_ipca.date_tax.wday == 0
+						if new_ipca.save
+							flash[:alert] = 'IPCA criada'
+						else
+							errors << new_ipca.errors.messages
+						end
+						#populate month
+						date = new_ipca.date_tax + 1
+						while date.month == new_ipca.date_tax.month
+							if date.wday < 6 && date.wday > 0
+								populate_ipca = Ipca.new()
+								populate_ipca.value_month = new_ipca.value_month
+								populate_ipca.value_year = new_ipca.value_year
+								populate_ipca.value_day = new_ipca.value_day
+								populate_ipca.date_update = new_ipca.date_update
+								populate_ipca.date_tax = date
+								if populate_ipca.save
+									flash[:alert] = 'IPCA criada'
+								else
+									errors << populate_ipca.errors.messages
+								end
+							end
+							date += 1
+						end
+					end
 				end
 			end
 		end
@@ -282,19 +305,15 @@ class PortfoliosController < ApplicationController
   end
 
 		# ipca
-		# API encontrada, precisa acertar a string de data para corresponder com a chamada da API
-		# Mes precisa ter 2 digitos obrigatóriamente
-		# Api puxa 1 valor por mês apenas
 		def fetch_ipca_value
-			# acertar aqui
-			actual_date = "#{Date.current.day}/#{Date.current.month}/#{Date.current.year}"
+			Date.current.month < 10 ? current_month = "0#{Date.current.month}" : current_month = "#{Date.current.month}"
+			actual_ipca_date = "#{Date.current.year}#{current_month}"
 			if Ipca.all.count > 0
-				# acertar aqui
-				last_ipca_date = "#{(Ipca.last.date_tax + 1).day}/#{(Ipca.last.date_tax + 1).month}/#{(Ipca.last.date_tax + 1).year}"
+				last_ipca_date = "#{Ipca.last.date_tax.year}#{Ipca.last.date_tax.month}"
 			else
-				last_ipca_date = '01/01/2010'
+				last_ipca_date = '201001'
 			end
-			uri = URI.parse("https://apisidra.ibge.gov.br/values/t/1737/n1/all/v/63/p/201001-202106/d/v63%202,v69%202,v2266%2013,v2263%202,v2264%202,v2265%202?formato=json")
+			uri = URI.parse("https://apisidra.ibge.gov.br/values/t/1737/n1/all/v/63/p/#{last_ipca_date}-#{actual_ipca_date}/d/v63%202,v69%202,v2266%2013,v2263%202,v2264%202,v2265%202?formato=json")
 			header = {'Content-Type': 'application/json'}
 			http = Net::HTTP.new(uri.host, uri.port)
 			http.use_ssl = true
