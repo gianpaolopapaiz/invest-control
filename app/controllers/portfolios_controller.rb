@@ -23,13 +23,17 @@ class PortfoliosController < ApplicationController
 		end
 		if @global_finish_date != 0
 			@global_cdi_tax = Cdi.where("date_tax >= '#{@global_initial_date}' AND date_tax <= '#{@global_finish_date}'").sum(:value_day) * 100
+			@global_ipca_tax = Ipca.where("date_tax >= '#{@global_initial_date}' AND date_tax <= '#{@global_finish_date}'").sum(:value_day) * 100
 		else
 			@global_cdi_tax = 0
+			@global_ipca_tax = 0
 			@global_initial_date = 0
 		end
 		# update
-		if Date.current.wday > 5
-			update_date = Date.current - (Date.current.wday - 5)
+		if Date.current.wday == 6
+			update_date = Date.current - 1
+		elsif Date.current.wday == 0
+			update_date = Date.current - 2
 		else
 			update_date = Date.current	
 		end
@@ -193,6 +197,47 @@ class PortfoliosController < ApplicationController
 				end
 			end
 		end
+		# ipca
+		if current_user.update_values_date < Ipca.last.date_tax && current_user.update_values_date.month < Ipca.last.date_tax.month
+			ipca_values = fetch_ipca_value
+			if ipca_values.count > 0 
+				ipca_values.each_with_index do |ipca, i|
+					if i > 0
+						new_ipca = Ipca.new()
+						new_ipca.value_month = ipca['V'].to_f / 100
+						new_ipca.value_year = ((1 + new_ipca.value_month) ** 12.0) - 1
+						new_ipca.value_day = ((1 + new_ipca.value_year) ** (1.0 / 252)) - 1
+						new_ipca.date_update = Date.current
+						new_ipca.date_tax = Date.new(ipca["D3C"][0..3].to_i, ipca["D3C"][4..5].to_i, 1)
+						new_ipca.date_tax += 2 if new_ipca.date_tax.wday == 6
+						new_ipca.date_tax += 1 if new_ipca.date_tax.wday == 0
+						if new_ipca.save
+							flash[:alert] = 'IPCA criada'
+						else
+							errors << new_ipca.errors.messages
+						end
+						#populate month
+						date = new_ipca.date_tax + 1
+						while date.month == new_ipca.date_tax.month
+							if date.wday < 6 && date.wday > 0
+								populate_ipca = Ipca.new()
+								populate_ipca.value_month = new_ipca.value_month
+								populate_ipca.value_year = new_ipca.value_year
+								populate_ipca.value_day = new_ipca.value_day
+								populate_ipca.date_update = new_ipca.date_update
+								populate_ipca.date_tax = date
+								if populate_ipca.save
+									flash[:alert] = 'IPCA criada'
+								else
+									errors << populate_ipca.errors.messages
+								end
+							end
+							date += 1
+						end
+					end
+				end
+			end
+		end
 		#errors	
 		if errors.count.positive?
 			flash[:alert] = errors.join(' | ')
@@ -260,6 +305,25 @@ class PortfoliosController < ApplicationController
       return JSON.parse(response.read_body) 
     end
   end
+
+		# ipca
+		def fetch_ipca_value
+			Date.current.month < 10 ? current_month = "0#{Date.current.month}" : current_month = "#{Date.current.month}"
+			actual_ipca_date = "#{Date.current.year}#{current_month}"
+			if Ipca.all.count > 0
+				last_ipca_date = "#{Ipca.last.date_tax.year}#{Ipca.last.date_tax.month}"
+			else
+				last_ipca_date = '201001'
+			end
+			uri = URI.parse("https://apisidra.ibge.gov.br/values/t/1737/n1/all/v/63/p/#{last_ipca_date}-#{actual_ipca_date}/d/v63%202,v69%202,v2266%2013,v2263%202,v2264%202,v2265%202?formato=json")
+			header = {'Content-Type': 'application/json'}
+			http = Net::HTTP.new(uri.host, uri.port)
+			http.use_ssl = true
+			http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+			request = Net::HTTP::Get.new(uri.request_uri, header)
+			response = http.request(request)
+			return JSON.parse(response.read_body) 
+		end
 
 	# funds
 	def fetch_fund_price(query)

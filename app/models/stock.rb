@@ -48,4 +48,12 @@ class Stock < ApplicationRecord
       0
     end
   end
+
+  def ipca_tax
+    if buy_date && actual_date 
+      Ipca.where("date_tax >= '#{buy_date}' AND date_tax <= '#{actual_date}'").sum(:value_day) * 100
+    else
+      0
+    end
+  end
 end

@@ -1,0 +1,2 @@
+class Ipca < ApplicationRecord
+end
