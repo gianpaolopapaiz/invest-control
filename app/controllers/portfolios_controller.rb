@@ -23,8 +23,10 @@ class PortfoliosController < ApplicationController
 		end
 		if @global_finish_date != 0
 			@global_cdi_tax = Cdi.where("date_tax >= '#{@global_initial_date}' AND date_tax <= '#{@global_finish_date}'").sum(:value_day) * 100
+			@global_ipca_tax = Ipca.where("date_tax >= '#{@global_initial_date}' AND date_tax <= '#{@global_finish_date}'").sum(:value_day) * 100
 		else
 			@global_cdi_tax = 0
+			@global_ipca_tax = 0
 			@global_initial_date = 0
 		end
 		# update

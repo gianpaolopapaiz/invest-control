@@ -66,12 +66,14 @@
               <span>Rendimento:</span>
               <span><%= number_to_currency(stock.return_value, unit:'R$', separator: ',', delimiter: '.') %></span>
             </div>
-
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
               <span>CDI no período:</span>
               <span><%= number_to_percentage(stock.cdi_tax, separator: ',', delimiter: '.', precision: 2) %></span>
             </div>
-
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>IPCA no período:</span>
+              <span><%= number_to_percentage(stock.ipca_tax, separator: ',', delimiter: '.', precision: 2) %></span>
+            </div>
             <hr class='my-1'>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
               <span>Quantidade:</span>

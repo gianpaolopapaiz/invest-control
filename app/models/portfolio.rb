@@ -86,7 +86,6 @@ class Portfolio < ApplicationRecord
   end
 
   def initial_date
-    
     stock_date = stocks.order(:buy_date).first.buy_date if stocks.count.positive?
     fund_date = funds.order(:buy_date).first.buy_date if funds.count.positive?
     if stock_date && fund_date
@@ -119,6 +118,16 @@ class Portfolio < ApplicationRecord
     date_end = finish_date
     if date_start && date_end
       Cdi.where("date_tax >= '#{date_start}' AND date_tax <= '#{date_end}'").sum(:value_day) * 100
+    else
+      0
+    end
+  end
+
+  def ipca_tax 
+    date_start = initial_date
+    date_end = finish_date
+    if date_start && date_end
+      Ipca.where("date_tax >= '#{date_start}' AND date_tax <= '#{date_end}'").sum(:value_day) * 100
     else
       0
     end

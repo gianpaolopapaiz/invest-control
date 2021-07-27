@@ -70,6 +70,10 @@
               <span>CDI no período:</span>
               <span><%= number_to_percentage(fund.cdi_tax, separator: ',', delimiter: '.', precision: 2) %></span>
             </div>
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>IPCA no período:</span>
+              <span><%= number_to_percentage(fund.ipca_tax, separator: ',', delimiter: '.', precision: 2) %></span>
+            </div>
 
             <hr class='my-1'>
             <div class="card-text mb-0 d-flex align-items-center justify-content-between">
