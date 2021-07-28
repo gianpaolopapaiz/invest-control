@@ -20,11 +20,11 @@
       <%= link_to 'remover filtro', portfolio_funds_path(@portfolio), class: 'ml-2' %>
     </div>
   <% else %>
-    <h4 class='mb-0'><strong>Fundos (<%= @funds.length %>):</strong></h4>
+    <h4 class='mb-2 mt-4''><strong>Fundos (<%= @funds.length %>):</strong></h4>
   <% end %>
   
   <%= form_tag portfolio_funds_path(@portfolio, remote: true), method: :get, class: 'form' do %>
-    <div class='d-flex align-items-center justify-content-between'>
+    <div class='d-flex align-items-center justify-content-between mb-2'>
       <%= text_field_tag :query, params[:query], class: "form-control mr-1 my-2", placeholder: "Cnpj, nome ou advisor..." %>
       <%= button_tag type: 'submit', class: "btn btn-primary", id: "register-button" do %>
         <i class="fas fa-search"></i>
