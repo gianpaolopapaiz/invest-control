@@ -1,6 +1,6 @@
 <div class='container app-full-container'>
+  <%= form_tag portfolio_stocks_choose_stock_path(@portfolio), method: :get, class: ' mt-3 search-form' do %>
   <h2>Pesquise uma ação</h2>
-  <%= form_tag portfolio_stocks_choose_stock_path(@portfolio), method: :get, class: 'form-inline mt-3' do %>
     <%= label_tag(:query, "Pesquise pelo símbolo da ação:") %>
     <%= text_field_tag :query, params[:query], class: "form-control", placeholder: "Símbolo da ação..." %>
     <div class='d-flex justify-content-center align-items-center w-100 mt-3'>
@@ -10,7 +10,7 @@
   <% end %> 
 
   <% if @autocomplete %>
-    <div class="mt-4 w-100">
+    <div class="mt-4 w-100 search-form">
       <% if @autocomplete.length > 0  %>
         <h3 class='mb-3'>Selecione uma ação:</h3>
         <hr class='no-margin'>

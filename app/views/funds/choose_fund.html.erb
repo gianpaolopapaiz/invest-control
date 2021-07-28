@@ -1,6 +1,6 @@
 <div class='container'>
-  <h3>Pesquise um fundo</h3>
-  <%= form_tag portfolio_funds_choose_fund_path(@portfolio), method: :get, class: 'form-inline mt-3' do %>
+  <%= form_tag portfolio_funds_choose_fund_path(@portfolio), method: :get, class: 'mt-3 search-form' do %>
+    <h3>Pesquise um fundo</h3>
     <%= label_tag(:query, "Pesquise pelo CNPJ do fundo:") %>
     <%= number_field_tag :query, params[:query], class: "form-control", placeholder: "CNPJ do fundo..." %>
     <div class='d-flex justify-content-center align-items-center w-100 mt-3'>
@@ -11,7 +11,7 @@
 
   <% if @fetched_fund  %>
     <% if @fetched_fund['cnpj'] %>
-      <div class="mt-4 w-100">
+      <div class="mt-4 w-100 search-form">
         <h3 class='mb-3'>Selecione um fundo:</h3>
         <hr class='no-margin'> 
         <%= link_to "#{@fetched_fund['nomeAbreviado']} | #{@fetched_fund['cnpj']}", "/portfolios/#{@portfolio.id}/funds/new?cnpj=#{@fetched_fund['cnpj']}&short_name=#{@fetched_fund['nomeAbreviado']}&fund_class=#{@fetched_fund['classe']}&cnpj_clean=#{@query}", class:'btn btn-block w-100 m-0 text-left' %>
