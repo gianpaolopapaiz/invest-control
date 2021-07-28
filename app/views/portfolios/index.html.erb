@@ -23,7 +23,7 @@
 		
 		<div class="tab-content" id="nav-tabContent">
 			<div class="tab-pane fade show active" id="nav-summary" role="tabpanel" aria-labelledby="nav-summary-tab">
-				
+				<%# Summary tab %>
 				<h4><strong>Dashboard</strong></h4>
 				
 				<div class="d-flex align-items-center justify-content-between mt-3">
@@ -59,7 +59,7 @@
 				
 				<% if @global_strategy_composition_percentage != {} %>
 				<hr class='mt-4'>
-					<div class='mt-3 mb-4'>
+					<div class='mt-4 mb-4'>
 						<h5 class="text-center"><strong>Composição por estratégia</strong></h4>
 						<%= pie_chart @global_strategy_composition_percentage, width: "", legend: "bottom", donut: true, prefix: "", suffix: "%", thousands: ".", decimal: ",", round: 2, loading: "carregando...", empty: "Sem dados" %>
 					</div>
@@ -67,7 +67,8 @@
 
 			</div>
 			<div class="tab-pane fade show" id="nav-portfolios" role="tabpanel" aria-labelledby="nav-portfolios-tab">
-				<%# Summary tab %>
+				<%# Portfolios tab %>
+				<h4 class='mb-3'><strong>Carteiras</strong></h4> 
 				<% if @portfolios && @portfolios.length > 0 %>
 					<div class='d-flex align-items-center justify-content-start flex-wrap'>
 						<% @portfolios.each do |portfolio| %>
