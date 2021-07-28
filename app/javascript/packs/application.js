@@ -10,9 +10,14 @@ require("channels")
 
 import 'bootstrap';
 import "chartkick/chart.js"
+import { exportDataToExcel } from '../component/export_table'
 
 document.addEventListener('turbolinks:load', () => {
   // Call your JS functions here
+  if (document.getElementById('consolidated-table')) {
+    const exportButton = document.getElementById('export-button')
+    exportButton.addEventListener('click', exportDataToExcel);
+  }
 });
 
 // Uncomment to copy all static images under ../images to the output folder and reference
