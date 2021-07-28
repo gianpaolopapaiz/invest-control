@@ -1,18 +1,19 @@
 <div class="container">
   <div class='d-flex align-items-center justify-content-between flex-wrap'>
-      <%= link_to '', portfolios_path, class: "fas fa-chevron-left app-btn-flat" %>
-      <div class='d-flex align-items-center justify-content-start flex-column'>
-        <h2 class='mb-0'>Tabela Consolidada </h2>
-      </div>
-      <div >
-      </div>
+    <%= link_to '', portfolios_path, class: "fas fa-chevron-left app-btn-flat" %>
+    <div class='d-flex align-items-center justify-content-start flex-column'>
+      <h2 class='mb-0'>Tabela Consolidada</h2>
     </div>
-  </div>
-  <hr>
+		<button class="fas fa-ellipsis-v app-btn-flat" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a id='export-button' class='dropdown-item' href="#">Exportar Tabela</a>
+		</div>
+	</div>
+	<hr>
 </div>
 
 <div style="overflow-x:auto;" class='mx-2 my-4 '>
-  <table class='app-table-consolidated'>
+  <table id='consolidated-table' class='app-table-consolidated'>
     <tr>
       <th>Carteira</th>
       <th>Produto</th>
@@ -72,3 +73,4 @@
     <% end %>
   </table>
 </div>
+ 
