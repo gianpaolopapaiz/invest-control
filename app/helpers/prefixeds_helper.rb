@@ -1,0 +1,2 @@
+module PrefixedsHelper
+end

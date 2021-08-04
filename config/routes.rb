@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :portfolios do
     resources :stocks, only: [:new, :create, :index]
     resources :funds, only: [:new, :create, :index]
+    resources :prefixeds, only: [:new, :create, :index]
     get '/stocks/choose_stock', to: 'stocks#choose_stock'
     get '/funds/choose_fund', to: 'funds#choose_fund'
   end
