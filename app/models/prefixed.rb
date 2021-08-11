@@ -1,6 +1,6 @@
 class Prefixed < ApplicationRecord
   belongs_to :portfolio
-  STRATEGIES = ['Pós-fixado', 'Pré-fixado', 'Inflação', 'Multimercado', 'Variável', 'Internacional']
+  STRATEGIES = ['Pós-fixado', 'Prefixado', 'Inflação', 'Multimercado', 'Variável', 'Internacional']
   ADVISORS = ['Zenit', 'Bittencourt', 'Nenhum']
   validates :short_name, :description, :strategy, :buy_date, :buy_quantity, :buy_price, :advisor, :end_date, :year_tax, presence: true
 	validates :strategy, inclusion: { in: STRATEGIES }
@@ -32,10 +32,10 @@ class Prefixed < ApplicationRecord
     end
   end 
   def day_return
-    ((((year_tax / 100.0) + 1.0) ** (1.0/252.0)) - 1.0) * 100.0
+    ((((year_tax / 100.0) + 1.0)**(1.0/252.0)) - 1.0) * 100.0
   end
   def month_return
-    ((((year_tax / 100.0) + 1.0) ** (1.0/12.0)) - 1.0) * 100.0
+    ((((year_tax / 100.0) + 1.0)**(1.0/12.0)) - 1.0) * 100.0
   end
   def year_return
     year_tax

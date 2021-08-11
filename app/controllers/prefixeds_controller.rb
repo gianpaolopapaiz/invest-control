@@ -10,10 +10,10 @@ class PrefixedsController < ApplicationController
 		# 	@prefixeds_return_value = (@prefixeds_actual_amount - @prefixeds_buy_amount) 
 		# end
 
-    # if params[:query] && params[:query] != ''
-    #   @query = params[:query]
-    #   @prefixeds = @portfolio.prefixeds.where("short_name ILIKE ? OR advisor ILIKE ?", "%#{@query}%", "%#{@query}%")
-    # end
+    if params[:query] && params[:query] != ''
+      @query = params[:query]
+      @prefixeds = @portfolio.prefixeds.where("short_name ILIKE ? OR description ILIKE ? OR advisor ILIKE ?", "%#{@query}%", "%#{@query}%", "%#{@query}%")
+    end
   end
 
   def new
@@ -28,7 +28,7 @@ class PrefixedsController < ApplicationController
     authorize @portfolio
     @prefixed = Prefixed.new(prefixed_params)
     @prefixed.portfolio = @portfolio
-    @prefixed.strategy = 'Pré-fixado'
+    @prefixed.strategy = 'Prefixado'
     if @prefixed.save
       update_prefixeds_price
     else
@@ -36,8 +36,6 @@ class PrefixedsController < ApplicationController
     end
   end
   
-  private
-
   def update_prefixeds_price
     if params[:id]
 		  portfolio = Portfolio.find(params[:id])
@@ -47,13 +45,15 @@ class PrefixedsController < ApplicationController
     authorize portfolio
 		if portfolio.prefixeds.length.positive?
       portfolio.prefixeds.each do |prefixed|
-        prefixed.actual_price =  prefixed.buy_price * prefixed.days_count * prefixed.day_return
+        prefixed.actual_price =  prefixed.buy_price + (prefixed.buy_price * prefixed.days_count * (prefixed.day_return / 100))
         prefixed.actual_date = Date.current
         prefixed.save
       end
     end
     redirect_to portfolio_prefixeds_path(portfolio)
   end
+
+  private
 
   def prefixed_params
     params.require(:prefixed).permit(:buy_date, :buy_quantity, :buy_price, :description, :short_name, :advisor, :end_date, :year_tax)

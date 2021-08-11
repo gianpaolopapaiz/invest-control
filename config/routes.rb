@@ -11,10 +11,12 @@ Rails.application.routes.draw do
   end
   get '/portfolios/:id/update_stocks_price', to: 'stocks#update_stocks_price', as: 'update_stocks_price'
   get '/portfolios/:id/update_funds_price', to: 'funds#update_funds_price', as: 'update_funds_price'
+  get '/portfolios/:id/update_prefixeds_price', to: 'prefixeds#update_prefixeds_price', as: 'update_prefixeds_price'
   get '/consolidated', to: 'portfolios#consolidated', as: 'consolidated'
   get '/update_products_value', to: 'portfolios#update_products_value', as: 'update_products_value'
   resources :stocks, only: [:edit, :update, :destroy]
   resources :funds, only: [:edit, :update, :destroy]
+  resources :prefixeds, only: [:edit, :update, :destroy]
   get '/funds/:id/fetch_fund_price', to: 'funds#fetch_fund_price', as: 'fetch_fund_price'
 
   namespace :api, defaults: { format: :json } do
