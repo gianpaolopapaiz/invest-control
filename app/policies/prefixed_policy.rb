@@ -1,4 +1,4 @@
-class StockPolicy < ApplicationPolicy
+class PrefixedPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       scope.where(user: user)

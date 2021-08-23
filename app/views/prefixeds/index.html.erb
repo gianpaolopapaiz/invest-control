@@ -1,0 +1,104 @@
+<div class="container mb-4">
+  <div class='d-flex align-items-center justify-content-between flex-wrap'>
+    <%= link_to '', portfolio_path(@portfolio), class: "fas fa-chevron-left app-btn-flat" %>
+    <div class='d-flex align-items-center justify-content-start flex-column'>
+      <h2 class='mb-0'><%= @portfolio.name %> </h2>
+      <h5 class='mb-0'>Prefixados</h5>
+    </div>
+		<button class="fas fa-ellipsis-v app-btn-flat" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <%= link_to 'Adicionar prefixado', new_portfolio_prefixed_path(@portfolio), class: 'dropdown-item' %>
+      <%= link_to 'Atualizar prefixados', update_prefixeds_price_path(@portfolio), class: 'dropdown-item' %>
+		</div>
+	</div>
+	<hr>
+  
+  <% if @query && @query != '' %>
+      <h4 class='mb-0'><strong>Prefixados filtrados por:</strong></h4>
+    <div class='d-flex justify-content-between align-items-center'>
+      <h4>"<%= @query %>" (<%= @prefixeds.length %>)</h4>
+      <%= link_to 'remover filtro', portfolio_prefixeds_path(@portfolio), class: 'ml-2' %>
+    </div>
+  <% else %>
+    <h4 class='mb-2 mt-4''><strong>Prefixados (<%= @prefixeds.length %>):</strong></h4>
+  <% end %>
+  
+  <%= form_tag portfolio_prefixeds_path(@portfolio, remote: true), method: :get, class: 'form' do %>
+    <div class='d-flex align-items-center justify-content-between mb-2'>
+      <%= text_field_tag :query, params[:query], class: "form-control mr-1 my-2", placeholder: "Título, descrição ou advisor..." %>
+      <%= button_tag type: 'submit', class: "btn btn-primary", id: "register-button" do %>
+        <i class="fas fa-search"></i>
+      <% end %>
+    </div>
+  <% end %> 
+  
+  <% if @prefixeds.length.positive? %>
+    <div class='d-flex align-items-strech justify-content-start flex-wrap'>
+      <% @prefixeds.order('buy_date DESC').each do |prefixed| %>     
+        <div class="card invest-card m-1" style="width: 16rem;">
+          <div class="dropdown"> 
+						<button class="fas fa-cog fixed-top-right text-muted" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <%= link_to 'Editar', edit_prefixed_path(prefixed), class: 'dropdown-item'  %>
+              <%= link_to 'Remover', prefixed_path(prefixed), method: :delete, data: { confirm: "Você tem certeza?" }, class: 'dropdown-item'  %>
+						</div>
+					</div>
+          <div class="card-body">
+            <h5 class="card-title" title='<%= prefixed.short_name %>'><strong><%= truncate(prefixed.short_name, length: 50) %></strong></h5>
+            <h6 class="card-subtitle mb-2 text-muted">Descrição: <%= prefixed.description %></h6>
+            <h6 class="card-subtitle mb-2 text-muted">Estratégia: <%= prefixed.strategy %></h6>
+            <h6 class="card-subtitle mb-2 text-muted">Advisor: <%= prefixed.advisor %></h6>
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>Posição:</span> 
+              <span><%= number_to_currency(prefixed.amount, unit:'R$', separator: ',', delimiter: '.') %></span>
+            </div>
+            <hr class='my-1'>
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>Valor aplicado:</span> 
+              <span><%= number_to_currency(prefixed.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
+            </div>
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>Taxa de retorno:</span>
+              <span><%= number_to_percentage(prefixed.return_tax, separator: ',', delimiter: '.', precision: 2) %></span>
+            </div>
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>Rendimento:</span>
+              <span><%= number_to_currency(prefixed.return_value, unit:'R$', separator: ',', delimiter: '.') %></span>
+            </div>
+
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>CDI no período:</span>
+              <span><%= number_to_percentage(prefixed.cdi_tax, separator: ',', delimiter: '.', precision: 2) %></span>
+            </div>
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>IPCA no período:</span>
+              <span><%= number_to_percentage(prefixed.ipca_tax, separator: ',', delimiter: '.', precision: 2) %></span>
+            </div>
+
+            <hr class='my-1'>
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>Quantidade:</span>
+              <span><%= number_to_currency(prefixed.buy_quantity, unit: '', separator: ',', delimiter: '.', precision: 2) %></span>
+            </div>
+            <table class='w-100'>
+              <tbody>
+                <tr>
+                  <td class='text-left'>Entrada:</td>
+                  <td class='text-center'><%= prefixed.buy_date.strftime("%d/%m/%y") %></td>
+                  <td class='text-right'><%= number_to_currency(prefixed.buy_price, unit:'R$', separator: ',', delimiter: '.') %></td>
+                </tr>
+                <tr>
+                  <td class='text-left'>Atualizado:</td>
+                  <td class='text-center'><%= prefixed.actual_date.strftime("%d/%m/%y") if prefixed.actual_date %></td>
+                  <td class='text-right'><%= number_to_currency(prefixed.actual_price, unit:'R$', separator: ',', delimiter: '.') if prefixed.actual_price %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p>(Nenhum fundo adicionado!)</p>
+  <% end %>
+</div>

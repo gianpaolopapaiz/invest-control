@@ -9,6 +9,7 @@
 		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       <%= link_to 'Adicionar Ação', portfolio_stocks_choose_stock_path(@portfolio), class: 'dropdown-item' %>
       <%= link_to 'Adicionar Fundo', portfolio_funds_choose_fund_path(@portfolio), class: 'dropdown-item' %>
+      <%= link_to 'Adicionar Prefixado', new_portfolio_prefixed_path(@portfolio), class: 'dropdown-item' %>
 			<%= link_to 'Renomear Carteira', edit_portfolio_path(@portfolio), class: 'dropdown-item' %>
 			<%= link_to 'Remover Carteira', portfolio_path(@portfolio), method: :delete, data: { confirm: "Você tem certeza?" }, class: 'dropdown-item' %>
 		</div>
@@ -30,7 +31,7 @@
     <div class="tab-content" id="nav-tabContent">
       <div class="tab-pane fade show active" id="nav-summary" role="tabpanel" aria-labelledby="nav-summary-tab">
   
-        <% if @stocks.length > 0 || @funds.length > 0 %>
+        <% if @stocks.length > 0 || @funds.length > 0 || @prefixeds.length > 0 %>
           
           <h4><strong>Dashboard</strong></h4>
          
@@ -131,6 +132,34 @@
                 </div>
                 <div class=''>
                   <%= link_to 'Todos fundos', portfolio_funds_path(@portfolio), class: 'btn btn-primary btn-block btn-sm'  %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          <% if @prefixeds.length > 0 %>
+            <div class="card invest-card m-1" style="width: 16rem;">
+              <div class="card-body">
+                <h5 class="card-title"><strong>Prefixados</strong></h5>
+                <h6 class="card-subtitle mb-2 text-muted">Nº de ativos <%= @prefixeds.length %> </h6>
+                <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+                  <span>Posição:</span> 
+                  <span><%= number_to_currency(@prefixeds_actual_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
+                </div>
+                <hr class='my-1'>
+                <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+                  <span>Valor aplicado:</span> 
+                  <span><%= number_to_currency(@prefixeds_buy_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
+                </div>
+                <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+                  <span>Taxa de retorno:</span> 
+                  <span><%= number_to_percentage(@prefixeds_return_tax, separator: ',', delimiter: '.', precision: 2) %></span>
+                </div>
+                <div class="card-text mb-3 d-flex align-items-center justify-content-between">
+                  <span>Rendimento:</span> 
+                  <span><%= number_to_currency(@prefixeds_return_value, unit:'R$', separator: ',', delimiter: '.') %></span>
+                </div>
+                <div class=''>
+                  <%= link_to 'Todos prefixados', portfolio_prefixeds_path(@portfolio), class: 'btn btn-primary btn-block btn-sm'  %>
                 </div>
               </div>
             </div>

@@ -1,8 +1,8 @@
-class Stock < ApplicationRecord
+class Prefixed < ApplicationRecord
   belongs_to :portfolio
   STRATEGIES = ['Pós-fixado', 'Prefixado', 'Inflação', 'Multimercado', 'Variável', 'Internacional']
   ADVISORS = ['Zenit', 'Bittencourt', 'Nenhum']
-  validates :short_name, :symbol, :strategy, :buy_date, :buy_quantity, :buy_price, :advisor, presence: true
+  validates :short_name, :description, :strategy, :buy_date, :buy_quantity, :buy_price, :advisor, :end_date, :year_tax, presence: true
 	validates :strategy, inclusion: { in: STRATEGIES }
   validates :advisor, inclusion: { in: ADVISORS }
 
@@ -32,13 +32,24 @@ class Stock < ApplicationRecord
     end
   end 
   def day_return
-    ((((actual_price / buy_price) ** (1 / (actual_date - buy_date).to_f)) - 1) * 100)
+    ((((year_tax / 100.0) + 1.0)**(1.0/252.0)) - 1.0) * 100.0
   end
   def month_return
-    ((((day_return / 100) + 1) ** 30) - 1) * 100
+    ((((year_tax / 100.0) + 1.0)**(1.0/12.0)) - 1.0) * 100.0
   end
   def year_return
-    ((((month_return / 100) + 1) ** 12) - 1) * 100
+    year_tax
+  end
+  def days_count
+    date = Date.current
+    sum = 0
+    while date >= buy_date do
+      if (date.wday > 0 && date.wday < 6)
+        sum += 1
+      end
+      date -= 1
+    end
+    return sum
   end
 
   def cdi_tax

@@ -2,6 +2,7 @@ class Portfolio < ApplicationRecord
   belongs_to :user
   has_many :funds, dependent: :destroy 
   has_many :stocks, dependent: :destroy 
+  has_many :prefixeds, dependent: :destroy
   
   def initial_amount
     sum = 0
@@ -10,6 +11,9 @@ class Portfolio < ApplicationRecord
     end
     funds.each do |fund|
       sum += fund.buy_price * fund.buy_quantity
+    end
+    prefixeds.each do |prefixed|
+      sum += prefixed.buy_price * prefixed.buy_quantity
     end
     sum
   end
@@ -21,6 +25,9 @@ class Portfolio < ApplicationRecord
     funds.each do |fund|
       sum += fund.actual_price * fund.buy_quantity if fund.actual_price
     end
+    prefixeds.each do |prefixed|
+      sum += prefixed.actual_price * prefixed.buy_quantity if prefixed.actual_price
+    end
     sum
   end
 
@@ -31,6 +38,9 @@ class Portfolio < ApplicationRecord
     end
     funds.each do |fund|
       sum += (fund.actual_price - fund.buy_price) * fund.buy_quantity if fund.actual_price
+    end
+    prefixeds.each do |prefixed|
+      sum += (prefixed.actual_price - prefixed.buy_price) * prefixed.buy_quantity if prefixed.actual_price
     end
     sum
   end
@@ -60,6 +70,13 @@ class Portfolio < ApplicationRecord
           composition["#{fund.strategy}"] = fund.amount / amount * 100
         end
       end
+      prefixeds.each do |prefixed|
+        if composition["#{prefixed.strategy}"]
+          composition["#{prefixed.strategy}"] += prefixed.amount / amount * 100
+        else
+          composition["#{prefixed.strategy}"] = prefixed.amount / amount * 100
+        end
+      end
     end
     composition
   end
@@ -81,6 +98,13 @@ class Portfolio < ApplicationRecord
           composition["#{fund.strategy}"] = fund.amount
         end
       end
+      prefixeds.each do |prefxed|
+        if composition["#{prefxed.strategy}"]
+          composition["#{prefxed.strategy}"] += prefxed.amount
+        else
+          composition["#{prefxed.strategy}"] = prefxed.amount
+        end
+      end
     end
     composition
   end
@@ -88,29 +112,21 @@ class Portfolio < ApplicationRecord
   def initial_date
     stock_date = stocks.order(:buy_date).first.buy_date if stocks.count.positive?
     fund_date = funds.order(:buy_date).first.buy_date if funds.count.positive?
-    if stock_date && fund_date
-      stock_date < fund_date ? stock_date : fund_date
-    elsif stock_date && !fund_date
-      stock_date
-    elsif !stock_date && fund_date
-      fund_date
-    else
-      nil
-    end
+    prefixed_date = prefixeds.order(:buy_date).first.buy_date if prefixeds.count.positive?
+    date = stock_date
+    date = fund_date if fund_date < date
+    date = prefixed_date if prefixed_date < date
+    date
   end
 
   def finish_date
     stock_date = stocks.order(:actual_date).last.actual_date if stocks.count.positive?
     fund_date = funds.order(:actual_date).last.actual_date if funds.count.positive?
-    if stock_date && fund_date
-      stock_date > fund_date ? stock_date : fund_date
-    elsif stock_date && !fund_date
-      stock_date
-    elsif !stock_date && fund_date
-      fund_date
-    else
-      nil
-    end
+    prefixed_date = prefixeds.order(:actual_date).last.actual_date if prefixeds.count.positive?
+    date = stock_date
+    date = fund_date if fund_date > date
+    date = prefixed_date if prefixed_date > date
+    date
   end
 
   def cdi_tax 
