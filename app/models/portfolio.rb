@@ -110,23 +110,27 @@ class Portfolio < ApplicationRecord
   end
 
   def initial_date
-    stock_date = stocks.order(:buy_date).first.buy_date if stocks.count.positive?
-    fund_date = funds.order(:buy_date).first.buy_date if funds.count.positive?
-    prefixed_date = prefixeds.order(:buy_date).first.buy_date if prefixeds.count.positive?
-    date = stock_date
-    date = fund_date if fund_date < date
-    date = prefixed_date if prefixed_date < date
-    date
+    date_array = []
+    date_array << stocks.order(:buy_date).first.buy_date if stocks.count.positive?
+    date_array << funds.order(:buy_date).first.buy_date if funds.count.positive?
+    date_array << prefixeds.order(:buy_date).first.buy_date if prefixeds.count.positive?
+    if date_array.count.positive?
+      date = date_array.sort.first  
+    else
+      date = nil
+    end
   end
 
   def finish_date
-    stock_date = stocks.order(:actual_date).last.actual_date if stocks.count.positive?
-    fund_date = funds.order(:actual_date).last.actual_date if funds.count.positive?
-    prefixed_date = prefixeds.order(:actual_date).last.actual_date if prefixeds.count.positive?
-    date = stock_date
-    date = fund_date if fund_date > date
-    date = prefixed_date if prefixed_date > date
-    date
+    date_array = []
+    date_array << stocks.order(:actual_date).last.actual_date if stocks.count.positive?
+    date_array << funds.order(:actual_date).last.actual_date if funds.count.positive?
+    date_array << prefixeds.order(:actual_date).last.actual_date if prefixeds.count.positive?
+    if date_array.count.positive?
+      date = date_array.sort.last 
+    else
+      date = nil
+    end
   end
 
   def cdi_tax 
