@@ -2,14 +2,6 @@ class PrefixedsController < ApplicationController
   def index
     @portfolio = policy_scope(Portfolio).find(params[:portfolio_id])
     @prefixeds = @portfolio.prefixeds
-    # @prefixeds_actual_amount = prefixeds_actual_amount(@prefixeds)
-		# @stocks_buy_amount = stocks_buy_amount(@prefixeds)
-		
-    # if @prefixeds.length > 0 
-		# 	@prefixeds_return_tax = ((@prefixeds_actual_amount / @prefixeds_buy_amount) - 1) *100
-		# 	@prefixeds_return_value = (@prefixeds_actual_amount - @prefixeds_buy_amount) 
-		# end
-
     if params[:query] && params[:query] != ''
       @query = params[:query]
       @prefixeds = @portfolio.prefixeds.where("short_name ILIKE ? OR description ILIKE ? OR advisor ILIKE ?", "%#{@query}%", "%#{@query}%", "%#{@query}%")
@@ -34,6 +26,30 @@ class PrefixedsController < ApplicationController
     else
       render :new
     end
+  end
+
+  def edit
+    @prefixed = Prefixed.find(params[:id])
+    authorize @prefixed
+  end
+
+  def update
+    @prefixed = Prefixed.find(params[:id])
+    authorize @prefixed
+      if @prefixed.update(prefixed_params)
+        flash[:success] = "Fundos atualizados com sucesso!"
+        redirect_to portfolio_prefixeds_path(@prefixed.portfolio)
+      else
+        flash[:alert] = @prefixed.errors.messages
+        render :edit
+      end
+  end
+
+  def destroy
+    fund = Prefixed.find(params[:id])
+    authorize fund
+    fund.destroy
+    redirect_to portfolio_funds_path(fund.portfolio)
   end
   
   def update_prefixeds_price
