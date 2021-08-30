@@ -213,7 +213,7 @@ class PortfoliosController < ApplicationController
 		# ipca
 		if !Ipca.last || (current_user.update_values_date < Ipca.last.date_tax && current_user.update_values_date.month < Ipca.last.date_tax.month)
 			ipca_values = fetch_ipca_value
-			if ipca_values.count > 0 
+			if ipca_values && ipca_values.count > 0 
 				ipca_values.each_with_index do |ipca, i|
 					if i > 0
 						new_ipca = Ipca.new()
@@ -224,6 +224,7 @@ class PortfoliosController < ApplicationController
 						new_ipca.date_tax = Date.new(ipca["D3C"][0..3].to_i, ipca["D3C"][4..5].to_i, 1)
 						new_ipca.date_tax += 2 if new_ipca.date_tax.wday == 6
 						new_ipca.date_tax += 1 if new_ipca.date_tax.wday == 0
+						new_ipca.real_value = true
 						if new_ipca.save
 							flash[:alert] = 'IPCA criada'
 						else
@@ -239,6 +240,7 @@ class PortfoliosController < ApplicationController
 								populate_ipca.value_day = new_ipca.value_day
 								populate_ipca.date_update = new_ipca.date_update
 								populate_ipca.date_tax = date
+								populate_ipca.real_value = true
 								if populate_ipca.save
 									flash[:alert] = 'IPCA criada'
 								else
@@ -250,6 +252,14 @@ class PortfoliosController < ApplicationController
 					end
 				end
 			end
+			# populate fake
+			# real_last_date = Ipca.where(real_value: true).last.date_tax
+			# unreal_ipcas = Ipca.where(real_value: false)
+
+			# if real_last_date < current_user.update_values_date && !unreal_ipcas.count.positive?
+			# 	while 
+			# end
+
 		end
 		#errors	
 		if errors.count.positive?
