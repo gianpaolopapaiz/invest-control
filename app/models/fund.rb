@@ -47,11 +47,18 @@ class Fund < ApplicationRecord
 			0
 		end
   end
-	def ipca_tax
-    if buy_date && actual_date 
-      Ipca.where("date_tax >= '#{buy_date}' AND date_tax <= '#{actual_date}'").sum(:value_day) * 100
-    else
-      0
+  def ipca_tax 
+    sum = 0
+    sum = Ipca.where("date_tax >= '#{buy_date}'").sum(:value_day) * 100 if buy_date
+    last_ipca_date = Ipca.last.date_tax
+    date = last_ipca_date
+    tax = Ipca.last.value_day
+    if DateTime.now > last_ipca_date
+      (DateTime.now - last_ipca_date).to_i.times do
+        date += 1
+        sum += tax if (date.wday != 6 && date.wday != 0)
+      end
     end
-  end
+    sum
+	end
 end
