@@ -146,11 +146,18 @@ class Portfolio < ApplicationRecord
   def ipca_tax 
     date_start = initial_date
     date_end = finish_date
-    if date_start && date_end
-      Ipca.where("date_tax >= '#{date_start}' AND date_tax <= '#{date_end}'").sum(:value_day) * 100
-    else
-      0
+    sum = 0
+    sum = Ipca.where("date_tax >= '#{date_start}' AND date_tax <= '#{date_end}'").sum(:value_day) * 100 if date_start && date_end
+    last_ipca_date = Ipca.last.date_tax
+    date = last_ipca_date
+    tax = Ipca.last.value_day
+    if DateTime.now > last_ipca_date
+      (DateTime.now - last_ipca_date).to_i.times do
+        date += 1
+        sum += tax if (date.wday != 6 && date.wday != 0)
+      end
     end
+    sum
   end
 end
 

@@ -23,7 +23,7 @@ class PortfoliosController < ApplicationController
 		end
 		if @global_finish_date != 0
 			@global_cdi_tax = Cdi.where("date_tax >= '#{@global_initial_date}' AND date_tax <= '#{@global_finish_date}'").sum(:value_day) * 100
-			@global_ipca_tax = Ipca.where("date_tax >= '#{@global_initial_date}' AND date_tax <= '#{@global_finish_date}'").sum(:value_day) * 100
+			@global_ipca_tax = global_ipca_tax(@global_initial_date, @global_finish_date)
 		else
 			@global_cdi_tax = 0
 			@global_ipca_tax = 0
@@ -211,9 +211,9 @@ class PortfoliosController < ApplicationController
 			end
 		end
 		# ipca
-		if !Ipca.last || (current_user.update_values_date < Ipca.last.date_tax && current_user.update_values_date.month < Ipca.last.date_tax.month)
+		if !Ipca.last || DateTime.now > Ipca.last.date_tax
 			ipca_values = fetch_ipca_value
-			if ipca_values.count > 0 
+			if ipca_values && ipca_values.count > 0 
 				ipca_values.each_with_index do |ipca, i|
 					if i > 0
 						new_ipca = Ipca.new()
@@ -224,6 +224,7 @@ class PortfoliosController < ApplicationController
 						new_ipca.date_tax = Date.new(ipca["D3C"][0..3].to_i, ipca["D3C"][4..5].to_i, 1)
 						new_ipca.date_tax += 2 if new_ipca.date_tax.wday == 6
 						new_ipca.date_tax += 1 if new_ipca.date_tax.wday == 0
+						new_ipca.real_value = true
 						if new_ipca.save
 							flash[:alert] = 'IPCA criada'
 						else
@@ -239,6 +240,7 @@ class PortfoliosController < ApplicationController
 								populate_ipca.value_day = new_ipca.value_day
 								populate_ipca.date_update = new_ipca.date_update
 								populate_ipca.date_tax = date
+								populate_ipca.real_value = true
 								if populate_ipca.save
 									flash[:alert] = 'IPCA criada'
 								else
@@ -326,7 +328,7 @@ class PortfoliosController < ApplicationController
 			Date.current.month < 10 ? current_month = "0#{Date.current.month}" : current_month = "#{Date.current.month}"
 			actual_ipca_date = "#{Date.current.year}#{current_month}"
 			if Ipca.all.count > 0
-				last_ipca_date = "#{Ipca.last.date_tax.year}#{Ipca.last.date_tax.month}"
+				last_ipca_date = "#{Ipca.last.date_tax.year}#{Ipca.last.date_tax.month < 10 ? "0#{Ipca.last.date_tax.month}" : Ipca.last.date_tax.month}"
 			else
 				last_ipca_date = '201001'
 			end
@@ -338,6 +340,21 @@ class PortfoliosController < ApplicationController
 			request = Net::HTTP::Get.new(uri.request_uri, header)
 			response = http.request(request)
 			return JSON.parse(response.read_body) 
+		end
+
+		def global_ipca_tax(global_initial_date, global_finish_date)
+			sum = 0
+			sum = Ipca.where("date_tax >= '#{global_initial_date}' AND date_tax <= '#{global_finish_date}'").sum(:value_day) * 100
+			last_ipca_date = Ipca.last.date_tax
+			date = last_ipca_date
+			tax = Ipca.last.value_day
+			if DateTime.now > last_ipca_date
+				(DateTime.now - last_ipca_date).to_i.times do
+					date += 1
+					sum += tax if (date.wday != 6 && date.wday != 0)
+				end
+			end
+			sum
 		end
 
 	# funds
