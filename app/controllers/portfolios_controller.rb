@@ -224,7 +224,6 @@ class PortfoliosController < ApplicationController
 						new_ipca.date_tax = Date.new(ipca["D3C"][0..3].to_i, ipca["D3C"][4..5].to_i, 1)
 						new_ipca.date_tax += 2 if new_ipca.date_tax.wday == 6
 						new_ipca.date_tax += 1 if new_ipca.date_tax.wday == 0
-						new_ipca.real_value = true
 						if new_ipca.save
 							flash[:alert] = 'IPCA criada'
 						else
@@ -240,7 +239,6 @@ class PortfoliosController < ApplicationController
 								populate_ipca.value_day = new_ipca.value_day
 								populate_ipca.date_update = new_ipca.date_update
 								populate_ipca.date_tax = date
-								populate_ipca.real_value = true
 								if populate_ipca.save
 									flash[:alert] = 'IPCA criada'
 								else
