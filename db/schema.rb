@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_09_225556) do
+ActiveRecord::Schema.define(version: 2021_09_20_204012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,24 @@ ActiveRecord::Schema.define(version: 2021_09_09_225556) do
     t.index ["user_id"], name: "index_portfolios_on_user_id"
   end
 
+  create_table "post_fixeds", force: :cascade do |t|
+    t.string "short_name"
+    t.string "description"
+    t.string "strategy"
+    t.date "buy_date"
+    t.float "buy_quantity"
+    t.float "buy_price"
+    t.float "actual_price"
+    t.date "actual_date"
+    t.string "advisor"
+    t.date "end_date"
+    t.string "tax_index"
+    t.bigint "portfolio_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["portfolio_id"], name: "index_post_fixeds_on_portfolio_id"
+  end
+
   create_table "prefixeds", force: :cascade do |t|
     t.string "short_name"
     t.string "description"
@@ -136,6 +154,7 @@ ActiveRecord::Schema.define(version: 2021_09_09_225556) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "funds", "portfolios"
   add_foreign_key "portfolios", "users"
+  add_foreign_key "post_fixeds", "portfolios"
   add_foreign_key "prefixeds", "portfolios"
   add_foreign_key "stocks", "portfolios"
 end
