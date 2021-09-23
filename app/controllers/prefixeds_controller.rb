@@ -46,10 +46,10 @@ class PrefixedsController < ApplicationController
   end
 
   def destroy
-    fund = Prefixed.find(params[:id])
-    authorize fund
-    fund.destroy
-    redirect_to portfolio_funds_path(fund.portfolio)
+    prefixed = Prefixed.find(params[:id])
+    authorize prefixed
+    prefixed.destroy
+    redirect_to portfolio_funds_path(prefixed.portfolio)
   end
   
   def update_prefixeds_price

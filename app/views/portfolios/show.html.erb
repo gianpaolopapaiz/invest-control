@@ -10,6 +10,7 @@
       <%= link_to 'Adicionar Ação', portfolio_stocks_choose_stock_path(@portfolio), class: 'dropdown-item' %>
       <%= link_to 'Adicionar Fundo', portfolio_funds_choose_fund_path(@portfolio), class: 'dropdown-item' %>
       <%= link_to 'Adicionar Prefixado', new_portfolio_prefixed_path(@portfolio), class: 'dropdown-item' %>
+      <%= link_to 'Adicionar Pós-fixado', new_portfolio_post_fixed_path(@portfolio), class: 'dropdown-item' %>
 			<%= link_to 'Renomear Carteira', edit_portfolio_path(@portfolio), class: 'dropdown-item' %>
 			<%= link_to 'Remover Carteira', portfolio_path(@portfolio), method: :delete, data: { confirm: "Você tem certeza?" }, class: 'dropdown-item' %>
 		</div>
