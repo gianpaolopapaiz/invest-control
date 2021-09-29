@@ -165,6 +165,37 @@
               </div>
             </div>
           <% end %>
+
+          <% if @post_fixeds.length > 0 %>
+            <div class="card invest-card m-1" style="width: 16rem;">
+              <div class="card-body">
+                <h5 class="card-title"><strong>Pós-fixados</strong></h5>
+                <h6 class="card-subtitle mb-2 text-muted">Nº de ativos <%= @post_fixeds.length %> </h6>
+                <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+                  <span>Posição:</span> 
+                  <span><%= number_to_currency(@post_fixeds_actual_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
+                </div>
+                <hr class='my-1'>
+                <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+                  <span>Valor aplicado:</span> 
+                  <span><%= number_to_currency(@post_fixeds_buy_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
+                </div>
+                <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+                  <span>Taxa de retorno:</span> 
+                  <span><%= number_to_percentage(@post_fixeds_return_tax, separator: ',', delimiter: '.', precision: 2) %></span>
+                </div>
+                <div class="card-text mb-3 d-flex align-items-center justify-content-between">
+                  <span>Rendimento:</span> 
+                  <span><%= number_to_currency(@post_fixeds_return_value, unit:'R$', separator: ',', delimiter: '.') %></span>
+                </div>
+                <div class=''>
+                  <%= link_to 'Todos pós-fixados', portfolio_post_fixeds_path(@portfolio), class: 'btn btn-primary btn-block btn-sm'  %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+
         </div>
       </div>
     </div>

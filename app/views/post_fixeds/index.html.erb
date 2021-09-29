@@ -1,0 +1,104 @@
+<div class="container mb-4">
+  <div class='d-flex align-items-center justify-content-between flex-wrap'>
+    <%= link_to '', portfolio_path(@portfolio), class: "fas fa-chevron-left app-btn-flat" %>
+    <div class='d-flex align-items-center justify-content-start flex-column'>
+      <h2 class='mb-0'><%= @portfolio.name %> </h2>
+      <h5 class='mb-0'>Pós-fixados</h5>
+    </div>
+		<button class="fas fa-ellipsis-v app-btn-flat" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <%= link_to 'Adicionar pós-fixado', new_portfolio_post_fixed_path(@portfolio), class: 'dropdown-item'  %>
+      <%# <%= link_to 'Atualizar pós-fixado', update_prefixeds_price_path(@portfolio), class: 'dropdown-item' %> %>
+		</div>
+	</div>
+	<hr>
+  
+  <% if @query && @query != '' %>
+      <h4 class='mb-0'><strong>Pós-fixados filtrados por:</strong></h4>
+    <div class='d-flex justify-content-between align-items-center'>
+      <h4>"<%= @query %>" (<%= @post_fixeds.length %>)</h4>
+      <%= link_to 'remover filtro', portfolio_prefixeds_path(@portfolio), class: 'ml-2' %>
+    </div>
+  <% else %>
+    <h4 class='mb-2 mt-4''><strong>Pós-fixados (<%= @post_fixeds.length %>):</strong></h4>
+  <% end %>
+  
+  <%= form_tag portfolio_prefixeds_path(@portfolio, remote: true), method: :get, class: 'form' do %>
+    <div class='d-flex align-items-center justify-content-between mb-2'>
+      <%= text_field_tag :query, params[:query], class: "form-control mr-1 my-2", placeholder: "Título, descrição ou advisor..." %>
+      <%= button_tag type: 'submit', class: "btn btn-primary", id: "register-button" do %>
+        <i class="fas fa-search"></i>
+      <% end %>
+    </div>
+  <% end %> 
+  
+  <% if @post_fixeds.length.positive? %>
+    <div class='d-flex align-items-strech justify-content-start flex-wrap'>
+      <% @post_fixeds.order('buy_date DESC').each do |post_fixed| %>     
+        <div class="card invest-card m-1" style="width: 16rem;">
+          <div class="dropdown"> 
+						<button class="fas fa-cog fixed-top-right text-muted" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <%= link_to 'Editar', edit_post_fixed_path(post_fixed), class: 'dropdown-item'  %>
+              <%= link_to 'Remover', post_fixed_path(post_fixed), method: :delete, data: { confirm: "Você tem certeza?" }, class: 'dropdown-item'  %>
+						</div>
+					</div>
+          <div class="card-body">
+            <h5 class="card-title" title='<%= post_fixed.short_name %>'><strong><%= truncate(post_fixed.short_name, length: 50) %></strong></h5>
+            <h6 class="card-subtitle mb-2 text-muted">Descrição: <%= post_fixed.description %></h6>
+            <h6 class="card-subtitle mb-2 text-muted">Indexador: <%= post_fixed.tax_index %></h6>
+            <h6 class="card-subtitle mb-2 text-muted">Advisor: <%= post_fixed.advisor %></h6>
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>Posição:</span> 
+              <span><%= number_to_currency(post_fixed.amount, unit:'R$', separator: ',', delimiter: '.') %></span>
+            </div>
+            <hr class='my-1'>
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>Valor aplicado:</span> 
+              <span><%= number_to_currency(post_fixed.initial_amount, unit:'R$', separator: ',', delimiter: '.') %></span>
+            </div>
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>Taxa de retorno:</span>
+              <span><%= number_to_percentage(post_fixed.return_tax, separator: ',', delimiter: '.', precision: 2) %></span>
+            </div>
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>Rendimento:</span>
+              <span><%= number_to_currency(post_fixed.return_value, unit:'R$', separator: ',', delimiter: '.') %></span>
+            </div>
+
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>CDI no período:</span>
+              <span><%= number_to_percentage(post_fixed.cdi_tax, separator: ',', delimiter: '.', precision: 2) %></span>
+            </div>
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>IPCA no período:</span>
+              <span><%= number_to_percentage(post_fixed.ipca_tax, separator: ',', delimiter: '.', precision: 2) %></span>
+            </div>
+
+            <hr class='my-1'>
+            <div class="card-text mb-0 d-flex align-items-center justify-content-between">
+              <span>Quantidade:</span>
+              <span><%= number_to_currency(post_fixed.buy_quantity, unit: '', separator: ',', delimiter: '.', precision: 2) %></span>
+            </div>
+            <table class='w-100'>
+              <tbody>
+                <tr>
+                  <td class='text-left'>Entrada:</td>
+                  <td class='text-center'><%= post_fixed.buy_date.strftime("%d/%m/%y") %></td>
+                  <td class='text-right'><%= number_to_currency(post_fixed.buy_price, unit:'R$', separator: ',', delimiter: '.') %></td>
+                </tr>
+                <tr>
+                  <td class='text-left'>Atualizado:</td>
+                  <td class='text-center'><%= post_fixed.actual_date.strftime("%d/%m/%y") if post_fixed.actual_date %></td>
+                  <td class='text-right'><%= number_to_currency(post_fixed.actual_price, unit:'R$', separator: ',', delimiter: '.') if post_fixed.actual_price %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p>(Nenhum pós-fixado adicionado!)</p>
+  <% end %>
+</div>

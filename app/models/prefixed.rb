@@ -7,7 +7,7 @@ class Prefixed < ApplicationRecord
   validates :advisor, inclusion: { in: ADVISORS }
 
   def initial_amount
-      buy_price * buy_quantity
+    buy_price * buy_quantity
   end
   
   def amount

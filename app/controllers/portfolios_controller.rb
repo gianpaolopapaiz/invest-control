@@ -48,6 +48,7 @@ class PortfoliosController < ApplicationController
 		@stocks = @portfolio.stocks
 		@funds = @portfolio.funds
 		@prefixeds = @portfolio.prefixeds
+		@post_fixeds = @portfolio.post_fixeds
 		#portfolio
 		@portfolio_actual_amount = portfolio_actual_amount
 		@portfolio_buy_amount = portfolio_buy_amount
@@ -97,6 +98,18 @@ class PortfoliosController < ApplicationController
 			else
 				@prefixeds_return_tax = 0
 				@prefixeds_return_value = 0
+			end 
+		end
+		# post_fixeds
+		@post_fixeds_actual_amount = product_actual_amount(@post_fixeds)
+		@post_fixeds_buy_amount = product_buy_amount(@post_fixeds)
+		if @post_fixeds.length > 0 
+			if @post_fixeds_actual_amount != 0
+				@post_fixeds_return_tax = ((@post_fixeds_actual_amount / @post_fixeds_buy_amount) - 1) *100
+				@post_fixeds_return_value = (@post_fixeds_actual_amount - @post_fixeds_buy_amount)
+			else
+				@post_fixeds_return_tax = 0
+				@post_fixeds_return_value = 0
 			end 
 		end
 	end
@@ -267,6 +280,7 @@ class PortfoliosController < ApplicationController
 		sum = product_actual_amount(portfolio.stocks) if portfolio.stocks.length > 0
 		sum += product_actual_amount(portfolio.funds) if portfolio.funds.length > 0
 		sum += product_actual_amount(portfolio.prefixeds) if portfolio.prefixeds.length > 0
+		sum += product_actual_amount(portfolio.post_fixeds) if portfolio.post_fixeds.length > 0
 		sum
 	end
 
@@ -276,6 +290,7 @@ class PortfoliosController < ApplicationController
 		sum = product_buy_amount(portfolio.stocks) if portfolio.stocks.length > 0
 		sum += product_buy_amount(portfolio.funds) if portfolio.funds.length > 0
 		sum += product_buy_amount(portfolio.prefixeds) if portfolio.prefixeds.length > 0
+		sum += product_buy_amount(portfolio.post_fixeds) if portfolio.post_fixeds.length > 0
 		sum
 	end
 	
